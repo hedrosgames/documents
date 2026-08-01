@@ -253,12 +253,13 @@ input[type="search"] {
 }
 
 .progress-box {
-  margin-top: 1.5rem;
+  margin: 1.5rem auto 0;
   max-width: 36rem;
   padding: 1rem 1.1rem;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 12px;
+  text-align: center;
 }
 
 .progress-box h3 {
@@ -281,7 +282,8 @@ input[type="search"] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 0.65rem;
+  justify-content: center;
+  margin-bottom: 0;
 }
 
 .progress-actions button,

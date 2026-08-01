@@ -29,13 +29,11 @@
 
   <section class="progress-box" aria-labelledby="progress-title">
     <h3 id="progress-title">Progresso salvo neste navegador</h3>
-    <p>Cartas, Digivolutions e itens marcados ficam no cache do browser (localStorage), não no Git. Cada site é um cache separado: o HTML local e o GitHub Pages não compartilham o que você marcou.</p>
     <p class="progress-status" id="progressStatus">Lendo…</p>
     <div class="progress-actions">
       <button type="button" id="exportProgress">Exportar</button>
       <label class="file-btn">Importar<input type="file" id="importProgress" accept="application/json,.json" hidden></label>
     </div>
-    <p class="progress-hint">Pra migrar: abre o hub <em>local</em> → Exportar → abre o hub no GitHub Pages → Importar o JSON.</p>
   </section>
 </main>
 <script>
