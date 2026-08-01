@@ -25,6 +25,97 @@
 <main class="shell-app">
   <h2 class="hub-heading">Digimon World 3 Breakdown</h2>
   <img class="hub-art" src="assets/digimon-world-3-cover.jpg" width="760" height="853" alt="Capa de Digimon World 3 no PlayStation" decoding="async">
+
+  <section class="progress-box" aria-labelledby="progress-title">
+    <h3 id="progress-title">Progresso salvo neste navegador</h3>
+    <p>Cartas, Digivolutions e itens marcados ficam no cache do browser (localStorage), não no Git. Cada site é um cache separado: o HTML local e o GitHub Pages não compartilham o que você marcou.</p>
+    <p class="progress-status" id="progressStatus">Lendo…</p>
+    <div class="progress-actions">
+      <button type="button" id="exportProgress">Exportar</button>
+      <label class="file-btn">Importar<input type="file" id="importProgress" accept="application/json,.json" hidden></label>
+    </div>
+    <p class="progress-hint">Pra migrar: abre o hub <em>local</em> → Exportar → abre o hub no GitHub Pages → Importar o JSON.</p>
+  </section>
 </main>
+<script>
+(function () {
+  const KEY_RE = /^dw3-/;
+  const statusEl = document.getElementById("progressStatus");
+
+  function snapshot() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (KEY_RE.test(k)) data[k] = localStorage.getItem(k);
+    }
+    return data;
+  }
+
+  function summarize(data) {
+    const keys = Object.keys(data);
+    if (!keys.length) return "Nada marcado neste domínio ainda.";
+    const bits = [];
+    if (data["dw3-booster-cards-owned-v1"]) {
+      try { bits.push(JSON.parse(data["dw3-booster-cards-owned-v1"]).length + " cartas"); } catch (_) { bits.push("cartas"); }
+    }
+    if (data["dw3-steal-items-owned-v1"]) {
+      try { bits.push(JSON.parse(data["dw3-steal-items-owned-v1"]).length + " itens"); } catch (_) { bits.push("itens"); }
+    }
+    const evoKeys = keys.filter(k => /-owned-v1$/.test(k) && k !== "dw3-booster-cards-owned-v1" && k !== "dw3-steal-items-owned-v1");
+    if (evoKeys.length) {
+      let n = 0;
+      evoKeys.forEach(k => { try { n += JSON.parse(data[k]).length; } catch (_) {} });
+      bits.push(n + " Digivolutions (" + evoKeys.length + " partners)");
+    }
+    return "Neste domínio: " + bits.join(" · ") + " — " + keys.length + " chave(s).";
+  }
+
+  function refresh() {
+    statusEl.textContent = summarize(snapshot());
+  }
+
+  document.getElementById("exportProgress").addEventListener("click", () => {
+    const data = snapshot();
+    if (!Object.keys(data).length) {
+      statusEl.textContent = "Não tem nada pra exportar neste domínio.";
+      return;
+    }
+    const blob = new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), data }, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "dw3-progress.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    statusEl.textContent = "Exportado. Agora importa esse JSON no outro domínio.";
+  });
+
+  document.getElementById("importProgress").addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
+        let n = 0;
+        Object.keys(data).forEach(k => {
+          if (!KEY_RE.test(k)) return;
+          localStorage.setItem(k, typeof data[k] === "string" ? data[k] : JSON.stringify(data[k]));
+          n++;
+        });
+        if (!n) throw new Error("no keys");
+        statusEl.textContent = "Importado: " + n + " chave(s). Abre Boosters / Digivolution / Steal Items pra conferir.";
+        refresh();
+      } catch (_) {
+        statusEl.textContent = "Arquivo inválido. Precisa ser o JSON exportado daqui.";
+      }
+      e.target.value = "";
+    };
+    reader.readAsText(file);
+  });
+
+  refresh();
+})();
+</script>
 </body>
 </html>

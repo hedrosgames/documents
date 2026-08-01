@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dw3-shell.css">
+<title>DW3 — Backup de progresso</title>
+</head>
+<body>
+<header class="site-header">
+  <h1>Backup de progresso</h1>
+  <p>Exporta ou importa cartas, Digivolutions e itens marcados neste domínio (localStorage).</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="index.html">Hub</a>
+  </nav>
+</header>
+<main class="shell-app">
+  <section class="progress-box" aria-labelledby="progress-title">
+    <h3 id="progress-title">Progresso neste domínio</h3>
+    <p class="progress-status" id="progressStatus">Lendo…</p>
+    <div class="progress-actions">
+      <button type="button" id="exportProgress">Exportar</button>
+      <label class="file-btn">Importar<input type="file" id="importProgress" accept="application/json,.json" hidden></label>
+    </div>
+    <p class="progress-hint">Abre este arquivo no mesmo lugar onde você marcou (pasta local ou GitHub Pages). Exporta num, importa no outro.</p>
+    <pre id="progressKeys" style="margin:0.75rem 0 0;padding:0.65rem 0.75rem;background:var(--panel2);border-radius:8px;font-size:0.75rem;overflow:auto;max-height:12rem;color:var(--muted)"></pre>
+  </section>
+</main>
+<script>
+(function () {
+  const KEY_RE = /^dw3-/;
+  const statusEl = document.getElementById("progressStatus");
+  const keysEl = document.getElementById("progressKeys");
+
+  function snapshot() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (KEY_RE.test(k)) data[k] = localStorage.getItem(k);
+    }
+    return data;
+  }
+
+  function refresh() {
+    const data = snapshot();
+    const keys = Object.keys(data).sort();
+    if (!keys.length) {
+      statusEl.textContent = "Nada marcado neste domínio.";
+      keysEl.textContent = "";
+      return;
+    }
+    statusEl.textContent = keys.length + " chave(s) dw3-* neste domínio.";
+    keysEl.textContent = keys.map(k => {
+      let n = "";
+      try {
+        const v = JSON.parse(data[k]);
+        if (Array.isArray(v)) n = " → " + v.length + " itens";
+      } catch (_) {}
+      return k + n;
+    }).join("\n");
+  }
+
+  document.getElementById("exportProgress").addEventListener("click", () => {
+    const data = snapshot();
+    if (!Object.keys(data).length) {
+      statusEl.textContent = "Não tem nada pra exportar.";
+      return;
+    }
+    const blob = new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), data }, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "dw3-progress.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    statusEl.textContent = "Exportado: dw3-progress.json";
+  });
+
+  document.getElementById("importProgress").addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
+        let n = 0;
+        Object.keys(data).forEach(k => {
+          if (!KEY_RE.test(k)) return;
+          localStorage.setItem(k, typeof data[k] === "string" ? data[k] : JSON.stringify(data[k]));
+          n++;
+        });
+        if (!n) throw new Error("no keys");
+        statusEl.textContent = "Importado: " + n + " chave(s).";
+        refresh();
+      } catch (_) {
+        statusEl.textContent = "Arquivo inválido.";
+      }
+      e.target.value = "";
+    };
+    reader.readAsText(file);
+  });
+
+  refresh();
+})();
+</script>
+</body>
+</html>
