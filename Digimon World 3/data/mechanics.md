@@ -1,6 +1,6 @@
 # Digimon World 3 — Mecânicas de combate e progressão
 
-Referência de apoio ao **Balance GDD**. Tudo aqui é comportamento documentado e reproduzível do jogo (versão NA/NTSC-U), apurado de FAQs da comunidade. O jogo usa matemática inteira e não expõe as constantes exatas de dano; as relações abaixo são o que dá pra medir e confirmar. Os números finos moram nos JSON/HTML das guias; este doc trata das **regras**.
+Referência de apoio ao **Balance Notes**. Tudo aqui é comportamento documentado e reproduzível do jogo (versão NA/NTSC-U), apurado de FAQs da comunidade. O jogo usa matemática inteira e não expõe as constantes exatas de dano; as relações abaixo são o que dá pra medir e confirmar. Os números finos moram nos JSON/HTML das guias; este doc trata das **regras**.
 
 Fontes: TheFulgorah — Bestiary (GameFAQs), Rob01m — pesquisa de DV EXP, Wikimon (Digimon World 2003), DW3 FAQ v0.91 (video-games-museum), fórum de speedrun do DW3.
 

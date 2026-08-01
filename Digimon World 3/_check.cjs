@@ -15,7 +15,7 @@ const NAV = [
   "digimon-world-3-level-exp.html",
   "digimon-world-3-walkthrough.html",
   "digimon-world-3-routes.html",
-  "digimon-world-3-balance-gdd.html"
+  "digimon-world-3-balance-notes.html"
 ];
 
 const files = [...NAV, "index.html"];

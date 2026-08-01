@@ -32,7 +32,7 @@ Kit de referência HTML:
 - Level EXP  
 - Walkthrough  
 - Routes  
-- Balance GDD  
+- Balance Notes  
 
 Estilo compartilhado em `Digimon World 3/dw3-shell.css`.  
 Checagem opcional: `node "Digimon World 3/_check.cjs"`.
