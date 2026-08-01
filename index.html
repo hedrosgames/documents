@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hedros Games — Documentação</title>
+  <meta name="description" content="Lobby de documentação interna da Hedros Games.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09090b;
+      --panel: #18181b;
+      --panel2: #27272a;
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --border: #3f3f46;
+      --violet: #a855f7;
+      --violet-soft: #7c3aed;
+      --fuchsia: #d946ef;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .hero-gradient {
+      background:
+        radial-gradient(circle at top right, #7c3aed18, transparent 45%),
+        radial-gradient(circle at bottom left, #d946ef14, transparent 40%);
+    }
+    .shell {
+      max-width: 56rem;
+      margin: 0 auto;
+      padding: 4.5rem 1.25rem 3.5rem;
+    }
+    .brand {
+      margin: 0 0 0.35rem;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      background: linear-gradient(90deg, #c084fc, #e879f9);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .tagline {
+      margin: 0 0 2.25rem;
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 28rem;
+    }
+    .section-label {
+      margin: 0 0 0.85rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .docs {
+      display: grid;
+      gap: 0.85rem;
+    }
+    .doc-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: rgba(24, 24, 27, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.15rem 1.25rem;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s, box-shadow 0.25s;
+    }
+    .doc-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--violet);
+      box-shadow: 0 0 24px -6px rgba(168, 85, 247, 0.28);
+    }
+    .doc-card:focus-visible {
+      outline: 2px solid var(--violet);
+      outline-offset: 3px;
+    }
+    .doc-card .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+      margin-bottom: 0.45rem;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #e9d5ff;
+      background: color-mix(in srgb, var(--violet-soft) 28%, transparent);
+      border: 1px solid color-mix(in srgb, var(--violet) 40%, transparent);
+    }
+    .doc-card h2 {
+      margin: 0 0 0.3rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .doc-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .doc-card .go {
+      display: inline-block;
+      margin-top: 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #c084fc;
+    }
+    .foot {
+      margin-top: 3rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #27272a;
+      color: #71717a;
+      font-size: 0.78rem;
+    }
+    @media (max-width: 520px) {
+      .shell { padding: 3.25rem 1rem 2.5rem; }
+    }
+  </style>
+</head>
+<body class="hero-gradient">
+  <main class="shell">
+    <h1 class="brand">Hedros Games</h1>
+    <p class="tagline">Documentação de projetos. Escolha um kit pra abrir.</p>
+
+    <p class="section-label">Documentação</p>
+    <div class="docs">
+      <a class="doc-card" href="Digimon%20World%203/index.html">
+        <div class="meta"><span class="pill">Guia</span></div>
+        <h2>Digimon World 3</h2>
+        <p>Walkthrough, rotas, Digivolution, boosters, fraquezas, stats e GDD de balance.</p>
+        <span class="go">Abrir documentação →</span>
+      </a>
+    </div>
+
+    <p class="foot">Hedros Games · documentação interna publicada neste repositório</p>
+  </main>
+</body>
+</html>
