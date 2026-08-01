@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="dw3-shell.css">
-<title>Digimon World 3 — Partner Digivolution Guide</title>
+<title>Digimon World 3 — Partner Digivolution</title>
 <style>
 :root {
   --bg: #0c1017;
@@ -31,32 +31,6 @@ button:focus-visible, input:focus-visible {
   outline-offset: 2px;
 }
 button { user-select: none; -webkit-tap-highlight-color: transparent; }
-.doc-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-}
-.doc-nav a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  text-decoration: none;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 999px;
-  padding: 0.32rem 0.75rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
-}
-.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
-.doc-nav a.current {
-  color: var(--text);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
-}
 .panel-scroll {
   scrollbar-width: thin;
   scrollbar-color: #3a4a60 transparent;
@@ -648,21 +622,14 @@ footer {
   line-height: 1.45;
 }
 
-/* shell-aligned responsive */
-@media (max-width: 1100px) {
-  .layout, .wrap, .columns { grid-template-columns: 1fr !important; }
-  .toc, .route-list, aside.filters, .side, .right-panel, .left-panel { position: static !important; height: auto !important; max-height: 42vh; }
-}
-@media (max-width: 700px) {
-  .flow, .meta-grid, .tracks, .level-grid { grid-template-columns: 1fr !important; }
-  .search { margin-left: 0 !important; max-width: none !important; width: 100%; }
+.search { margin-left: 0 !important; max-width: none !important; width: 100%; }
 }
 </style>
 </head>
 <body>
-<header>
-  <h1>Partner Digivolution Guide</h1>
-  <p>Escolha um partner e siga a árvore permanente de Digivolution, forma a forma, vendo o que cada uma aprende ou libera no Load. Clique duas vezes numa forma para marcar como desbloqueada — o progresso fica salvo por partner neste navegador.</p>
+<header class="site-header">
+  <h1>Partner Digivolution</h1>
+  <p>Escolha o partner, marque o que já liberou e siga a árvore. Stats e techniques ficam à direita. O progresso fica salvo neste navegador.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a class="current" href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>

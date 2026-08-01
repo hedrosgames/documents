@@ -37,20 +37,6 @@ button:focus-visible, input:focus-visible {
 }
 button { user-select: none; -webkit-tap-highlight-color: transparent; }
 
-.doc-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
-.doc-nav a {
-  display: inline-flex; align-items: center; gap: 0.35rem;
-  text-decoration: none; color: var(--muted);
-  border: 1px solid var(--border); background: var(--panel);
-  border-radius: 999px; padding: 0.32rem 0.75rem;
-  font-size: 0.78rem; font-weight: 600;
-}
-.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
-.doc-nav a.current {
-  color: var(--text); border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
-}
-
 header {
   padding: 1.25rem 1.5rem 0.9rem;
   border-bottom: 1px solid var(--border);
@@ -175,9 +161,9 @@ header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 56rem;
 </style>
 </head>
 <body>
-<header>
+<header class="site-header">
   <h1>Level EXP</h1>
-  <p>Quanto de EXP total cada partner precisa para chegar em cada nível, do 1 ao 99.</p>
+  <p>EXP total de cada partner do nível 1 ao 99. Compare curvas e veja quem sobe mais barato.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>

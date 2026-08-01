@@ -35,18 +35,6 @@ button:focus-visible, input:focus-visible {
   outline-offset: 2px;
 }
 button { user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer; }
-.doc-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
-.doc-nav a {
-  display: inline-flex; align-items: center; gap: 0.35rem; text-decoration: none;
-  color: var(--muted); border: 1px solid var(--border); background: var(--panel);
-  border-radius: 999px; padding: 0.32rem 0.75rem; font-size: 0.78rem; font-weight: 600;
-  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
-}
-.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
-.doc-nav a.current {
-  color: var(--text); border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
-}
 .panel-scroll { scrollbar-width: thin; scrollbar-color: #3a4a60 transparent; }
 .panel-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
 .panel-scroll::-webkit-scrollbar-thumb { background: #3a4a60; border-radius: 999px; }
@@ -302,9 +290,9 @@ header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52rem;
 </style>
 </head>
 <body>
-<header>
+<header class="site-header">
   <h1>Boosters</h1>
-  <p>Aqui você vê onde cada pack cai. A vem de duelo de cartas, B de Cardmon em árvore ou pesca, e R entra no lugar do B num drop raro. Steal fica em outra página.</p>
+  <p>Packs A, B e R: de onde saem e quais cartas vêm dentro. Tem visão por pack e catálogo de cartas, inclusive as Secrets.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>

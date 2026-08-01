@@ -59,7 +59,8 @@ a:focus-visible {
 /* —— Header + nav —— */
 .site-header,
 .top,
-header.site-header {
+header.site-header,
+body > header {
   padding: 1.25rem 1.5rem 0.9rem;
   border-bottom: 1px solid var(--border);
   background: color-mix(in srgb, var(--panel) 55%, transparent);
@@ -67,7 +68,8 @@ header.site-header {
 
 .site-header h1,
 .top h1,
-header.site-header h1 {
+header.site-header h1,
+body > header h1 {
   margin: 0 0 0.25rem;
   font-size: clamp(1.15rem, 2.2vw, 1.45rem);
   letter-spacing: -0.02em;
@@ -75,7 +77,8 @@ header.site-header h1 {
 
 .site-header > p,
 .top > p,
-header.site-header > p {
+header.site-header > p,
+body > header > p {
   margin: 0;
   color: var(--muted);
   font-size: 0.88rem;
@@ -247,6 +250,30 @@ input[type="search"] {
   color: var(--muted);
 }
 
+.toolbar,
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.toolbar-scroll,
+.chip-row.scroll {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.15rem;
+  max-width: 100%;
+}
+
+.toolbar-scroll .chip,
+.chip-row.scroll .chip,
+.toolbar-scroll button,
+.chip-row.scroll button {
+  flex: 0 0 auto;
+}
+
 .table-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -279,6 +306,15 @@ img, svg, video {
   }
   .shell-wide, .shell-app, .shell-prose { padding: 0.65rem 0.75rem 2rem; }
   .hub-grid { grid-template-columns: 1fr; }
+  .map-nav, .exp-nav, .el-nav {
+    display: flex !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.35rem;
+    grid-template-columns: none !important;
+  }
+  .map-nav > *, .exp-nav > *, .el-nav > * { flex: 0 0 auto; }
 }
 
 @media (max-width: 520px) {

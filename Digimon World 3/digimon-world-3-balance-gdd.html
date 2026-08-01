@@ -18,24 +18,11 @@
   --open: #e0a045;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-}
+/* body chrome from dw3-shell.css */
 a { color: var(--link); }
-/* doc-nav styles come from dw3-shell.css */
 
-header {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 1.75rem 1.25rem 1.1rem;
-  border-bottom: 1px solid var(--line);
-}
+
+/* page header chrome from .site-header (shell); content width via .wrap */
 header h1 {
   margin: 0 0 0.4rem;
   font-size: clamp(1.25rem, 2.4vw, 1.55rem);
@@ -210,21 +197,14 @@ code {
   header, .wrap { padding-left: 1rem; padding-right: 1rem; }
 }
 
-/* shell-aligned responsive */
-@media (max-width: 1100px) {
-  .layout, .wrap, .columns { grid-template-columns: 1fr !important; }
-  .toc, .route-list, aside.filters, .side, .right-panel, .left-panel { position: static !important; height: auto !important; max-height: 42vh; }
-}
-@media (max-width: 700px) {
-  .flow, .meta-grid, .tracks, .level-grid { grid-template-columns: 1fr !important; }
-  .search { margin-left: 0 !important; max-width: none !important; width: 100%; }
+.search { margin-left: 0 !important; max-width: none !important; width: 100%; }
 }
 </style>
 </head>
 <body>
-<header>
+<header class="site-header">
   <h1>GDD de Balanceamento</h1>
-  <p>Aqui você cruza mapa, monstro e Digivolution com o que já está em <code>data/</code>. Número que não tem fonte vira Ponto em Aberto.</p>
+  <p>Documento de balanceamento do projeto: o que medir por mapa, o Core Loop e onde ainda há Ponto em Aberto.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>

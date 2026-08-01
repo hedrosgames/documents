@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="dw3-shell.css">
-<title>Digimon World 3 — Submarimon & Digmon Routes</title>
+<title>Digimon World 3 — Routes</title>
 <style>
 :root {
   --bg:#0c1017; --panel:#151c27; --panel2:#1c2635; --text:#edf2f7;
@@ -30,18 +30,7 @@ header {
 }
 header h1 { margin:0 0 .25rem; font-size:clamp(1.15rem,2.2vw,1.45rem); }
 header p { margin:0; max-width:52rem; color:var(--muted); font-size:.88rem; }
-.doc-nav { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.75rem; }
-.doc-nav a {
-  display:inline-flex; text-decoration:none; color:var(--muted);
-  border:1px solid var(--border); background:var(--panel);
-  border-radius:999px; padding:.32rem .75rem; font-size:.78rem; font-weight:600;
-}
-.doc-nav a:hover { color:var(--text); border-color:#4a5d75; }
-.doc-nav a.current {
-  color:var(--text); border-color:var(--accent);
-  background:color-mix(in srgb,var(--accent) 14%,var(--panel));
-}
-.wrap { max-width:1280px; margin:0 auto; padding:.85rem 1.25rem 2.5rem; }
+.wrap { max-width:1200px; margin:0 auto; padding:.85rem 1.25rem 2.5rem; }
 .toolbar {
   display:flex; flex-wrap:wrap; align-items:center; gap:.45rem;
   margin-bottom:.85rem; padding:.65rem .75rem;
@@ -223,21 +212,14 @@ header p { margin:0; max-width:52rem; color:var(--muted); font-size:.88rem; }
   .dest-btn .go { justify-self:start; }
 }
 
-/* shell-aligned responsive */
-@media (max-width: 1100px) {
-  .layout, .wrap, .columns { grid-template-columns: 1fr !important; }
-  .toc, .route-list, aside.filters, .side, .right-panel, .left-panel { position: static !important; height: auto !important; max-height: 42vh; }
-}
-@media (max-width: 700px) {
-  .flow, .meta-grid, .tracks, .level-grid { grid-template-columns: 1fr !important; }
-  .search { margin-left: 0 !important; max-width: none !important; width: 100%; }
+.search { margin-left: 0 !important; max-width: none !important; width: 100%; }
 }
 </style>
 </head>
 <body>
 <header class="site-header">
   <h1>Submarimon & Digmon Routes</h1>
-  <p>Cada dock do Submarimon e cada buraco do Digmon: de onde você entra, pra onde sai, e como achar a entrada no mapa. Clique num destino pra abrir o card daquele ponto — se ele também for um dock ou buraco.</p>
+  <p>Cada dock do Submarimon e cada buraco do Digmon: de onde você entra, pra onde sai e como achar a entrada. Clique num destino com Abrir para ir ao card daquele ponto.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>
@@ -465,7 +447,7 @@ const ROUTES = [
   },
   {
     id:"hole-as-kicking", kind:"hole", world:"asuka", icon:"⛏️", name:"Kicking Forest · ladder",
-    group:"server-hop-a", groupLabel:"Asuka ↔ Amaterasu (par A)",
+    group:"server-hop-a", groupLabel:"Asuka ↔ Amaterasu · Kicking ↔ Central",
     spot:"Parte sul, descendo a rope ladder",
     how:"Em Kicking Forest (Asuka), vá à parte sul e desça a rope ladder. O buraco fica embaixo.",
     destinations:[
@@ -476,7 +458,7 @@ const ROUTES = [
   },
   {
     id:"hole-am-central", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Central Park · perto do dock",
-    group:"server-hop-a", groupLabel:"Asuka ↔ Amaterasu (par A)",
+    group:"server-hop-a", groupLabel:"Asuka ↔ Amaterasu · Kicking ↔ Central",
     spot:"Parte oeste / baixa",
     how:"Em Central Park (Amaterasu), vá à parte oeste baixa, perto do dock.",
     destinations:[
@@ -487,18 +469,18 @@ const ROUTES = [
   },
   {
     id:"hole-as-central", kind:"hole", world:"asuka", icon:"⛏️", name:"Central Park · western pipe",
-    group:"server-hop-b", groupLabel:"Asuka ↔ Amaterasu (par B)",
+    group:"server-hop-b", groupLabel:"Asuka ↔ Amaterasu · Central ↔ Kicking",
     spot:"Perto do cano saindo do chão",
     how:"Em Central Park (Asuka), ache o cano saindo do chão na parte oeste. O buraco fica perto.",
     destinations:[
       { name:"Amaterasu Kicking Forest", detail:"Saída da ladder", type:"exit", link:"hole-am-kicking" },
       { name:"Asuka Central Park", detail:"Volta", type:"return" }
     ],
-    note:"Segundo atalho entre Central Park e Kicking Forest, espelhado nos dois servers."
+    note:"Segundo atalho entre Central Park e Kicking Forest, nos dois servers."
   },
   {
     id:"hole-am-kicking", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Kicking Forest · ladder",
-    group:"server-hop-b", groupLabel:"Asuka ↔ Amaterasu (par B)",
+    group:"server-hop-b", groupLabel:"Asuka ↔ Amaterasu · Central ↔ Kicking",
     spot:"Parte sul, abaixo da ladder",
     how:"Em Kicking Forest (Amaterasu), vá à parte sul e desça a ladder. O buraco fica embaixo.",
     destinations:[

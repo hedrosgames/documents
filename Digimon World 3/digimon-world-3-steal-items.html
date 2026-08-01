@@ -28,32 +28,6 @@ button:focus-visible, input:focus-visible {
   outline-offset: 2px;
 }
 button { user-select: none; -webkit-tap-highlight-color: transparent; }
-.doc-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-}
-.doc-nav a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  text-decoration: none;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 999px;
-  padding: 0.32rem 0.75rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
-}
-.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
-.doc-nav a.current {
-  color: var(--text);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
-}
 .panel-scroll {
   scrollbar-width: thin;
   scrollbar-color: #3a4a60 transparent;
@@ -494,9 +468,9 @@ tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
-<header>
+<header class="site-header">
   <h1>Steal Items</h1>
-  <p>Filtre pelo nível do Digimon e abra um Digimon ou item nas laterais. Clique duas vezes no item para marcar que já pegou. Os chips de tipo filtram a lista; packs de carta ficam em Boosters.</p>
+  <p>O que cada Digimon dropa ou deixa roubar, filtrado por mapa e item. Clique no monstro ou no item pra cruzar a lista.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a class="current" href="digimon-world-3-steal-items.html">Steal Items</a>

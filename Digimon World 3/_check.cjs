@@ -33,14 +33,14 @@ for (const f of files) {
   if (!h.includes('href="dw3-shell.css"')) fail(f + " missing dw3-shell.css");
   if (!/<html[^>]*lang="pt-BR"/i.test(h)) fail(f + " lang not pt-BR");
   if (f !== "index.html") {
+    if (!h.includes('class="site-header"')) fail(f + " missing site-header");
+    if (h.includes("shell-aligned")) fail(f + " leftover shell-aligned block");
+    if (/\.doc-nav\s*\{/.test(h)) fail(f + " local .doc-nav CSS (should use shell)");
     const navOrder = [...h.matchAll(/href="(digimon-world-3-[a-z-]+\.html)"/g)]
       .map(m => m[1])
       .filter((v, i, a) => NAV.includes(v) && a.indexOf(v) === i);
-    // first 9 unique guide links in doc-nav should match NAV order
     const slice = navOrder.slice(0, 9);
-    if (slice.join() !== NAV.join()) {
-      fail(f + " nav order: " + slice.join(" → "));
-    }
+    if (slice.join() !== NAV.join()) fail(f + " nav order: " + slice.join(" → "));
   }
 }
 
@@ -63,13 +63,11 @@ ROUTES.forEach(r => {
   });
 });
 
-const jargon = ["bifurcação", "rede de três", "Todos os destinos visíveis", "Seabed com bifurcação"];
-jargon.forEach(j => {
+const jargon = ["bifurcação", "rede de três", "Todos os destinos visíveis", "Seabed com bifurcação", "par A)", "par B)"];
+jargon.forEach(word => {
   for (const f of NAV) {
     const h = fs.readFileSync(path.join(DIR, f), "utf8");
-    // ignore JSON blobs / comments mentioning GameFAQs as source attribution in data
-    if (j === "FAQs") continue;
-    if (h.includes(j)) fail(f + " jargon: " + j);
+    if (h.includes(word)) fail(f + " jargon: " + word);
   }
 });
 

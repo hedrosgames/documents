@@ -42,21 +42,6 @@ button:focus-visible, input:focus-visible {
 }
 button { user-select: none; -webkit-tap-highlight-color: transparent; }
 
-.doc-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
-.doc-nav a {
-  display: inline-flex; align-items: center; gap: 0.35rem;
-  text-decoration: none; color: var(--muted);
-  border: 1px solid var(--border); background: var(--panel);
-  border-radius: 999px; padding: 0.32rem 0.75rem;
-  font-size: 0.78rem; font-weight: 600;
-  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
-}
-.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
-.doc-nav a.current {
-  color: var(--text); border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
-}
-
 header {
   padding: 1.25rem 1.5rem 0.9rem;
   border-bottom: 1px solid var(--border);
@@ -257,9 +242,9 @@ tr.selected td { background: color-mix(in srgb, var(--accent) 12%, transparent);
 </style>
 </head>
 <body>
-<header>
+<header class="site-header">
   <h1>Elemental Weaknesses</h1>
-  <p>Cada Digimon mostra as resistências como Element - valor, do elemento que mais machuca até o que ele mal sente (quanto menor o número, mais dano). Escolha um mapa para ver a lista — a dica de Power olha os três Digimon de menor nível dali.</p>
+  <p>Resistências por mapa e a recomendação de elemento pro grupo. Drops aparecem junto de cada Digimon quando existem.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>

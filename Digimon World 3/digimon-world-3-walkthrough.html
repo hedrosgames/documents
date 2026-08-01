@@ -23,14 +23,6 @@ body {
 }
 a { color:var(--asuka); }
 a:hover { color:#9ad4ff; }
-.doc-nav { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.75rem; }
-.doc-nav a {
-  display:inline-flex; text-decoration:none; color:var(--muted);
-  border:1px solid var(--border); background:var(--panel);
-  border-radius:999px; padding:.32rem .75rem; font-size:.78rem; font-weight:600;
-}
-.doc-nav a:hover { color:var(--text); border-color:#4a5d75; }
-.doc-nav a.current { color:var(--text); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,var(--panel)); }
 .top { padding:1.25rem 1.5rem .9rem; border-bottom:1px solid var(--border); background:color-mix(in srgb,var(--panel) 55%,transparent); }
 .top h1 { margin:0 0 .25rem; font-size:clamp(1.15rem,2.2vw,1.45rem); letter-spacing:-.02em; }
 .top p { margin:0; color:var(--muted); font-size:.88rem; max-width:48rem; }
@@ -142,9 +134,9 @@ a:hover { color:#9ad4ff; }
 </style>
 </head>
 <body>
-<header class="top">
-  <h1>Digimon World 3 — Walkthrough</h1>
-  <p>Caminho crítico do começo ao fim. Cada capítulo traz objetivo, pré-requisito, mapa esquemático do setor, passo a passo, cards de chefe e como voltar. Nome de mapa, item e Digimon em inglês; a prosa em português. Lugares que se repetem (Secret Room, Master Room, Control Room…) têm ficha própria em <a href="#places">Lugares recorrentes</a>.</p>
+<header class="site-header">
+  <h1>Walkthrough</h1>
+  <p>Caminho crítico do começo ao fim. Cada momento traz objetivo, pré-requisito, mapa do setor, passo a passo, chefes e como voltar. Nomes de mapa, item e Digimon em inglês; prosa em português. Lugares que se repetem têm ficha em Lugares recorrentes.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>
@@ -1555,7 +1547,7 @@ a:hover { color:#9ad4ff; }
             <span class="badge srv-asuka">Asuka · Central</span>
           </div>
           <p class="what">Os esgotos sob Asuka City. Contêm a Control Room (Datamon) e o portão que Datamon abre pro Admin Center.</p>
-          <p class="reach"><span class="k">Como chegar</span> Com os portões da cidade fechados: dock à direita da Asuka Bridge → Submarimon → emerge nos Sewers. Veja a rota em Routes.</p>
+          <p class="reach"><span class="k">Como chegar</span> Com os portões da cidade fechados: dock à direita da Asuka Bridge → Submarimon → emerge nos Sewers. Detalhe em <a href="digimon-world-3-routes.html#sub-bridge">Routes · Asuka Bridge</a>.</p>
         </div>
         <div class="place-card" id="place-control-room">
           <div class="place-top">
@@ -1587,7 +1579,7 @@ a:hover { color:#9ad4ff; }
             <span class="badge srv-asuka">Asuka · South</span>
           </div>
           <p class="what">O lago subterrâneo sob Suzaku City. Tem o Crossbow e liga a caça ao Staff ID Pass (Keith e Nick).</p>
-          <p class="reach"><span class="k">Como chegar</span> Em Suzaku City, entre no Suzaku Hall e use o dock atrás dele → Submarimon, dois screens. Veja Routes (Suzaku City).</p>
+          <p class="reach"><span class="k">Como chegar</span> Em Suzaku City, entre no Suzaku Hall e use o dock atrás dele → Submarimon, dois screens. Detalhe em <a href="digimon-world-3-routes.html#sub-suzaku">Routes · Suzaku City</a>.</p>
         </div>
         <div class="place-card" id="place-circuit-board">
           <div class="place-top">
@@ -1595,7 +1587,7 @@ a:hover { color:#9ad4ff; }
             <span class="badge srv-special">Especial · Underground</span>
           </div>
           <p class="what">A rede subterrânea acessada por buracos com o Digmon (Digi-Egg of Knowledge). Liga setores e servers.</p>
-          <p class="reach"><span class="k">Como chegar</span> Chame o Digmon num buraco. Os pares de entrada/saída estão no guia de Routes.</p>
+          <p class="reach"><span class="k">Como chegar</span> Chame o Digmon num buraco. Pares de entrada/saída em <a href="digimon-world-3-routes.html">Routes</a> (filtro Buracos).</p>
         </div>
         <div class="place-card" id="place-seabed">
           <div class="place-top">
@@ -1665,7 +1657,7 @@ a:hover { color:#9ad4ff; }
     <p><a href="digimon-world-3-routes.html">Routes</a> · <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a> · <a href="digimon-world-3-steal-items.html">Steal Items</a> · <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a> · <a href="digimon-world-3-monster-stats.html">Monster Stats</a></p>
   </div>
 </section>
-    <p class="foot">Fatos cruzados com FAQs de GameFAQs (EmeraldPhoenix, Dark Zero), o Circuit Board Guide do Shalios e walkthroughs públicos (StratsWiki, Revolution Arena). Onde os guias divergem num labirinto, o texto segue o caminho em que eles batem juntos. Os mapas são esquemas de conexão feitos a partir dessas fontes — não são screenshots do jogo.</p>
+    <p class="foot">Fontes: walkthroughs públicos (EmeraldPhoenix, Dark Zero, Shalios Circuit Board, StratsWiki). Os mapas são esquemas de conexão — não são prints do jogo.</p>
   </main>
 </div>
 
