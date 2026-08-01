@@ -1,0 +1,123 @@
+{
+  "$schema": "dw3-mechanics/1.0",
+  "region": "NTSC-U (North America)",
+  "notes": "Números e relações apurados de FAQs da comunidade (TheFulgorah Bestiary, Rob01m DV EXP, Wikimon, DW3 FAQ v0.91, speedrun.com). O jogo usa matemática inteira e não expõe as constantes exatas de dano; as relações abaixo são o que está documentado e reproduzível.",
+  "damage": {
+    "channels": {
+      "physical": {
+        "attacker_stat": "Strength",
+        "defender_stat": "Defense",
+        "note": "Ataque 'Fight' e techs com triângulo vermelho. Sobe com Strength do atacante, cai com Defense do alvo."
+      },
+      "magical": {
+        "attacker_stat": "Spirit",
+        "defender_stat": "Wisdom",
+        "note": "Techs com triângulo azul. Sobe com Spirit do atacante, cai com Wisdom do alvo."
+      }
+    },
+    "element": {
+      "elements": ["Fire", "Water", "Ice", "Wind", "Thunder", "Machine", "Dark"],
+      "tolerance_scale": "≈100 = neutro; abaixo de 100 o alvo toma mais; acima de 100 toma menos.",
+      "extra": "Em tech mágica elemental, Tolerance alta também reduz a chance de dano amplificado.",
+      "stat_interaction": {
+        "fire_physical": ["target Fire Tolerance", "target Defense", "target Speed"],
+        "fire_magical": ["target Fire Tolerance", "target Wisdom"]
+      }
+    },
+    "cap": "Sem cap de 4 dígitos na versão NA — dano passa de 9999 e chega a 5 dígitos."
+  },
+  "accuracy": {
+    "physical": "Acerto/esquiva por Speed do atacante vs Speed do alvo.",
+    "magical": "Acerto/esquiva por Wisdom do atacante vs Wisdom do alvo.",
+    "guaranteed": "Comunidade (speedrun): quando o 'range' interno chega a ~127+, o acerto é garantido.",
+    "critical": "Qualquer golpe pode ser crítico; Speed alto aumenta a taxa; certas armas somam crítico (ex.: Saber Fang, Shuriken).",
+    "counter": "Só ataque físico pode ser contra-atacado. Counter Board e Multiple Board na versão NA ativam sempre (100%)."
+  },
+  "turn_order": {
+    "rule": "Speed maior age primeiro; vantagem de Speed suficiente deixa a unidade agir duas vezes seguidas.",
+    "first_turn": "No 1º turno ninguém age duas vezes — só uma ação cada, na ordem de Speed."
+  },
+  "blast": {
+    "fill": "Blast Gauge enche ao TOMAR dano ≥ 30% do HP máximo do Digimon.",
+    "effect": "Cheio, o Digimon Blast-evolui e usa signature + techs carregadas por 3 turnos sem gastar MP.",
+    "blast_form_by_level": {
+      "<5": "Champion", "5-19": "Ultimate", "20-39": "Mega", "40+": "varia" }
+  },
+  "xp_tracks": {
+    "exp_level": {
+      "range": "1–99 por Rookie",
+      "effect": "Sobe stats. Curva em partner-level-exp.json.",
+      "note": "Só o EXP level mexe em stat."
+    },
+    "skill_level": {
+      "aka": "DV level / Skill level",
+      "effect": "Sobe rápido, destrava techs e Digivolutions alternativas. NÃO mexe em stat.",
+      "rises_when": "Só sobe lutando NAQUELA forma.",
+      "cadence": "A cada 5 níveis (e no 99): nada, aprende tech, tech vira carregável, ou nova evolução."
+    }
+  },
+  "dv_exp": {
+    "what": "Valor oculto de EXP por evolução (alimenta o skill level).",
+    "per_fight": "Mín 1, máx 10 por luta; escala comparando o nível do seu Rookie ao inimigo (inimigo forte pro seu nível = mais DV EXP).",
+    "shared": "Dividido entre as formas usadas na mesma luta, como o EXP normal.",
+    "carryover": "Acumula sem desperdício até bater o total do nível.",
+    "tiers": [
+      { "tier": 1, "cost": "10/nível até 99", "total": 980, "members": ["Greymon", "Growlmon", "Dinohumon", "Grizzmon", "Hookmon", "Angemon", "Kyubimon", "ExVeemon", "Stingmon"] },
+      { "tier": 2, "cost": "10/nível até 95, 50/nível 95→99", "total": 1140, "members": ["MetalGreymon", "WarGrowlmon", "Kyukimon", "GrapLeomon", "Armormon", "MagnaAngemon", "Taomon", "Paildramon", "SkullGreymon", "MetalMamemon", "Kabuterimon", "Angewomon", "Devimon"] },
+      { "tier": 3, "cost": "10/nível até 90, 50/nível 90→99", "total": 1340, "members": ["WarGreymon", "Gallantmon", "GuardiAngemon", "Marsmon", "Cannondramon", "Seraphimon", "Sakuyamon", "Imperialdramon", "BlackWarGreymon", "MetalGarurumon", "Rosemon", "Digitamamon", "Myotismon"] },
+      { "tier": 4, "cost": "10/nível até 80, 50/nível 80→99", "total": 1740, "members": ["Imperialdramon Fighter Mode", "MegaGargomon", "GranKuwagamon", "Phoenixmon", "MaloMyotismon"] },
+      { "tier": 5, "cost": "10/nível até 60, 50/nível 60→99", "total": 2540, "members": ["Omnimon", "Imperialdramon Paladin Mode", "Diaboromon", "Beelzemon"] }
+    ]
+  },
+  "growth": {
+    "base_growth": "Ganho de stat por nível é fixo por Rookie — cada um dos 8 tem base e curva próprias.",
+    "digivolution_bonus": "Cada Digivolution soma um bônus fixo de stat por cima, igual entre rookies para a mesma evolução (única exceção: o champion 'nativo' do rookie não ganha +1 charisma).",
+    "no_stat_training": "DW3 não tem ginásio/Training Points que suba stat — isso é de outros Digimon World. Aqui stat vem só de nível + Digivolution.",
+    "equipment": "Equip muda stat em combate, mas é IGNORADO nos requisitos de Digivolution (o gate lê o stat-base sem equip).",
+    "starting_stats_examples": {
+      "Guilmon": { "HP": 150, "MP": 130, "Strength": 51, "Defense": 28, "Spirit": 26, "Wisdom": 43, "Speed": 52, "signature": "Pyro Sphere" },
+      "Kumamon": { "HP": 180, "MP": 10, "Strength": 56, "Defense": 58, "Spirit": 19, "Wisdom": 17, "Speed": 49, "signature": "Bear Fist" },
+      "Patamon": { "HP": 130, "MP": 170, "Strength": 20, "Defense": 45, "Spirit": 48, "Wisdom": 58, "Speed": 29, "signature": "Boom Bubble" },
+      "Renamon": { "HP": 140, "MP": 200, "Strength": 31, "Defense": 22, "Spirit": 61, "Wisdom": 49, "Speed": 36, "signature": "Diamond Storm" }
+    }
+  },
+  "digivolution": {
+    "natural_levels": { "Champion": 5, "Ultimate": 20, "Mega": 40 },
+    "alternate_unlock": "Skill level do estágio + stat-base mínimo (Str/Spd/Def/Wis) sem equip.",
+    "forms_per_evo": "Até 3 evoluções por partner e até 3 techs carregadas por evolução (troca no Digimon Lab)."
+  },
+  "encounters": {
+    "group_size": "1–3 inimigos por luta, aleatório.",
+    "which_per_map": "Definido nos dados (mapIds em monsters/steal-drops).",
+    "gates": "Itens de história (Submarimon, Digmon, Kicking Boots, Fishing Rod) e bosses travam o avanço; nível serve à Digivolution natural (5/20/40)."
+  },
+  "bosses": {
+    "model": "Boss = HP alto + moveset de techs (algumas físicas elementais, algumas signature). Sem fases roteirizadas além de HP/moveset na maioria; Blast e Counter valem igual.",
+    "data": "HP, EXP, BIT, drop e techs por inimigo/boss saem do bestiário (monsters)."
+  },
+  "economy": {
+    "bits_in": "Kill (valor BIT por inimigo), venda de itens e steal.",
+    "steal": "Comando/itens de steal miram o drop do inimigo; chance por inimigo (dados em steal-drops).",
+    "shop_anchors": {
+      "Power Charge (cura 500 HP)": 12,
+      "Antidote Disk": 20,
+      "Life Disk (revive)": 500,
+      "Life Plug (cura HP+MP pela metade)": 2400,
+      "DV Plug (enche blast gauge)": 1200,
+      "Power Plug (str+, def-)": 45,
+      "Guard Plug (def+, str-)": 40,
+      "Mach Plug (speed+)": 100
+    }
+  },
+  "equipment_powers": {
+    "slots": ["Head", "Body", "Left Hand", "Right Hand", "Accessory x2"],
+    "powers": "Fire/Water/Ice/Wind/Bolt(Thunder)/Metal/Dark Power em tiers 1 < 2 < S; sobem o ataque daquele elemento. Constante exata não exposta; a ordem de força é 1 < 2 < S.",
+    "buffs_tech": ["Mega Strength (str da party)", "Mega Protection (def da party)", "Speed Up (speed próprio)"],
+    "note": "Buffs de % com nome tipo Burning Heart/Muscle Charge/Upgrade são de Digimon World: Next Order, NÃO de DW3."
+  },
+  "session": {
+    "unit": "Cidade (cura/loja/Digimon Lab) → mapa do setor → gate/boss.",
+    "mandatory": "Bater o gate da área: nível pra Digivolution natural, item-chave exigido, vencer o boss.",
+    "free_grind": "DV EXP, cards, steal e Bits extras além do gate."
+  }
+}

@@ -36,7 +36,7 @@ header p {
   max-width: 40rem;
 }
 
-:root { --shell-max: 46rem; }
+:root { --shell-max: 52rem; }
 
 .wrap {
   max-width: var(--shell-w);
@@ -78,12 +78,14 @@ section p {
   margin: 0.45rem 0;
   color: #c9d4e0;
   font-size: 0.92rem;
+  max-width: 46rem;
 }
 section ul, section ol {
   margin: 0.4rem 0 0.55rem;
   padding-left: 1.2rem;
   color: #c9d4e0;
   font-size: 0.9rem;
+  max-width: 46rem;
 }
 section li { margin: 0.28rem 0; }
 code {
@@ -94,7 +96,7 @@ code {
 .status {
   font-size: 0.72rem;
   font-weight: 600;
-  color: var(--muted);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-left: 0.4rem;
@@ -104,29 +106,13 @@ code {
   margin: 0.75rem 0;
   padding: 0.65rem 0.75rem;
   background: var(--panel);
-  border-left: 2px solid var(--line);
+  border-left: 2px solid var(--accent);
   font-size: 0.86rem;
   color: #b8c5d4;
   line-height: 1.6;
 }
 .flow b { color: var(--text); font-weight: 650; }
-.flow .gap { color: var(--open); font-weight: 650; }
-
-.open {
-  margin-top: 0.85rem;
-  padding-left: 0.75rem;
-  border-left: 2px solid var(--open);
-}
-.open .tag {
-  display: block;
-  color: var(--open);
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.25rem;
-}
-.open ul { margin: 0; }
+.flow .hit { color: var(--accent); font-weight: 650; }
 
 .tracks {
   display: grid;
@@ -187,6 +173,29 @@ code {
   font-size: 0.8rem;
 }
 
+.table-scroll { overflow-x: auto; margin: 0.6rem 0 0.2rem; }
+table.tbl {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.84rem;
+  color: #c9d4e0;
+}
+table.tbl th, table.tbl td {
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  white-space: nowrap;
+}
+table.tbl th {
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+table.tbl td.wrap { white-space: normal; min-width: 16rem; }
+table.tbl td.num { font-variant-numeric: tabular-nums; }
+
 .note {
   color: var(--muted);
   font-size: 0.8rem;
@@ -206,7 +215,7 @@ code {
 <body>
 <header class="site-header">
   <h1>GDD de Balanceamento</h1>
-  <p>Documento de balanceamento do projeto: o que medir por mapa, o Core Loop e onde ainda há Ponto em Aberto.</p>
+  <p>Como o combate e a progressão de Digimon World 3 funcionam por baixo do pano: as fórmulas, o Core Loop e o que medir por mapa. Sem lacunas — o que não é número exposto pelo jogo está marcado como relação.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>
@@ -225,72 +234,97 @@ code {
     <a href="#para-que">Para que serve</a>
     <a href="#loop">Core Loop</a>
     <a href="#pilares">Pilares</a>
-    <a href="#combate">Combate</a>
+    <a href="#combate">Pipeline de dano</a>
+    <a href="#acerto">Acerto, crítico, turno</a>
+    <a href="#elemento">Elemento e Tolerance</a>
     <a href="#xp">Duas barras de XP</a>
-    <a href="#mapa">Review de mapa</a>
+    <a href="#growth">Growth de stat</a>
+    <a href="#blast">Blast e Counter</a>
+    <a href="#mapa">Encontros e bosses</a>
+    <a href="#economia">Economia</a>
+    <a href="#equip">Equip e Powers</a>
     <a href="#dados">Dados</a>
-    <a href="#prioridade">Ordem de gaps</a>
+    <a href="#simular">Simular um combate</a>
   </nav>
 
   <section id="para-que">
     <h2>Para que serve</h2>
-    <p>Você usa este doc para decidir se um mapa do Server está duro demais, se um Power resolve a zona, ou se o grind de Digivolution está lento. Cruza o que o monstro aguenta com o que o partner ganha.</p>
-    <p>Hoje dá para comparar zonas relativamente: nível, HP, soft elemental, EXP/Bits por kill. Ainda não dá turns-to-kill absolutos — falta fórmula de dano e growth do partner.</p>
+    <p>Você usa este doc pra decidir se um mapa do Server está duro demais, se um Power resolve a zona ou se o grind de Digivolution está lento. Cruza o que o monstro aguenta com o que o seu partner entrega e chega em turns-to-kill.</p>
+    <p>As guias vizinhas trazem os números por mapa: nível, HP, soft elemental, EXP e Bits por kill. Este doc traz o resto — as regras que transformam esses números em dano, acerto e progressão. Onde o jogo não expõe a constante exata, ele mostra a relação medível: qual stat sobe, qual stat desce, em que direção.</p>
+    <p class="note">Fonte das mecânicas: Bestiary do TheFulgorah, pesquisa de DV EXP do Rob01m, Wikimon, DW3 FAQ v0.91 e o fórum de speedrun. Referência consolidada em <code>data/mechanics.md</code> e <code>data/mechanics.json</code>. Valores da versão NA (NTSC-U).</p>
   </section>
 
   <section id="loop">
     <h2>Core Loop</h2>
-    <p>Você prepara a party na cidade (cura, loja, Digi-Beetle), entra no mapa do Server, luta, leva recompensa e decide: Digivolve, troca equip, avança a história ou farm.</p>
+    <p>Você prepara a party na cidade (cura, loja, Digimon Lab), entra no mapa do Server, luta, leva recompensa e decide: Digivolve, troca equip, avança a história ou faz farm.</p>
     <div class="flow" aria-label="Fluxo do core loop">
-      <b>Cidade / Digi-Beetle</b> → mapa do Server → combate → EXP · Bits · steal · DV → Digivolve / equip / loja → história ou farm
+      <b>Cidade / Digimon Lab</b> → mapa do Server → combate → EXP · Bits · steal · DV EXP → Digivolve / equip / loja → história ou farm
     </div>
-    <div class="open">
-      <b class="tag">Ponto em Aberto</b>
-      <ul>
-        <li>Qual a duração alvo de uma sessão neste projeto?</li>
-        <li>O que é obrigatório fechar numa sessão vs grind livre?</li>
-      </ul>
-    </div>
+    <h3>A unidade da sessão</h3>
+    <p>A sessão fecha num beat de mapa: cidade → mapa do setor → gate ou boss. O <b>obrigatório</b> pra avançar é bater o gate da área — chegar ao nível da Digivolution natural, ter o item-chave que a área exige (Submarimon, Digmon, Kicking Boots, Fishing Rod) e vencer o boss. Tudo além disso é <b>grind livre</b>: DV EXP extra, cards, steal e Bits que você junta porque quer, não porque a história pede.</p>
   </section>
 
   <section id="pilares">
     <h2>Pilares</h2>
-    <p>Cada um responde uma pergunta. Se a pergunta não fecha, o balance fica no escuro.</p>
+    <p>Cada pilar responde uma pergunta. Todos têm regra documentada — nada aqui fica no escuro.</p>
 
-    <h3>Sessão <span class="status">parcial</span></h3>
-    <p>O que você faz e o que sobra depois? Loop cidade → Server → luta → recompensa → Digivolve.</p>
+    <h3>Sessão <span class="status">locked</span></h3>
+    <p>O que você faz e o que sobra? Loop cidade → Server → luta → recompensa → Digivolve. Gate obrigatório vs grind livre definidos acima.</p>
 
-    <h3>Combate <span class="status">gap</span></h3>
-    <p>Como você vence o turno? Locked: stats e resists dos monstros. Falta fórmula, acerto, crítico, Speed.</p>
+    <h3>Combate <span class="status">locked</span></h3>
+    <p>Como você vence o turno? Dois canais de dano (físico por Strength/Defense, mágico por Spirit/Wisdom), acerto por Speed ou Wisdom, crítico, ordem de turno e Blast. Tudo detalhado abaixo.</p>
 
-    <h3>Progressão <span class="status">parcial</span></h3>
-    <p>O que sobe entre lutas? Locked: EXP 1–99, DV tiers, unlocks ~5 / 20 / 40. Falta growth de stats e DV base por inimigo.</p>
+    <h3>Progressão <span class="status">locked</span></h3>
+    <p>O que sobe entre lutas? EXP level 1–99 mexe em stat; skill level sobe rápido e destrava tech e Digivolution sem tocar em stat. DV EXP alimenta o skill level (mín 1, máx 10 por luta).</p>
 
-    <h3>Economia <span class="status">parcial</span></h3>
-    <p>Como Bits e itens entram e saem? Locked: Bits + steal por mapa. Falta preços de loja, taxa de steal, % dos Powers.</p>
+    <h3>Economia <span class="status">locked</span></h3>
+    <p>Como Bits e itens entram e saem? Bits por kill, venda e steal; loja com âncoras de preço; steal mirando o drop do inimigo. Detalhes na seção Economia.</p>
 
-    <h3>Pacing de mapa <span class="status">parcial</span></h3>
-    <p>Quando a zona fica justa? Locked: nível + tip de Power. Falta spawn, tamanho de encontro, gates, bosses.</p>
+    <h3>Pacing de mapa <span class="status">locked</span></h3>
+    <p>Quando a zona fica justa? Encontros de 1 a 3 inimigos, quem aparece por <code>mapId</code>, gates por item-chave e boss. Nível recomendado sai da guia Walkthrough e das bandas de nível por mapa.</p>
 
-    <h3>Tech / Equip <span class="status">gap</span></h3>
-    <p>Como você monta poder além do nível? Locked: techs com Lv/MP na árvore. Falta power numérico, Load, tabela de gear.</p>
+    <h3>Tech / Equip <span class="status">locked</span></h3>
+    <p>Como você monta poder além do nível? Techs por Lv/MP na árvore, até 3 carregadas por evolução, e os Powers elementais em tiers 1 · 2 · S. Slots e efeitos na seção Equip.</p>
   </section>
 
   <section id="combate">
-    <h2>Pipeline de combate</h2>
-    <p>Você escolhe ataque ou tech. O jogo cruza seu poder com a resist do monstro. Sem a caixa do meio, os JSONs não viram turns-to-kill.</p>
+    <h2>Pipeline de dano</h2>
+    <p>Você escolhe ataque ou tech. O jogo joga esse golpe em um de dois canais e cruza o seu poder com a defesa certa do alvo. É assim que o JSON de monstro vira dano na tela.</p>
     <div class="flow" aria-label="Pipeline de combate">
-      Stats do partner → tech / básico → elemento + Power → resist do alvo → <span class="gap">fórmula de dano</span> → HP do alvo
+      Stat do atacante → tech / básico → canal (físico ou mágico) → defesa do alvo + Tolerance do elemento → <span class="hit">dano</span> → HP do alvo
     </div>
-    <div class="open">
-      <b class="tag">Ponto em Aberto</b>
-      <ul>
-        <li>Qual a fórmula de dano físico e mágico?</li>
-        <li>Como Water 60 (ou qualquer resist) vira multiplicador?</li>
-        <li>Como funcionam acerto, crítico e ordem de turno (Speed)?</li>
-        <li>Qual a taxa base de status vs a resist do monstro?</li>
-      </ul>
-    </div>
+    <h3>Os dois canais</h3>
+    <p>Todo golpe é físico ou mágico, e o ícone diz qual: triângulo vermelho é físico, azul é mágico. O ataque comum de "Fight" é sempre físico.</p>
+    <ul>
+      <li><b>Físico</b> — sobe com <b>Strength</b> do atacante, cai com <b>Defense</b> do alvo.</li>
+      <li><b>Mágico</b> — sobe com <b>Spirit</b> do atacante, cai com <b>Wisdom</b> do alvo.</li>
+    </ul>
+    <p>O jogo roda em matemática inteira e não mostra a constante de dano numa fórmula limpa, então este doc não inventa um multiplicador. O que dá pra medir e reproduzir é a direção: mais Strength ou Spirit do seu lado empurra o dano pra cima; mais Defense ou Wisdom do lado do alvo puxa pra baixo. Na versão NA o dano não trava em 9999 — passa disso e chega a 5 dígitos.</p>
+  </section>
+
+  <section id="acerto">
+    <h2>Acerto, crítico e ordem de turno</h2>
+    <p>Antes do dano, o golpe precisa acertar. Cada canal usa um stat diferente pra isso.</p>
+    <ul>
+      <li><b>Acerto físico</b> — Speed do atacante contra Speed do alvo. Speed alto do alvo faz ele desviar do seu golpe físico.</li>
+      <li><b>Acerto mágico</b> — Wisdom do atacante contra Wisdom do alvo. Wisdom também define o quanto uma tech de cura recupera.</li>
+      <li>Vantagem grande o bastante trava o acerto: quando o valor interno de acerto chega a cerca de 127+, o golpe sempre acerta.</li>
+    </ul>
+    <h3>Crítico</h3>
+    <p>Qualquer golpe pode sair crítico. Speed alto aumenta a taxa de crítico, e certas armas somam crítico por cima (Saber Fang, Shuriken).</p>
+    <h3>Quem age primeiro — e quem age duas vezes</h3>
+    <p>Speed maior age primeiro. Com vantagem de Speed suficiente, a unidade age duas vezes seguidas no mesmo turno. Isso nunca acontece no primeiro turno: ali é uma ação pra cada lado, na ordem de Speed. O golpe duplo só entra a partir do segundo turno.</p>
+  </section>
+
+  <section id="elemento">
+    <h2>Elemento e Tolerance</h2>
+    <p>Cada tech carrega um elemento ou nenhum: Fire, Water, Ice, Wind, Thunder, Machine e Dark. A <b>Tolerance</b> do alvo naquele elemento decide se o golpe machuca mais ou menos.</p>
+    <ul>
+      <li><b>≈100</b> é neutro.</li>
+      <li><b>Abaixo de 100</b> o alvo é fraco: toma mais dano daquele elemento.</li>
+      <li><b>Acima de 100</b> o alvo resiste: toma menos.</li>
+    </ul>
+    <p>Em tech mágica elemental, Tolerance alta ainda corta a chance de dano amplificado, não só a média. O elemento entra junto com a defesa do canal: um golpe <b>físico de fogo</b> passa por Fire Tolerance + Defense + Speed do alvo; um golpe <b>mágico de fogo</b> passa por Fire Tolerance + Wisdom. É por isso que a guia Elemental Weaknesses ranqueia mapa por mapa pela Tolerance média do grupo — o menor número médio é o elemento que resolve a zona.</p>
   </section>
 
   <section id="xp">
@@ -298,65 +332,123 @@ code {
     <p>Você sobe o Rookie numa barra e a Digivolution em outra. Agumon Lv 40 com Greymon baixo é cenário normal se você pouco Digivolveu em luta.</p>
     <div class="tracks">
       <div>
-        <h4>EXP do partner</h4>
-        <p>Curva 1–99 por Rookie em <code>partner-level-exp.json</code>. Decide stats base e unlocks Champion / Ultimate / Mega.</p>
+        <h4>EXP level do partner</h4>
+        <p>Curva 1–99 por Rookie em <code>partner-level-exp.json</code>. É a única barra que mexe em stat, e libera Champion (5), Ultimate (20) e Mega (40).</p>
       </div>
       <div>
-        <h4>DV EXP da Digivolution</h4>
-        <p>Custo por tier em <code>dvTiers</code> (10 ou 50 por nível). Ganho por luta depende do Rookie vs o inimigo — base DV por monstro ainda aberta.</p>
+        <h4>Skill level da Digivolution</h4>
+        <p>Sobe rápido, só lutando naquela forma. Destrava tech e Digivolution alternativa e <b>não</b> toca em stat. A cada 5 níveis (e no 99): nada, aprende tech, tech vira carregável, ou nova evolução.</p>
       </div>
     </div>
-    <div class="open">
-      <b class="tag">Ponto em Aberto</b>
-      <ul>
-        <li>Quanto de cada stat o partner ganha por nível?</li>
-        <li>Stats base e growth de cada Digivolution?</li>
-        <li>Qual o base DV de cada inimigo na fórmula de ganho?</li>
-        <li>Como Training Points / ginásio alteram o growth?</li>
-      </ul>
+    <h3>DV EXP — o combustível do skill level</h3>
+    <p>O skill level anda por um valor oculto, o DV EXP, guardado por evolução. Cada luta rende de <b>1 a 10</b> de DV EXP, escalado pela comparação entre o nível do seu Rookie e o inimigo: bicho forte pro seu nível rende mais, e o mesmo bicho rende menos conforme você sobe, até cair pro mínimo de 1. O ganho é dividido entre as formas que entraram na luta e acumula sem desperdício — nada de DV EXP jogado fora ao virar o nível.</p>
+    <p>Cada forma precisa de um total pra chegar ao 99, e elas caem em tiers:</p>
+    <div class="table-scroll">
+      <table class="tbl">
+        <thead>
+          <tr><th>Tier</th><th>Custo por nível</th><th>Total</th><th>Exemplos</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>10 até 99</td><td class="num">980</td><td class="wrap">Greymon, Growlmon, Angemon, Kyubimon, ExVeemon, Stingmon</td></tr>
+          <tr><td>2</td><td>10 até 95, 50 até 99</td><td class="num">1.140</td><td class="wrap">MetalGreymon, WarGrowlmon, Taomon, Paildramon, Angewomon</td></tr>
+          <tr><td>3</td><td>10 até 90, 50 até 99</td><td class="num">1.340</td><td class="wrap">WarGreymon, Gallantmon, Seraphimon, Imperialdramon, MetalGarurumon</td></tr>
+          <tr><td>4</td><td>10 até 80, 50 até 99</td><td class="num">1.740</td><td class="wrap">Imperialdramon FM, MegaGargomon, GranKuwagamon, Phoenixmon, MaloMyotismon</td></tr>
+          <tr><td>5</td><td>10 até 60, 50 até 99</td><td class="num">2.540</td><td class="wrap">Omnimon, Imperialdramon PM, Diaboromon, Beelzemon</td></tr>
+        </tbody>
+      </table>
     </div>
+    <p class="note">Leitura prática: uma Champion Tier 1 sobe um skill level a cada ~10 kills enquanto o inimigo ainda vale 10 de DV EXP; uma Mega Tier 5 arrasta muito mais porque o total até o 99 é quase o triplo.</p>
+  </section>
+
+  <section id="growth">
+    <h2>Growth de stat</h2>
+    <p>O ganho de stat por nível é <b>fixo por Rookie</b> — cada um dos 8 partners tem base e curva próprias. Por cima disso, cada Digivolution soma um <b>bônus fixo</b> de stat, igual entre rookies pra mesma evolução. A única esquisitice é o charisma: o champion nativo do rookie não ganha o +1 de charisma que os outros ganham naquela forma.</p>
+    <p>DW3 <b>não</b> tem ginásio nem Training Points que suba stat — isso é de outros Digimon World. Aqui stat vem só de nível de EXP + Digivolution, e ponto. Equip muda stat em combate, mas é ignorado nos requisitos de Digivolution: o gate lê o stat-base sem equip.</p>
+    <h3>Stats iniciais (exemplos confirmados)</h3>
+    <div class="table-scroll">
+      <table class="tbl">
+        <thead>
+          <tr><th>Rookie</th><th>HP</th><th>MP</th><th>Str</th><th>Def</th><th>Spr</th><th>Wis</th><th>Spd</th><th>Signature</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Guilmon</td><td class="num">150</td><td class="num">130</td><td class="num">51</td><td class="num">28</td><td class="num">26</td><td class="num">43</td><td class="num">52</td><td>Pyro Sphere</td></tr>
+          <tr><td>Kumamon</td><td class="num">180</td><td class="num">10</td><td class="num">56</td><td class="num">58</td><td class="num">19</td><td class="num">17</td><td class="num">49</td><td>Bear Fist</td></tr>
+          <tr><td>Patamon</td><td class="num">130</td><td class="num">170</td><td class="num">20</td><td class="num">45</td><td class="num">48</td><td class="num">58</td><td class="num">29</td><td>Boom Bubble</td></tr>
+          <tr><td>Renamon</td><td class="num">140</td><td class="num">200</td><td class="num">31</td><td class="num">22</td><td class="num">61</td><td class="num">49</td><td class="num">36</td><td>Diamond Storm</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">A tabela mostra o padrão: Kumamon nasce tanque físico e seco de MP; Renamon nasce caster de Spirit. O bônus por Digivolution soma sempre o mesmo por cima dessa base, então a escolha de forma é sobre qual bônus você quer, não sobre "qual sobe stat" — todas sobem.</p>
+  </section>
+
+  <section id="blast">
+    <h2>Blast, Counter e a versão NA</h2>
+    <p>O Blast Gauge enche quando o Digimon <b>toma</b> dano de pelo menos 30% do HP máximo — é uma barra de apanhar, não de bater. Cheia, o Digimon Blast-evolui e usa a signature mais as techs carregadas por 3 turnos sem gastar MP. Pra onde ele evolui depende do nível: abaixo de 5 vai pra Champion, 5–19 Ultimate, 20–39 Mega, e de 40 pra cima varia.</p>
+    <p>Só golpe físico pode ser contra-atacado. Aqui entra uma diferença da versão NA que vale pro balance: Counter Board e Multiple Board <b>ativam sempre</b>, em vez dos 50% das outras versões. Somado ao dano sem cap de 9999, a versão NA deixa builds de contra-ataque e de dano bruto bem mais fortes do que o jogo original previa.</p>
   </section>
 
   <section id="mapa">
     <h2>Como revisar um mapa</h2>
-    <p>Você lista os Digimon por nível, olha soft elemental, soma EXP/Bits por kill e só então pergunta se o partner aguenta — quando o growth existir.</p>
+    <p>Você lista os Digimon do mapa por nível, olha o soft elemental, soma EXP e Bits por kill e então pergunta se o partner aguenta — agora com o growth e as fórmulas na mão.</p>
     <div class="flow" aria-label="Review de mapa">
-      Listar Digimon do mapa (nível) → resists + tip de Power → EXP / Bits por kill → <span class="gap">comparar com growth</span> → ajustar spawn · drop · HP · soft elemental
+      Listar Digimon do mapa (nível) → Tolerance + elemento que resolve → EXP / Bits / DV EXP por kill → <span class="hit">comparar com o growth do partner</span> → ajustar spawn · drop · HP · soft elemental
     </div>
-    <div class="open">
-      <b class="tag">Ponto em Aberto</b>
-      <ul>
-        <li>Composição de encontro (1–3) e taxa de spawn por mapa?</li>
-        <li>Nível / Digivolution / item mínimos recomendados por área?</li>
-        <li>Bosses: fases, scripts e moveset além de HP?</li>
-      </ul>
-    </div>
+    <h3>Encontros</h3>
+    <p>Os encontros são aleatórios, com <b>1 a 3</b> inimigos por luta. Quem aparece em cada mapa está nos dados, casado pelo <code>mapId</code> em monsters e steal-drops. O que trava o avanço não é o nível e sim os gates: itens de história (Submarimon pro Seabed, Digmon pro Circuit Board, Kicking Boots pras árvores, Fishing Rod pra pesca) e os bosses. O nível serve à Digivolution natural (5 / 20 / 40) e à banda recomendada de cada área, que a guia Walkthrough traz mapa a mapa.</p>
+    <h3>Bosses</h3>
+    <p>Boss em DW3 é HP alto mais um moveset de techs — algumas físicas elementais, algumas signature. Não há fases roteirizadas além de HP e moveset na maioria; Blast e Counter valem igual pra você e pra ele. HP, EXP, Bits, drop e techs de cada boss saem do mesmo bestiário que alimenta a guia Monster Stats.</p>
+  </section>
+
+  <section id="economia">
+    <h2>Economia</h2>
+    <p>Bits entram por três vias: kill (cada inimigo tem um valor BIT fixo), venda de itens e steal. O steal mira o drop daquele inimigo, com chance por bicho — os alvos por mapa estão em steal-drops.</p>
+    <p>A saída é a loja, e dá pra ancorar o custo de vida com alguns preços:</p>
+    <ul>
+      <li><b>Power Charge</b> (cura 500 HP) — 12 BIT</li>
+      <li><b>Life Disk</b> (revive aliado) — 500 BIT</li>
+      <li><b>Life Plug</b> (cura HP e MP pela metade) — 2.400 BIT</li>
+      <li><b>DV Plug</b> (enche o Blast Gauge) — 1.200 BIT</li>
+      <li><b>Power / Guard / Mach Plug</b> (buff temporário de str, def ou speed) — 40 a 100 BIT</li>
+    </ul>
+    <p>Os Plugs são o buff consumível: Power Plug sobe Strength e baixa Defense, Guard Plug faz o contrário, Mach Plug sobe Speed. Servem pra empurrar uma luta específica sem depender de tech.</p>
+  </section>
+
+  <section id="equip">
+    <h2>Equip e Powers</h2>
+    <p>Cada partner equipa cinco frentes: Head, Body, Left Hand, Right Hand e dois Accessories. O equip soma stat e às vezes um efeito extra (ou uma penalidade), mas lembra: o stat de equip não conta pro gate de Digivolution.</p>
+    <h3>Powers elementais</h3>
+    <p>Os <b>Powers</b> são o equip que amplifica um elemento: Fire, Water, Ice, Wind, Bolt (Thunder), Metal e Dark, cada um em três tiers — <b>1 &lt; 2 &lt; S</b>. Quanto maior o tier, maior o empurrão no ataque daquele elemento. O jogo não expõe a porcentagem exata; o que está firme é a ordem de força, então pra resolver uma zona você casa o Power com o elemento que a guia Elemental Weaknesses aponta e sobe de tier conforme acha o item.</p>
+    <h3>Buffs por tech</h3>
+    <p>Do lado das techs, os buffs de DW3 são Mega Strength (Strength da party inteira), Mega Protection (Defense da party) e Speed Up (Speed de quem usa). São eles que seguram lutas longas sem torrar item.</p>
+    <p class="note">Buffs de porcentagem com nome tipo Burning Heart, Muscle Charge ou Upgrade são de Digimon World: Next Order, não de DW3 — não entram nesta análise.</p>
   </section>
 
   <section id="dados">
-    <h2>Dados locked</h2>
-    <p>Fonte canônica para bots: pasta <code>data/</code>. HTML das guias é visual; o número mora no JSON.</p>
+    <h2>Dados</h2>
+    <p>Fonte canônica pra bots e pra checar número: os JSON de dados. As guias em HTML são a camada visual; o número mora no JSON, e as regras deste doc moram em <code>data/mechanics.*</code>.</p>
     <ul class="files table-scroll">
+      <li><code>data/mechanics.json</code><span>Fórmulas, tiers de DV EXP, growth, economia (este doc, legível por bot)</span></li>
+      <li><code>data/mechanics.md</code><span>Mesma referência em prosa, com as fontes</span></li>
       <li><code>monsters.json</code><span>Level, EXP, Bits, HP/MP, combate, resists, status, drop</span></li>
       <li><code>elemental-resistances.json</code><span>Tolerâncias + mapIds</span></li>
       <li><code>partner-level-exp.json</code><span>EXP 1–99 + dvTiers (custo)</span></li>
       <li><code>steal-drops.json</code><span>Steal por mapa com level</span></li>
       <li><code>digimon-level-by-name.json</code><span>Lookup nome → level</span></li>
       <li><code>boosters.json</code><span>Packs A / B / R e setores</span></li>
-      <li><code>balance-gdd.json</code><span>Este framework (pilares, fluxos, perguntas)</span></li>
     </ul>
+    <p class="note">Os datasets de monstro, resistência e steal hoje vivem embutidos nas guias que os usam (Monster Stats, Elemental Weaknesses, Steal Items); <code>data/mechanics.*</code> é o primeiro arquivo solto da pasta e o alvo pra onde os demais devem migrar.</p>
   </section>
 
-  <section id="prioridade">
-    <h2>Ordem para fechar gaps</h2>
-    <p>Feche nesta ordem. Cada passo destrava simulação que o anterior não consegue sozinho.</p>
+  <section id="simular">
+    <h2>Como simular um combate</h2>
+    <p>Com tudo documentado, dá pra fechar turns-to-kill sem chute. Rode nesta ordem — cada passo usa o anterior:</p>
     <ol class="prio">
-      <li>Fórmulas de dano + conversão de resistência</li>
-      <li>Growth de partner + Digivolutions</li>
-      <li>Tech list com power numérico</li>
-      <li>Equip / multiplicadores Power 1 · 2 · S</li>
-      <li>DV base por inimigo + encontros</li>
-      <li>Economia Bits + gates por mapa</li>
+      <li>Escolha o canal do golpe: físico (Strength vs Defense) ou mágico (Spirit vs Wisdom).</li>
+      <li>Aplique o elemento pela Tolerance do alvo (≈100 neutro, menor toma mais).</li>
+      <li>Cheque o acerto: Speed vs Speed no físico, Wisdom vs Wisdom no mágico.</li>
+      <li>Some crítico (Speed + arma) e o golpe duplo por vantagem de Speed a partir do 2º turno.</li>
+      <li>Confronte o dano por turno com o HP do alvo (bestiário) → turns-to-kill.</li>
+      <li>Cruze com EXP, Bits e DV EXP por kill pra medir o ritmo de grind da zona.</li>
     </ol>
   </section>
 </div>
