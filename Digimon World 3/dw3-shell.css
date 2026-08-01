@@ -235,22 +235,67 @@ input[type="search"] {
 .tip b, .warn b, .open b, .open .tag { display: inline-block; margin-right: 0.35rem; }
 
 /* —— Hub —— */
-.hub-heading {
-  margin: 1.1rem 0 0;
-  font-size: clamp(1.2rem, 3.5vw, 1.7rem);
-  font-weight: 800;
-  letter-spacing: -0.01em;
+body.hub .site-header > * { text-align: center; }
+body.hub .site-header > p { max-width: 52rem; margin-inline: auto; }
+body.hub .doc-nav { justify-content: center; }
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
+  gap: 1.25rem;
+  justify-content: center;
+  margin: 1.5rem auto 0;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   text-align: center;
 }
 
-.hub-art {
-  display: block;
-  width: min(100%, 320px);
-  height: auto;
-  margin: 1rem auto 0;
-  border: 1px solid var(--border);
-  border-radius: 12px;
+.game-title {
+  margin: 0;
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
+
+.game-art {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  text-decoration: none;
+}
+
+.game-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.game-open {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: 0.5rem;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+a.game-art:hover { border-color: var(--accent); }
+
+.game-card.is-locked .game-art { opacity: 0.5; filter: grayscale(0.7); }
 
 .progress-box {
   margin: 1.5rem auto 0;
@@ -274,6 +319,7 @@ input[type="search"] {
 }
 
 .progress-status {
+  margin: 0;
   color: var(--text) !important;
   font-size: 0.9rem !important;
 }

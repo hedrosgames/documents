@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="dw3-shell.css">
 <title>Digimon World 3 — Guias</title>
 </head>
-<body>
+<body class="hub">
 <header class="site-header">
   <h1>Digimon World 3 — Guias</h1>
-  <p>Kit de referência: Digivolution, drops, cartas, fraquezas, stats, EXP, walkthrough, rotas e GDD de balance. Escolha o guia que resolve o que você precisa agora.</p>
+  <p>Kit de referência: Digivolution, drops, cartas, fraquezas, stats, EXP, walkthrough, rotas e notas de balance. Escolha o guia que resolve o que você precisa agora.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>
@@ -24,17 +24,31 @@
   </nav>
 </header>
 <main class="shell-app">
-  <h2 class="hub-heading">Digimon World 3 Breakdown</h2>
-  <img class="hub-art" src="assets/digimon-world-3-cover.jpg" width="760" height="853" alt="Capa de Digimon World 3 no PlayStation" decoding="async">
+  <div class="game-grid">
+    <section class="game-card">
+      <h2 class="game-title">Digimon World 3</h2>
+      <a class="game-art" href="digimon-world-3-agumon-tree.html">
+        <img src="assets/digimon-world-3-cover.jpg" width="632" height="630" alt="Capa de Digimon World 3 no PlayStation" decoding="async">
+        <span class="game-open">Abrir guias →</span>
+      </a>
+      <p class="progress-status" id="progressStatus">Lendo…</p>
+      <div class="progress-actions">
+        <button type="button" id="exportProgress">Exportar</button>
+        <button type="button" id="importProgress">Importar</button>
+      </div>
+    </section>
 
-  <section class="progress-box" aria-labelledby="progress-title">
-    <h3 id="progress-title">Progresso salvo neste navegador</h3>
-    <p class="progress-status" id="progressStatus">Lendo…</p>
-    <div class="progress-actions">
-      <button type="button" id="exportProgress">Exportar</button>
-      <button type="button" id="importProgress">Importar</button>
-    </div>
-  </section>
+    <section class="game-card is-locked">
+      <h2 class="game-title">Digimon World 2</h2>
+      <div class="game-art">
+        <img src="assets/digimon-world-2-cover.jpg" width="632" height="624" alt="Capa de Digimon World 2 no PlayStation" decoding="async">
+      </div>
+      <p class="progress-status">Guias ainda não disponíveis.</p>
+      <div class="progress-actions">
+        <button type="button" disabled>Em breve</button>
+      </div>
+    </section>
+  </div>
 </main>
 <script>
 (function () {
@@ -96,7 +110,7 @@
     a.download = "dw3-progress.json";
     a.click();
     URL.revokeObjectURL(a.href);
-    statusEl.textContent = "Baixado. Pra atualizar o Git, troca Digimon World 3/dw3-progress.json por esse arquivo e faz commit.";
+    statusEl.textContent = "dw3-progress.json baixado.";
   });
 
   document.getElementById("importProgress").addEventListener("click", async () => {
@@ -115,10 +129,10 @@
       const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
       const n = applyData(data);
       if (!n) throw new Error("no keys");
-      statusEl.textContent = "Importado do Git: " + n + " chave(s). " + summarize(snapshot());
+      statusEl.textContent = "Importado: " + n + " chave(s). " + summarize(snapshot());
       refresh();
     } catch (_) {
-      statusEl.textContent = "Não deu pra importar. Confere se dw3-progress.json está no mesmo domínio (Pages ou servidor local).";
+      statusEl.textContent = "Não deu pra carregar o dw3-progress.json.";
     }
   });
 
