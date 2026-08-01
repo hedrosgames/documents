@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dw3-shell.css">
 <title>Digimon World 3 — Walkthrough</title>
 <style>
 :root {
@@ -122,14 +123,21 @@ a:hover { color:#9ad4ff; }
 .foot { color:var(--muted); font-size:.78rem; margin-top:.6rem; }
 .target-flash { animation:flash 1.4s ease; }
 @keyframes flash { 0%,100% { box-shadow:none; } 30% { box-shadow:0 0 0 2px var(--accent); } }
-@media (max-width:880px) {
+@media (max-width:1100px) {
   .layout { grid-template-columns:1fr; }
-  .toc { position:relative; height:auto; max-height:44vh; border-right:none; border-bottom:1px solid var(--border); }
+  .toc { position:relative; height:auto; max-height:42vh; border-right:none; border-bottom:1px solid var(--border); }
   .progress { position:static; margin:0 0 .85rem; }
   .meta-grid { grid-template-columns:1fr; }
   .it-head, .it-row { grid-template-columns:1fr; gap:.15rem; }
   .it-head { display:none; }
   .it-name { color:#bff0d8; }
+}
+@media (max-width:700px) {
+  .search { margin-left:0 !important; max-width:none !important; width:100%; }
+  .boss-grid, .place-grid { grid-template-columns:1fr; }
+}
+@media (max-width:520px) {
+  .ch-head { flex-direction:column; }
 }
 </style>
 </head>
@@ -144,8 +152,8 @@ a:hover { color:#9ad4ff; }
     <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a>
     <a href="digimon-world-3-monster-stats.html">Monster Stats</a>
     <a href="digimon-world-3-level-exp.html">Level EXP</a>
-    <a href="digimon-world-3-routes.html">Routes</a>
     <a class="current" href="digimon-world-3-walkthrough.html">Walkthrough</a>
+    <a href="digimon-world-3-routes.html">Routes</a>
     <a href="digimon-world-3-balance-gdd.html">Balance GDD</a>
   </nav>
 </header>
@@ -489,7 +497,7 @@ a:hover { color:#9ad4ff; }
       <text x="590" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Cape</text>
     </g></svg><figcaption>Mapa esquemático — Asuka · South. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
     <p>Do South Station você abre Bulk Swamp e Bulk Bridge. Em <strong>Tranquil Swamp</strong> tem inn e a <a href="#place-shaman-house">Shaman House</a> do Sepikmon, onde essa parte da história avança. Em <strong>Jungle Grave</strong> você encontra o <strong>Zanbamon</strong>: a primeira luta é scriptada e seus Digimon fogem. A Gatomon da inn te manda falar com o Sepikmon, que perdeu a máscara.</p>
-<p>A máscara passa por várias mãos. A sequência abaixo é o caminho que os FAQs batem juntos; no fim o Sepikmon te dá o <strong>Smelly Herb</strong>, que espanta o Zanbamon de vez.</p>
+<p>A máscara passa por várias mãos. Siga a sequência abaixo; no fim o Sepikmon te dá o <strong>Smelly Herb</strong>, que espanta o Zanbamon de vez.</p>
     
     <h3 class="block-title">Passo a passo</h3>
     <ol><li>Em Jungle Grave, fale com o Zanbamon (luta scriptada; seus Digimon fogem).</li><li>Na Shaman House (Tranquil Swamp), fale com o Sepikmon: ele perdeu a máscara.</li><li>Siga o rastro: Baronmon nas Protocol Ruins → Sepikmon na Asuka Bridge → o cara em Divermon's Lake reclama do Etemon.</li><li>Ache o Etemon em Asuka City (onde o senhor queria virar Digimon); ele foge pro esgoto e larga a máscara.</li><li>Volte ao Sepikmon: receba o Smelly Herb.</li><li>Volte a Jungle Grave com o herb pra espantar o Zanbamon.</li><li>Siga a Phoenix Bay → Suzaku City; cure, equipe e vença a Suzaku Leader (Suzaku Badge).</li></ol>
@@ -768,7 +776,7 @@ a:hover { color:#9ad4ff; }
       <rect x="552.5" y="188" width="95" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
       <text x="600" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Dum Dum Factory</text>
     </g></svg><figcaption>Mapa esquemático — Asuka · West. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
-    <p>Em S Noise Desert você fala com o Agumon e o Guilmon e entra no <strong>Mobius Desert</strong>, que embaralha a orientação. O caminho clássico dos FAQs até a Mirage Tower é uma sequência fixa de direções. Na torre dá pra curar, equipar e salvar, mas <strong>não se vende item de cura</strong> — leve estoque de antes.</p>
+    <p>Em S Noise Desert você fala com o Agumon e o Guilmon e entra no <strong>Mobius Desert</strong>, que embaralha a orientação. O caminho até a Mirage Tower é uma sequência fixa de direções. Na torre dá pra curar, equipar e salvar, mas <strong>não se vende item de cura</strong> — leve estoque de antes.</p>
     
     <h3 class="block-title">Passo a passo</h3>
     <ol><li>Em S Noise Desert, fale com Agumon e Guilmon e entre no Mobius Desert.</li><li>Siga a sequência de direções até a Mirage Tower.</li><li>Na torre, cure/equipe/salve (não há venda de cura aqui).</li><li>Suba e vença o Byakko Leader (Byakko Badge). Ele manda achar o Numemon na Dum Dum Factory.</li></ol>
@@ -1020,10 +1028,10 @@ a:hover { color:#9ad4ff; }
       <rect x="556" y="208" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
       <text x="590" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Cape</text>
     </g></svg><figcaption>Mapa esquemático — Asuka · South → Amaterasu. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
-    <p>Em Byakko, o líder preso da A.o.A. conta que eles vieram de Amaterasu usando o <strong>Bulbmon</strong>, que abre caminho na rede. A barreira do Lucky Mouse deixou o Bulbmon louco, e ele foi pro South. Sentindo os tremores, você segue até a Jungle Shrine, no Ether Forest, onde encontra a Suzaku Leader.</p>
+    <p>Em Byakko, o líder preso da A.o.A. conta que eles vieram de Amaterasu usando o <strong>Bulbmon</strong>, que abre caminho na rede. A barreira do Lucky Mouse deixou o Bulbmon louco, e ele foi pro South. Sentindo os tremores, você segue até a <a href="#place-jungle-shrine">Jungle Shrine</a>, no Ether Forest, onde encontra a Suzaku Leader.</p>
     
     <h3 class="block-title">Passo a passo</h3>
-    <ol><li>Em Byakko, ouça o líder preso sobre o Bulbmon.</li><li>Vá ao South: em Suzaku, o Patamon diz que a Leader foi pro Ether Forest.</li><li>Atravesse a Jungle Shrine e as Catacombs (se ainda faltou o Zanbamon, resolva agora).</li><li>Entre no buraco → Bug Maze: primeira rampa, desça, contorne o círculo até aparecer o ícone de escada, suba e siga pro ninho.</li><li>Vença o Bulbmon de novo: você chega ao Amaterasu Server.</li></ol>
+    <ol><li>Em Byakko, ouça o líder preso sobre o Bulbmon.</li><li>Vá ao South: em Suzaku, o Patamon diz que a Leader foi pro Ether Forest.</li><li>Atravesse a <a href="#place-jungle-shrine">Jungle Shrine</a> e as Catacombs (se ainda faltou o Zanbamon, resolva agora).</li><li>Entre no buraco → <a href="#place-bug-maze">Bug Maze</a>: primeira rampa, desça, contorne o círculo até aparecer o ícone de escada, suba e siga pro ninho.</li><li>Vença o Bulbmon de novo: você chega ao Amaterasu Server.</li></ol>
     
     <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
     <div class="boss-grid">
@@ -1391,7 +1399,7 @@ a:hover { color:#9ad4ff; }
       <rect x="573.3" y="118" width="73.4" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
       <text x="610" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Galacticmon</text>
     </g></svg><figcaption>Mapa esquemático — Asuka / Amaterasu · Login → Master Room. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
-    <p>No Login Room, o Kurt avisa que o Matrix ainda tem falha: você continua preso. De volta à <a href="#place-master-room">Master Room</a> de Asuka, a coisa desanda — o Vemmon foge e transforma a cidade inteira em Oinkmon. Você corre pra Amaterasu pelo Circuit Board (Kicking Forest → Central Park) e reencontra a Kail, ainda humana.</p>
+    <p>No <a href="#place-login-room">Login Room</a>, o Kurt avisa que o Matrix ainda tem falha: você continua preso. De volta à <a href="#place-master-room">Master Room</a> de Asuka, a coisa desanda — o Vemmon foge e transforma a cidade inteira em Oinkmon. Você corre pra Amaterasu pelo Circuit Board (Kicking Forest → Central Park) e reencontra a Kail, ainda humana.</p>
     
     <h3 class="block-title">Passo a passo</h3>
     <ol><li>No Login Room, ouça o Kurt sobre a falha do Matrix.</li><li>Volte à Master Room de Asuka: o Vemmon foge e todos viram Oinkmon.</li><li>Corra pra Amaterasu (Digmon / Circuit Board → Central Park); fale com a Kail.</li><li>Na Master Room, entre pela porta secreta → AoA HQ.</li><li>Aparece o Lord Megadeath: entre no portal da arma Gunslinger pra pará-lo.</li></ol>
@@ -1595,7 +1603,31 @@ a:hover { color:#9ad4ff; }
             <span class="badge srv-special">Especial · Underwater</span>
           </div>
           <p class="what">As passagens submarinas do Submarimon (Digi-Egg of Sincerity). Ligam setores dentro de um server.</p>
-          <p class="reach"><span class="k">Como chegar</span> Chame o Submarimon num dock. Todos os docks e destinos estão em Routes.</p>
+          <p class="reach"><span class="k">Como chegar</span> Chame o Submarimon num dock. Todos os docks e destinos estão em <a href="digimon-world-3-routes.html">Routes</a>.</p>
+        </div>
+        <div class="place-card" id="place-jungle-shrine">
+          <div class="place-top">
+            <strong>Jungle Shrine</strong>
+            <span class="badge srv-asuka">Asuka · South</span>
+          </div>
+          <p class="what">Santuário no Ether Forest / Ether Jungle. Porta de entrada pras Catacombs e, depois, pro Bug Maze rumo a Amaterasu.</p>
+          <p class="reach"><span class="k">Como chegar</span> South Sector → Phoenix Bay / Ether Jungle → caminho até a shrine. A Suzaku Leader aparece aqui na linha do Bulbmon.</p>
+        </div>
+        <div class="place-card" id="place-bug-maze">
+          <div class="place-top">
+            <strong>Bug Maze</strong>
+            <span class="badge srv-special">Especial · entre servers</span>
+          </div>
+          <p class="what">Labirinto de inseto onde o Bulbmon faz ninho. É a passagem da história de Asuka pra Amaterasu.</p>
+          <p class="reach"><span class="k">Como chegar</span> Jungle Shrine → Catacombs → buraco. Dentro: primeira rampa, desça, contorne o círculo até o ícone de escada, suba e vá ao ninho.</p>
+        </div>
+        <div class="place-card" id="place-login-room">
+          <div class="place-top">
+            <strong>Login Room</strong>
+            <span class="badge srv-special">Mundo real / Matrix</span>
+          </div>
+          <p class="what">Sala de login do Digimon Online. No fim do jogo o Kurt avisa aqui que o Matrix ainda tem falha.</p>
+          <p class="reach"><span class="k">Como chegar</span> Você volta pra cá pelo fluxo normal de logout/login da história — não é um mapa de Server.</p>
         </div>
     </div>
     <p class="foot">Rotas de Submarimon e buracos com destino completo ficam em <a href="digimon-world-3-routes.html">Routes</a>.</p>
@@ -1609,9 +1641,9 @@ a:hover { color:#9ad4ff; }
     <div class="where-row"><span class="badge sector">Onde pega · pra que serve</span></div></div>
   </header>
   <div class="ch-body">
-    <div class="item-table">
+    <div class="item-table table-scroll">
       <div class="it-head"><span>Item</span><span>Onde pega</span><span>Pra que serve</span></div>
-      <div class="it-row"><span class="it-name">Folder Bag</span><span>Divermon no Yellow Cruiser (Asuka City)</span><span>Libera o card game (packs de carta).</span></div><div class="it-row"><span class="it-name">Fishing Rod</span><span>Velho em Shell Beach + Red Snapper (Divermon's Lake) + Spider Web (Dokugumon, Protocol Forest)</span><span>Pesca Cardmon (packs B).</span></div><div class="it-row"><span class="it-name">Tree Boots</span><span>Carta Gabumon (armário do porão da Asuka Inn) → menino em Plug Cape</span><span>Chuta árvore pra achar Cardmon (packs B).</span></div><div class="it-row"><span class="it-name">Old Claw</span><span>MasterTyrannomon em Tyranno Valley</span><span>Arma forte pro início/meio.</span></div><div class="it-row"><span class="it-name">Blue Card</span><span>Tricky Guilmon no porão da Forest Inn (versão verdadeira)</span><span>Ativa a gondola em East Station rumo ao South.</span></div><div class="it-row"><span class="it-name">Smelly Herb</span><span>Sepikmon, depois de recuperar a máscara dele</span><span>Espanta o Zanbamon em Jungle Grave.</span></div><div class="it-row"><span class="it-name">Digi-Egg of Reliability</span><span>Atrás do shrine em Bios Swamp (estoura com TNT Chip do Baronmon)</span><span>Chama o Submarimon → abre o West Sector.</span></div><div class="it-row"><span class="it-name">Digi-Egg of Knowledge</span><span>Baú no Zhu Que UG Lake (Amaterasu)</span><span>Chama o Digmon → abre o Circuit Board e o North Sector.</span></div><div class="it-row"><span class="it-name">Sewer Key</span><span>HiAndromon na Dum Dum Factory</span><span>Abre caminho na fábrica rumo à Secret Room.</span></div><div class="it-row"><span class="it-name">Staff ID Pass</span><span>Nick acha na Secret Room (depois de limpar a sala)</span><span>Datamon abre o portão do Admin Center na Control Room.</span></div><div class="it-row"><span class="it-name">Crony ID</span><span>Kenny na Forest Inn BF (Amaterasu)</span><span>Passa pelos soldados A.o.A. em Amaterasu.</span></div><div class="it-row"><span class="it-name">Red / Blue / Black / White ID Pass</span><span>Líderes das cidades de Amaterasu (Qing Long, Zhu Que, Bai Hu, Zhen Wu)</span><span>Liberam as cidades e o Admin Center de Amaterasu.</span></div>
+      <div class="it-row"><span class="it-name"><a href="digimon-world-3-boosters.html">Folder Bag</a></span><span>Divermon no Yellow Cruiser (Asuka City)</span><span>Libera o card game (packs de carta).</span></div><div class="it-row"><span class="it-name">Fishing Rod</span><span>Velho em Shell Beach + Red Snapper (Divermon's Lake) + Spider Web (Dokugumon, Protocol Forest)</span><span>Pesca Cardmon (packs B).</span></div><div class="it-row"><span class="it-name">Tree Boots</span><span>Carta Gabumon (armário do porão da Asuka Inn) → menino em Plug Cape</span><span>Chuta árvore pra achar Cardmon (packs B).</span></div><div class="it-row"><span class="it-name">Old Claw</span><span>MasterTyrannomon em Tyranno Valley</span><span>Arma forte pro início/meio.</span></div><div class="it-row"><span class="it-name">Blue Card</span><span>Tricky Guilmon no porão da Forest Inn (versão verdadeira)</span><span>Ativa a gondola em East Station rumo ao South.</span></div><div class="it-row"><span class="it-name">Smelly Herb</span><span>Sepikmon, depois de recuperar a máscara dele</span><span>Espanta o Zanbamon em Jungle Grave.</span></div><div class="it-row"><span class="it-name">Digi-Egg of Reliability</span><span>Atrás do shrine em Bios Swamp (estoura com TNT Chip do Baronmon)</span><span>Chama o Submarimon → abre o West Sector.</span></div><div class="it-row"><span class="it-name">Digi-Egg of Knowledge</span><span>Baú no Zhu Que UG Lake (Amaterasu)</span><span>Chama o Digmon → abre o Circuit Board e o North Sector.</span></div><div class="it-row"><span class="it-name">Sewer Key</span><span>HiAndromon na Dum Dum Factory</span><span>Abre caminho na fábrica rumo à Secret Room.</span></div><div class="it-row"><span class="it-name">Staff ID Pass</span><span>Nick acha na Secret Room (depois de limpar a sala)</span><span>Datamon abre o portão do Admin Center na Control Room.</span></div><div class="it-row"><span class="it-name">Crony ID</span><span>Kenny na Forest Inn BF (Amaterasu)</span><span>Passa pelos soldados A.o.A. em Amaterasu.</span></div><div class="it-row"><span class="it-name">Red / Blue / Black / White ID Pass</span><span>Líderes das cidades de Amaterasu (Qing Long, Zhu Que, Bai Hu, Zhen Wu)</span><span>Liberam as cidades e o Admin Center de Amaterasu.</span></div>
     </div>
   </div>
 </section>

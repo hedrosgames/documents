@@ -1,0 +1,286 @@
+/* Digimon World 3 — shared shell
+   Tokens + chrome + responsive breakpoints: 1100 / 700 / 520 */
+:root {
+  --bg: #0c1017;
+  --panel: #151c27;
+  --panel2: #1c2635;
+  --text: #edf2f7;
+  --muted: #8fa0b5;
+  --border: #2a3648;
+  --accent: #3ecf8e;
+  --asuka: #4db6ff;
+  --amaterasu: #f0a020;
+  --warn: #ff8a65;
+  --tip: #4fc3f7;
+  --special: #b388ff;
+  --open: #e0a045;
+  --sub: #4fc3f7;
+  --hole: #f0a020;
+  --link: #6eb6ff;
+  --rookie: #f0a020;
+  --champ: #4db6ff;
+  --ult: #b388ff;
+  --mega: #ff6b6b;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 60% 35% at 0% 0%, rgba(77, 182, 255, 0.08), transparent),
+    radial-gradient(ellipse 50% 30% at 100% 0%, rgba(240, 160, 32, 0.07), transparent),
+    var(--bg);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1rem;
+}
+
+a { color: var(--asuka); }
+a:hover { color: #9ad4ff; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+}
+
+/* —— Header + nav —— */
+.site-header,
+.top,
+header.site-header {
+  padding: 1.25rem 1.5rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
+}
+
+.site-header h1,
+.top h1,
+header.site-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  letter-spacing: -0.02em;
+}
+
+.site-header > p,
+.top > p,
+header.site-header > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  max-width: 52rem;
+  line-height: 1.5;
+}
+
+.doc-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.doc-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  text-decoration: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 0.32rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.doc-nav a:hover {
+  color: var(--text);
+  border-color: #4a5d75;
+}
+
+.doc-nav a.current {
+  color: var(--text);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
+}
+
+/* —— Width shells —— */
+.shell-wide { max-width: 1440px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem; }
+.shell-app { max-width: 1200px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem; }
+.shell-prose { max-width: 720px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem; }
+.wrap.shell-wide,
+.wrap.shell-app,
+.wrap.shell-prose { margin-left: auto; margin-right: auto; }
+
+/* —— Chips / toolbar —— */
+.chip,
+.toolbar .chip {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  min-height: 2.2rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.chip:hover { border-color: #4a5d75; }
+.chip.active {
+  border-color: var(--accent);
+  color: #bff0d8;
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel2));
+}
+
+.search,
+input[type="search"] {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  min-height: 2.2rem;
+}
+
+/* —— Badges / pills —— */
+.badge {
+  padding: 0.12rem 0.42rem;
+  border-radius: 5px;
+  font-size: 0.66rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge.asuka,
+.badge.srv-asuka { color: var(--asuka); background: color-mix(in srgb, var(--asuka) 18%, transparent); }
+.badge.amaterasu,
+.badge.srv-amaterasu { color: var(--amaterasu); background: color-mix(in srgb, var(--amaterasu) 18%, transparent); }
+.badge.special,
+.badge.srv-both,
+.badge.srv-special { color: var(--special); background: color-mix(in srgb, var(--special) 18%, transparent); }
+.badge.sub { color: #9adcfb; background: color-mix(in srgb, var(--sub) 18%, transparent); }
+.badge.hole { color: #ffd180; background: color-mix(in srgb, var(--hole) 18%, transparent); }
+.badge.sector { background: var(--panel); border: 1px solid var(--border); color: var(--muted); }
+
+.pill {
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel2));
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  color: #bff0d8;
+  border-radius: 999px;
+  padding: 0.14rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+/* —— Callouts —— */
+.tip, .warn, .open, .note-callout {
+  margin: 0.75rem 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  border: 1px solid var(--border);
+}
+
+.tip {
+  background: color-mix(in srgb, var(--tip) 10%, var(--panel2));
+  border-color: color-mix(in srgb, var(--tip) 40%, var(--border));
+}
+
+.warn {
+  background: color-mix(in srgb, var(--warn) 12%, var(--panel2));
+  border-color: color-mix(in srgb, var(--warn) 45%, var(--border));
+}
+
+.open {
+  background: color-mix(in srgb, var(--open) 12%, var(--panel2));
+  border-color: color-mix(in srgb, var(--open) 45%, var(--border));
+}
+
+.tip b, .warn b, .open b, .open .tag { display: inline-block; margin-right: 0.35rem; }
+
+/* —— Hub cards —— */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.hub-card {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.hub-card:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+}
+
+.hub-card strong { display: block; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.hub-card span { color: var(--muted); font-size: 0.82rem; }
+
+.group-label,
+.toc-glabel {
+  margin: 0.55rem 0.35rem 0.25rem;
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* —— Layout helpers used across tools —— */
+.layout-stack-1100 { min-width: 0; }
+.min-0 { min-width: 0; }
+
+/* —— Canonical breakpoints —— */
+@media (max-width: 1100px) {
+  .site-header, .top, header.site-header { padding: 1rem 1rem 0.75rem; }
+  .shell-wide, .shell-app, .shell-prose { padding: 0.75rem 1rem 2rem; }
+}
+
+@media (max-width: 700px) {
+  body { font-size: 1rem; }
+  .doc-nav a {
+    min-height: 2.75rem;
+    padding: 0.45rem 0.85rem;
+  }
+  .chip, .search, input[type="search"] {
+    min-height: 2.75rem;
+  }
+  .shell-wide, .shell-app, .shell-prose { padding: 0.65rem 0.75rem 2rem; }
+  .hub-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+  .site-header h1, .top h1 { font-size: 1.1rem; }
+}

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dw3-shell.css">
 <title>Digimon World 3 — Steal Items</title>
 <style>
 :root {
@@ -92,7 +93,7 @@ header h1 {
 }
 header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52rem; line-height: 1.5; }
 .wrap {
-  max-width: 1680px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0.85rem 1.25rem 2.5rem;
   display: grid;
@@ -430,28 +431,20 @@ tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
 }
 .legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
 .note { color: var(--muted); font-size: 0.8rem; margin-top: 0.85rem; }
-@media (max-width: 1280px) {
-  .wrap { grid-template-columns: minmax(180px, 210px) minmax(0, 1fr) minmax(180px, 220px); }
-}
-@media (max-width: 1200px) {
-  .map-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 @media (max-width: 1100px) {
   .wrap { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
   .main-col { grid-column: 1 / -1; order: 1; }
   .digimon-index { order: 2; position: static; max-height: 280px; }
   .item-index { order: 3; position: static; max-height: 280px; }
   .side-panel button .tip { display: none !important; }
-}
-@media (max-width: 900px) {
-  .map-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  header { padding: 1rem 0.9rem 0.8rem; }
+  .map-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
   .wrap { grid-template-columns: 1fr; padding: 0.75rem 0.75rem 2rem; }
   .map-nav { grid-template-columns: 1fr; }
   .desc { font-size: 0.78rem; }
   .digimon-index, .item-index { max-height: 240px; }
+  header { padding: 1rem 0.9rem 0.8rem; }
 }
 @media (max-width: 520px) {
   header h1 { font-size: 1.15rem; }

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dw3-shell.css">
 <title>Digimon World 3 — Level EXP</title>
 <style>
 :root {
@@ -63,7 +64,7 @@ header h1 {
 header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 56rem; }
 
 .wrap {
-  max-width: 1400px; margin: 0 auto;
+  max-width: 1440px; margin: 0 auto;
   padding: 0.85rem 1.25rem 2.5rem;
   display: grid;
   grid-template-columns: minmax(170px, 210px) minmax(0, 1fr);
@@ -163,13 +164,13 @@ header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 56rem;
 .rank-item .n { color: var(--muted); font-size: 0.64rem; }
 .rank-item b { font-variant-numeric: tabular-nums; color: var(--accent); }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   .wrap { grid-template-columns: 1fr; }
   .side-panel { position: static; max-height: 220px; }
-  .level-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 1100px) and (min-width: 901px) {
   .level-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .level-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>

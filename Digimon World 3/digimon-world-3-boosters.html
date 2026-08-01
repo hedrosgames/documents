@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dw3-shell.css">
 <title>Digimon World 3 — Boosters</title>
 <style>
 :root {
@@ -56,7 +57,7 @@ header {
 header h1 { margin: 0 0 0.25rem; font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 700; letter-spacing: -0.02em; }
 header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52rem; line-height: 1.5; }
 .wrap {
-  max-width: 1280px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem;
+  max-width: 1440px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem;
 }
 .columns {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
@@ -285,13 +286,13 @@ header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52rem;
 @media (max-width: 1100px) {
   .card-catalog { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
-@media (max-width: 900px) {
+@media (max-width: 700px) {
   .columns { grid-template-columns: 1fr; }
   .detail-panel { position: static; max-height: none; order: -1; }
   .search { margin-left: 0; max-width: none; }
   .card-catalog { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-@media (max-width: 640px) {
+@media (max-width: 700px) {
   .card-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 520px) {

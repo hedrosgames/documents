@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dw3-shell.css">
 <title>Digimon World 3 — Partner Digivolution Guide</title>
 <style>
 :root {
@@ -11,14 +12,14 @@
   --panel2: #1c2635;
   --text: #edf2f7;
   --muted: #8fa0b5;
-  --accent: #f0a020;
+  --accent: #3ecf8e;
   --accent2: #3ecf8e;
   --rookie: #f0a020;
   --champ: #4db6ff;
   --ult: #b388ff;
   --mega: #ff6b6b;
   --border: #2a3648;
-  --glow: rgba(240, 160, 32, 0.25);
+  --glow: rgba(62, 207, 142, 0.25);
 }
 * { box-sizing: border-box; }
 
@@ -110,7 +111,7 @@ header p {
   margin: 0 auto;
   align-items: start;
 }
-@media (max-width: 1180px) {
+@media (max-width: 1100px) {
   .layout { grid-template-columns: minmax(0, 1fr) minmax(260px, 320px); }
   .attr-panel {
     grid-column: 1 / -1;
@@ -125,7 +126,7 @@ header p {
     gap: 0.4rem;
   }
 }
-@media (max-width: 820px) {
+@media (max-width: 700px) {
   .layout { grid-template-columns: 1fr; padding: 0.85rem 0.85rem 2rem; }
   .right-col { position: static !important; max-height: none; overflow: visible; }
   .attr-list { grid-template-columns: 1fr 1fr; }
@@ -539,8 +540,8 @@ header p {
 .partner-tabs button:hover { color: var(--text); border-color: #4a5d75; }
 .partner-tabs button.active {
   color: var(--text);
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 16%, var(--panel));
+  border-color: var(--rookie);
+  background: color-mix(in srgb, var(--rookie) 16%, var(--panel));
 }
 .dna-panel {
   background: var(--panel);
@@ -623,7 +624,7 @@ header p {
 .owned-bar button {
   transition: border-color 0.12s ease, color 0.12s ease;
 }
-@media (max-width: 820px) {
+@media (max-width: 700px) {
   .partner-bar { padding: 0.55rem 0.85rem 0.6rem; }
   .partner-tabs { gap: 0.35rem; }
   .partner-tabs button { padding: 0.32rem 0.7rem; font-size: 0.78rem; }
@@ -645,6 +646,16 @@ footer {
   color: var(--muted);
   font-size: 0.78rem;
   line-height: 1.45;
+}
+
+/* shell-aligned responsive */
+@media (max-width: 1100px) {
+  .layout, .wrap, .columns { grid-template-columns: 1fr !important; }
+  .toc, .route-list, aside.filters, .side, .right-panel, .left-panel { position: static !important; height: auto !important; max-height: 42vh; }
+}
+@media (max-width: 700px) {
+  .flow, .meta-grid, .tracks, .level-grid { grid-template-columns: 1fr !important; }
+  .search { margin-left: 0 !important; max-width: none !important; width: 100%; }
 }
 </style>
 </head>

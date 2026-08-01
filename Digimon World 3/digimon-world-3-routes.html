@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="dw3-shell.css">
 <title>Digimon World 3 — Submarimon & Digmon Routes</title>
 <style>
 :root {
@@ -207,19 +208,34 @@ header p { margin:0; max-width:52rem; color:var(--muted); font-size:.88rem; }
 .hint {
   margin-top:.75rem; color:var(--muted); font-size:.74rem;
 }
-@media (max-width:800px) {
+@media (max-width:1100px) {
   .layout { grid-template-columns:1fr; }
-  .route-list { position:static; max-height:260px; }
+  .route-list { position:static; max-height:42vh; }
 }
-@media (max-width:560px) {
+@media (max-width:700px) {
   .flow { grid-template-columns:1fr; }
   .arrow-col { transform:rotate(90deg); min-height:1.6rem; }
-  .toolbar .search { margin-left:0; max-width:none; }
+  .toolbar .search { margin-left:0; max-width:none; width:100%; }
+  .manual-nav button { min-width:2.75rem; min-height:2.75rem; }
+}
+@media (max-width:520px) {
+  .dest-btn { grid-template-columns:1fr; }
+  .dest-btn .go { justify-self:start; }
+}
+
+/* shell-aligned responsive */
+@media (max-width: 1100px) {
+  .layout, .wrap, .columns { grid-template-columns: 1fr !important; }
+  .toc, .route-list, aside.filters, .side, .right-panel, .left-panel { position: static !important; height: auto !important; max-height: 42vh; }
+}
+@media (max-width: 700px) {
+  .flow, .meta-grid, .tracks, .level-grid { grid-template-columns: 1fr !important; }
+  .search { margin-left: 0 !important; max-width: none !important; width: 100%; }
 }
 </style>
 </head>
 <body>
-<header>
+<header class="site-header">
   <h1>Submarimon & Digmon Routes</h1>
   <p>Cada dock do Submarimon e cada buraco do Digmon: de onde você entra, pra onde sai, e como achar a entrada no mapa. Clique num destino pra abrir o card daquele ponto — se ele também for um dock ou buraco.</p>
   <nav class="doc-nav" aria-label="Guides">
