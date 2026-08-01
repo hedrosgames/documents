@@ -37,6 +37,14 @@ Kit de referência HTML:
 Estilo compartilhado em `Digimon World 3/dw3-shell.css`.  
 Checagem opcional: `node "Digimon World 3/_check.cjs"`.
 
+## Clone local
+
+```
+C:\CursorProjects\documents
+```
+
+Outros docs não-Unity ficam em `C:\CursorProjects\` (`privatedocuments`, `bugstatus`).
+
 ## Como contribuir (fluxo interno)
 
 1. Crie ou edite a pasta do projeto.  
