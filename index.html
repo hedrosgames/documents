@@ -22,25 +22,29 @@
       --fuchsia: #d946ef;
     }
     * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
+    html {
+      -webkit-text-size-adjust: 100%;
+      background-color: var(--bg);
+      color-scheme: dark;
+    }
     body {
       margin: 0;
-      min-height: 100vh;
+      min-height: 100dvh;
       font-family: Inter, system-ui, sans-serif;
       color: var(--text);
-      background: var(--bg);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at top right, #7c3aed1f, transparent 45%),
+        radial-gradient(circle at bottom left, #d946ef17, transparent 40%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-    }
-    .hero-gradient {
-      background:
-        radial-gradient(circle at top right, #7c3aed18, transparent 45%),
-        radial-gradient(circle at bottom left, #d946ef14, transparent 40%);
     }
     .shell {
       max-width: 56rem;
       margin: 0 auto;
-      padding: 4.5rem 1.25rem 3.5rem;
+      padding: clamp(2.5rem, 8vw, 4.5rem) clamp(1rem, 4vw, 1.5rem) 3rem;
     }
     .brand {
       margin: 0 0 0.35rem;
@@ -54,9 +58,9 @@
       color: transparent;
     }
     .tagline {
-      margin: 0 0 2.25rem;
+      margin: 0 0 clamp(1.75rem, 5vw, 2.25rem);
       color: var(--muted);
-      font-size: 1rem;
+      font-size: clamp(0.92rem, 2.5vw, 1rem);
       max-width: 28rem;
     }
     .section-label {
@@ -69,23 +73,27 @@
     }
     .docs {
       display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
       gap: 0.85rem;
     }
     .doc-card {
       display: block;
       text-decoration: none;
       color: inherit;
-      background: rgba(24, 24, 27, 0.85);
+      background-color: var(--panel);
       border: 1px solid var(--border);
       border-radius: 1rem;
-      padding: 1.15rem 1.25rem;
+      padding: clamp(1rem, 3vw, 1.25rem);
       transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s, box-shadow 0.25s;
     }
-    .doc-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--violet);
-      box-shadow: 0 0 24px -6px rgba(168, 85, 247, 0.28);
+    @media (hover: hover) {
+      .doc-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--violet);
+        box-shadow: 0 0 24px -6px rgba(168, 85, 247, 0.28);
+      }
     }
+    .doc-card:active { border-color: var(--violet); }
     .doc-card:focus-visible {
       outline: 2px solid var(--violet);
       outline-offset: 3px;
@@ -112,14 +120,15 @@
     }
     .doc-card h2 {
       margin: 0 0 0.3rem;
-      font-size: 1.2rem;
+      font-size: clamp(1.05rem, 3vw, 1.2rem);
       font-weight: 700;
       letter-spacing: -0.02em;
     }
     .doc-card p {
       margin: 0;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: clamp(0.84rem, 2.4vw, 0.9rem);
+      overflow-wrap: break-word;
     }
     .doc-card .go {
       display: inline-block;
@@ -128,19 +137,9 @@
       font-weight: 700;
       color: #c084fc;
     }
-    .foot {
-      margin-top: 3rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid #27272a;
-      color: #71717a;
-      font-size: 0.78rem;
-    }
-    @media (max-width: 520px) {
-      .shell { padding: 3.25rem 1rem 2.5rem; }
-    }
   </style>
 </head>
-<body class="hero-gradient">
+<body>
   <main class="shell">
     <h1 class="brand">Hedros Games</h1>
     <p class="tagline">Documentação de projetos. Escolha um kit pra abrir.</p>
@@ -154,8 +153,6 @@
         <span class="go">Abrir documentação →</span>
       </a>
     </div>
-
-    <p class="foot">Hedros Games · documentação interna publicada neste repositório</p>
   </main>
 </body>
 </html>
