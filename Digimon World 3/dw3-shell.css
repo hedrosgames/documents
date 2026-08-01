@@ -213,32 +213,13 @@ input[type="search"] {
 
 .tip b, .warn b, .open b, .open .tag { display: inline-block; margin-right: 0.35rem; }
 
-/* —— Hub cards —— */
-.hub-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 0.65rem;
-  margin-top: 1rem;
+/* —— Hub —— */
+.hub-heading {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
-
-.hub-card {
-  display: block;
-  text-decoration: none;
-  color: var(--text);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 0.85rem 1rem;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.hub-card:hover {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 8%, var(--panel));
-}
-
-.hub-card strong { display: block; font-size: 0.95rem; margin-bottom: 0.3rem; }
-.hub-card span { color: var(--muted); font-size: 0.82rem; }
 
 .group-label,
 .toc-glabel {
@@ -305,7 +286,6 @@ img, svg, video {
     min-height: 2.75rem;
   }
   .shell-wide, .shell-app, .shell-prose { padding: 0.65rem 0.75rem 2rem; }
-  .hub-grid { grid-template-columns: 1fr; }
   .map-nav, .exp-nav, .el-nav {
     display: flex !important;
     flex-wrap: nowrap;
