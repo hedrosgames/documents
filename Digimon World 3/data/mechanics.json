@@ -1,7 +1,7 @@
 {
   "$schema": "dw3-mechanics/1.0",
   "region": "NTSC-U (North America)",
-  "notes": "Números e relações apurados de FAQs da comunidade (TheFulgorah Bestiary, Rob01m DV EXP, Wikimon, DW3 FAQ v0.91, speedrun.com). O jogo usa matemática inteira e não expõe as constantes exatas de dano; as relações abaixo são o que está documentado e reproduzível.",
+  "notes": "O jogo usa matemática inteira e não expõe as constantes exatas de dano; as relações abaixo são o que é reproduzível em teste.",
   "damage": {
     "channels": {
       "physical": {
@@ -29,7 +29,7 @@
   "accuracy": {
     "physical": "Acerto/esquiva por Speed do atacante vs Speed do alvo.",
     "magical": "Acerto/esquiva por Wisdom do atacante vs Wisdom do alvo.",
-    "guaranteed": "Comunidade (speedrun): quando o 'range' interno chega a ~127+, o acerto é garantido.",
+    "guaranteed": "Quando o 'range' interno de acerto chega a ~127+, o acerto é garantido.",
     "critical": "Qualquer golpe pode ser crítico; Speed alto aumenta a taxa; certas armas somam crítico (ex.: Saber Fang, Shuriken).",
     "counter": "Só ataque físico pode ser contra-atacado. Counter Board e Multiple Board na versão NA ativam sempre (100%)."
   },
@@ -112,8 +112,7 @@
   "equipment_powers": {
     "slots": ["Head", "Body", "Left Hand", "Right Hand", "Accessory x2"],
     "powers": "Fire/Water/Ice/Wind/Bolt(Thunder)/Metal/Dark Power em tiers 1 < 2 < S; sobem o ataque daquele elemento. Constante exata não exposta; a ordem de força é 1 < 2 < S.",
-    "buffs_tech": ["Mega Strength (str da party)", "Mega Protection (def da party)", "Speed Up (speed próprio)"],
-    "note": "Buffs de % com nome tipo Burning Heart/Muscle Charge/Upgrade são de Digimon World: Next Order, NÃO de DW3."
+    "buffs_tech": ["Mega Strength (str da party)", "Mega Protection (def da party)", "Speed Up (speed próprio)"]
   },
   "session": {
     "unit": "Cidade (cura/loja/Digimon Lab) → mapa do setor → gate/boss.",

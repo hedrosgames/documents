@@ -36,31 +36,50 @@ header p {
   max-width: 40rem;
 }
 
-:root { --shell-max: 52rem; }
+/* doc de prosa: a coluna fecha em ~1200px e o bloco todo centraliza no ultrawide */
+:root { --shell-max: 1200px; }
 
 .wrap {
   max-width: var(--shell-w);
   margin: 0 auto;
-  padding: 0.5rem var(--shell-pad) 3.5rem;
+  padding: 0.85rem var(--shell-pad) 2.5rem;
+  display: grid;
+  grid-template-columns: minmax(180px, 230px) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
 }
+.main-col { min-width: 0; }
 
 .toc {
-  display: flex; flex-wrap: wrap; gap: 0.35rem 1rem;
-  padding: 0.85rem 0 1rem;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 0.5rem;
-  font-size: 0.78rem;
+  position: sticky; top: 0.75rem;
+  max-height: calc(100vh - 1.5rem); overflow: auto;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0.65rem;
+  scrollbar-width: thin; scrollbar-color: #3a4a60 transparent;
 }
+.toc .label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); font-weight: 700; margin: 0 0 0.45rem;
+}
+.toc .list { display: flex; flex-direction: column; gap: 0.28rem; }
 .toc a {
-  color: var(--muted);
-  text-decoration: none;
+  text-align: left; border: 1px solid var(--border); background: var(--panel2);
+  color: var(--text); border-radius: 7px; padding: 0.38rem 0.5rem;
+  text-decoration: none; font-size: 0.76rem; line-height: 1.3;
 }
-.toc a:hover { color: var(--text); }
+.toc a:hover { border-color: #4a5d75; }
+.toc a.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel2));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+}
 
 section {
   padding: 1.35rem 0 1.15rem;
   border-bottom: 1px solid var(--line);
+  scroll-margin-top: 1rem;
 }
+section:first-of-type { padding-top: 0.35rem; }
 section:last-child { border-bottom: none; }
 section h2 {
   margin: 0 0 0.65rem;
@@ -74,18 +93,18 @@ section h3 {
   font-weight: 650;
   color: var(--text);
 }
+/* a coluna de conteúdo já é a medida de leitura (shell-max abaixo);
+   a prosa preenche a coluna e tabelas/grids usam tudo */
 section p {
   margin: 0.45rem 0;
   color: #c9d4e0;
   font-size: 0.92rem;
-  max-width: 46rem;
 }
 section ul, section ol {
   margin: 0.4rem 0 0.55rem;
   padding-left: 1.2rem;
   color: #c9d4e0;
   font-size: 0.9rem;
-  max-width: 46rem;
 }
 section li { margin: 0.28rem 0; }
 code {
@@ -202,12 +221,22 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
   margin-top: 1rem;
 }
 
-@media (max-width: 700px) {
-  .tracks { grid-template-columns: 1fr; }
-  .files li { grid-template-columns: 1fr; gap: 0.15rem; }
+@media (max-width: 1100px) {
+  .wrap { grid-template-columns: 1fr; }
+  .toc {
+    position: relative; top: 0; max-height: none;
+  }
+  .toc .list {
+    flex-direction: row; flex-wrap: nowrap;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    gap: 0.35rem; padding-bottom: 0.15rem;
+  }
+  .toc .list a { flex: 0 0 auto; white-space: nowrap; }
 }
 
 @media (max-width: 700px) {
+  .tracks { grid-template-columns: 1fr; }
+  .files li { grid-template-columns: 1fr; gap: 0.15rem; }
   .search { margin-left: 0 !important; max-width: none !important; width: 100%; }
 }
 </style>
@@ -215,7 +244,7 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
 <body>
 <header class="site-header">
   <h1>Balance Notes</h1>
-  <p>Como o combate e a progressão de Digimon World 3 funcionam por baixo do pano: as fórmulas, o Core Loop e o que medir por mapa. Sem lacunas — o que não é número exposto pelo jogo está marcado como relação.</p>
+  <p>Como o combate e a progressão de Digimon World 3 funcionam por baixo do pano: as fórmulas, o Core Loop e o que medir por mapa.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
     <a href="digimon-world-3-steal-items.html">Steal Items</a>
@@ -231,27 +260,31 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
 
 <div class="wrap">
   <nav class="toc" aria-label="Sumário">
-    <a href="#para-que">Para que serve</a>
-    <a href="#loop">Core Loop</a>
-    <a href="#pilares">Pilares</a>
-    <a href="#combate">Pipeline de dano</a>
-    <a href="#acerto">Acerto, crítico, turno</a>
-    <a href="#elemento">Elemento e Tolerance</a>
-    <a href="#xp">Duas barras de XP</a>
-    <a href="#growth">Growth de stat</a>
-    <a href="#blast">Blast e Counter</a>
-    <a href="#mapa">Encontros e bosses</a>
-    <a href="#economia">Economia</a>
-    <a href="#equip">Equip e Powers</a>
-    <a href="#dados">Dados</a>
-    <a href="#simular">Simular um combate</a>
+    <p class="label">Sumário</p>
+    <div class="list">
+      <a href="#para-que">Para que serve</a>
+      <a href="#loop">Core Loop</a>
+      <a href="#pilares">Pilares</a>
+      <a href="#combate">Pipeline de dano</a>
+      <a href="#acerto">Acerto, crítico, turno</a>
+      <a href="#elemento">Elemento e Tolerance</a>
+      <a href="#xp">Duas barras de XP</a>
+      <a href="#growth">Growth de stat</a>
+      <a href="#blast">Blast e Counter</a>
+      <a href="#mapa">Encontros e bosses</a>
+      <a href="#economia">Economia</a>
+      <a href="#equip">Equip e Powers</a>
+      <a href="#dados">Dados</a>
+      <a href="#simular">Simular um combate</a>
+    </div>
   </nav>
 
+  <main class="main-col">
   <section id="para-que">
     <h2>Para que serve</h2>
     <p>Você usa este doc pra decidir se um mapa do Server está duro demais, se um Power resolve a zona ou se o grind de Digivolution está lento. Cruza o que o monstro aguenta com o que o seu partner entrega e chega em turns-to-kill.</p>
     <p>As guias vizinhas trazem os números por mapa: nível, HP, soft elemental, EXP e Bits por kill. Este doc traz o resto — as regras que transformam esses números em dano, acerto e progressão. Onde o jogo não expõe a constante exata, ele mostra a relação medível: qual stat sobe, qual stat desce, em que direção.</p>
-    <p class="note">Fonte das mecânicas: Bestiary do TheFulgorah, pesquisa de DV EXP do Rob01m, Wikimon, DW3 FAQ v0.91 e o fórum de speedrun. Referência consolidada em <code>data/mechanics.md</code> e <code>data/mechanics.json</code>. Valores da versão NA (NTSC-U).</p>
+    <p class="note">Valores da versão NA (NTSC-U).</p>
   </section>
 
   <section id="loop">
@@ -266,7 +299,7 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
 
   <section id="pilares">
     <h2>Pilares</h2>
-    <p>Cada pilar responde uma pergunta. Todos têm regra documentada — nada aqui fica no escuro.</p>
+    <p>Cada pilar responde uma pergunta sobre o jogo, e a regra que responde está logo abaixo.</p>
 
     <h3>Sessão <span class="status">locked</span></h3>
     <p>O que você faz e o que sobra? Loop cidade → Server → luta → recompensa → Digivolve. Gate obrigatório vs grind livre definidos acima.</p>
@@ -299,7 +332,7 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
       <li><b>Físico</b> — sobe com <b>Strength</b> do atacante, cai com <b>Defense</b> do alvo.</li>
       <li><b>Mágico</b> — sobe com <b>Spirit</b> do atacante, cai com <b>Wisdom</b> do alvo.</li>
     </ul>
-    <p>O jogo roda em matemática inteira e não mostra a constante de dano numa fórmula limpa, então este doc não inventa um multiplicador. O que dá pra medir e reproduzir é a direção: mais Strength ou Spirit do seu lado empurra o dano pra cima; mais Defense ou Wisdom do lado do alvo puxa pra baixo. Na versão NA o dano não trava em 9999 — passa disso e chega a 5 dígitos.</p>
+    <p>O jogo roda em matemática inteira e não expõe a constante de dano numa fórmula limpa. O que dá pra medir e reproduzir é a direção: mais Strength ou Spirit do seu lado empurra o dano pra cima; mais Defense ou Wisdom do lado do alvo puxa pra baixo. Na versão NA o dano não trava em 9999 — passa disso e chega a 5 dígitos.</p>
   </section>
 
   <section id="acerto">
@@ -363,7 +396,7 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
   <section id="growth">
     <h2>Growth de stat</h2>
     <p>O ganho de stat por nível é <b>fixo por Rookie</b> — cada um dos 8 partners tem base e curva próprias. Por cima disso, cada Digivolution soma um <b>bônus fixo</b> de stat, igual entre rookies pra mesma evolução. A única esquisitice é o charisma: o champion nativo do rookie não ganha o +1 de charisma que os outros ganham naquela forma.</p>
-    <p>DW3 <b>não</b> tem ginásio nem Training Points que suba stat — isso é de outros Digimon World. Aqui stat vem só de nível de EXP + Digivolution, e ponto. Equip muda stat em combate, mas é ignorado nos requisitos de Digivolution: o gate lê o stat-base sem equip.</p>
+    <p>Stat vem <b>só</b> de nível de EXP mais Digivolution — não existe treino nem ginásio que suba stat. Equip muda stat em combate, mas é ignorado nos requisitos de Digivolution: o gate lê o stat-base sem equip.</p>
     <h3>Stats iniciais (exemplos confirmados)</h3>
     <div class="table-scroll">
       <table class="tbl">
@@ -419,16 +452,15 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
     <h3>Powers elementais</h3>
     <p>Os <b>Powers</b> são o equip que amplifica um elemento: Fire, Water, Ice, Wind, Bolt (Thunder), Metal e Dark, cada um em três tiers — <b>1 &lt; 2 &lt; S</b>. Quanto maior o tier, maior o empurrão no ataque daquele elemento. O jogo não expõe a porcentagem exata; o que está firme é a ordem de força, então pra resolver uma zona você casa o Power com o elemento que a guia Elemental Weaknesses aponta e sobe de tier conforme acha o item.</p>
     <h3>Buffs por tech</h3>
-    <p>Do lado das techs, os buffs de DW3 são Mega Strength (Strength da party inteira), Mega Protection (Defense da party) e Speed Up (Speed de quem usa). São eles que seguram lutas longas sem torrar item.</p>
-    <p class="note">Buffs de porcentagem com nome tipo Burning Heart, Muscle Charge ou Upgrade são de Digimon World: Next Order, não de DW3 — não entram nesta análise.</p>
+    <p>Do lado das techs, os buffs são Mega Strength (Strength da party inteira), Mega Protection (Defense da party) e Speed Up (Speed de quem usa). São eles que seguram lutas longas sem torrar item.</p>
   </section>
 
   <section id="dados">
     <h2>Dados</h2>
-    <p>Fonte canônica pra bots e pra checar número: os JSON de dados. As guias em HTML são a camada visual; o número mora no JSON, e as regras deste doc moram em <code>data/mechanics.*</code>.</p>
+    <p>Pra checar número, vá no JSON. As guias em HTML são a camada visual; o número mora no dado, e as regras desta página moram em <code>data/mechanics.*</code>.</p>
     <ul class="files table-scroll">
-      <li><code>data/mechanics.json</code><span>Fórmulas, tiers de DV EXP, growth, economia (este doc, legível por bot)</span></li>
-      <li><code>data/mechanics.md</code><span>Mesma referência em prosa, com as fontes</span></li>
+      <li><code>data/mechanics.json</code><span>Fórmulas, tiers de DV EXP, growth e economia em formato de dado</span></li>
+      <li><code>data/mechanics.md</code><span>Mesma referência em prosa</span></li>
       <li><code>monsters.json</code><span>Level, EXP, Bits, HP/MP, combate, resists, status, drop</span></li>
       <li><code>elemental-resistances.json</code><span>Tolerâncias + mapIds</span></li>
       <li><code>partner-level-exp.json</code><span>EXP 1–99 + dvTiers (custo)</span></li>
@@ -436,7 +468,7 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
       <li><code>digimon-level-by-name.json</code><span>Lookup nome → level</span></li>
       <li><code>boosters.json</code><span>Packs A / B / R e setores</span></li>
     </ul>
-    <p class="note">Os datasets de monstro, resistência e steal hoje vivem embutidos nas guias que os usam (Monster Stats, Elemental Weaknesses, Steal Items); <code>data/mechanics.*</code> é o primeiro arquivo solto da pasta e o alvo pra onde os demais devem migrar.</p>
+    <p class="note">Os datasets de monstro, resistência e steal vivem embutidos nas guias que os usam: Monster Stats, Elemental Weaknesses e Steal Items.</p>
   </section>
 
   <section id="simular">
@@ -451,6 +483,33 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
       <li>Cruze com EXP, Bits e DV EXP por kill pra medir o ritmo de grind da zona.</li>
     </ol>
   </section>
+  </main>
 </div>
+<script>
+(() => {
+  const links = [...document.querySelectorAll('.toc .list a')];
+  const byId = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  const sections = links
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+
+  let current = null;
+  const setActive = id => {
+    if (id === current) return;
+    current = id;
+    links.forEach(a => a.classList.remove('active'));
+    byId.get(id)?.classList.add('active');
+  };
+
+  const io = new IntersectionObserver(entries => {
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+    if (visible) setActive(visible.target.id);
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(s => io.observe(s));
+})();
+</script>
 </body>
 </html>

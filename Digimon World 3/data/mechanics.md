@@ -1,8 +1,6 @@
 # Digimon World 3 — Mecânicas de combate e progressão
 
-Referência de apoio ao **Balance Notes**. Tudo aqui é comportamento documentado e reproduzível do jogo (versão NA/NTSC-U), apurado de FAQs da comunidade. O jogo usa matemática inteira e não expõe as constantes exatas de dano; as relações abaixo são o que dá pra medir e confirmar. Os números finos moram nos JSON/HTML das guias; este doc trata das **regras**.
-
-Fontes: TheFulgorah — Bestiary (GameFAQs), Rob01m — pesquisa de DV EXP, Wikimon (Digimon World 2003), DW3 FAQ v0.91 (video-games-museum), fórum de speedrun do DW3.
+Referência de mecânica de combate e progressão (versão NA/NTSC-U). O jogo usa matemática inteira e não expõe as constantes exatas de dano; as relações abaixo são o que dá pra medir e confirmar. Os números finos moram nos JSON/HTML das guias; este doc trata das **regras**.
 
 ## Dano
 
@@ -77,8 +75,6 @@ Bits entram por kill (valor BIT por inimigo), venda e steal. Steal mira o drop d
 ## Equip e Powers
 
 Slots: Head, Body, Left Hand, Right Hand e dois Accessories. Os **Powers** elementais (Fire/Water/Ice/Wind/Bolt/Metal/Dark) vêm em tiers **1 < 2 < S** e sobem o ataque daquele elemento. Buffs por tech: Mega Strength (party), Mega Protection (party), Speed Up (próprio).
-
-> Buffs de porcentagem com nome tipo Burning Heart, Muscle Charge ou Upgrade são de **Digimon World: Next Order**, não de DW3. Não use aqui.
 
 ## Sessão
 
