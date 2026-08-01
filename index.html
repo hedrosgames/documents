@@ -1,25 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hedros Games — Documentação</title>
-  <meta name="description" content="Lobby de documentação interna da Hedros Games.">
+  <meta name="description" content="Documentação de jogos da Hedros Games.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3C/svg%3E" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #09090b;
-      --panel: #18181b;
-      --panel2: #27272a;
-      --text: #fafafa;
-      --muted: #a1a1aa;
-      --border: #3f3f46;
-      --violet: #a855f7;
-      --violet-soft: #7c3aed;
-      --fuchsia: #d946ef;
+      --bg: #0b0f14;
+      --panel: #141a22;
+      --panel2: #1b232d;
+      --text: #e8eef6;
+      --muted: #97a4b4;
+      --border: #26313d;
+      --accent: #3ecf8e;
     }
     * { box-sizing: border-box; }
     html {
@@ -33,125 +31,205 @@
       font-family: Inter, system-ui, sans-serif;
       color: var(--text);
       background-color: var(--bg);
-      background-image:
-        radial-gradient(circle at top right, #7c3aed1f, transparent 45%),
-        radial-gradient(circle at bottom left, #d946ef17, transparent 40%);
+      background-image: radial-gradient(circle at top right, #7c3aed14, transparent 45%);
       background-repeat: no-repeat;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
     .shell {
-      max-width: 56rem;
-      margin: 0 auto;
-      padding: clamp(2.5rem, 8vw, 4.5rem) clamp(1rem, 4vw, 1.5rem) 3rem;
-    }
-    .brand {
-      margin: 0 0 0.35rem;
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-      background: linear-gradient(90deg, #c084fc, #e879f9);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .tagline {
-      margin: 0 0 clamp(1.75rem, 5vw, 2.25rem);
-      color: var(--muted);
-      font-size: clamp(0.92rem, 2.5vw, 1rem);
-      max-width: 28rem;
-    }
-    .section-label {
-      margin: 0 0 0.85rem;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .docs {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
-      gap: 0.85rem;
-    }
-    .doc-card {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      background-color: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      padding: clamp(1rem, 3vw, 1.25rem);
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s, box-shadow 0.25s;
-    }
-    @media (hover: hover) {
-      .doc-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--violet);
-        box-shadow: 0 0 24px -6px rgba(168, 85, 247, 0.28);
-      }
-    }
-    .doc-card:active { border-color: var(--violet); }
-    .doc-card:focus-visible {
-      outline: 2px solid var(--violet);
-      outline-offset: 3px;
-    }
-    .doc-card .meta {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
       align-items: center;
-      margin-bottom: 0.45rem;
+      min-height: 100dvh;
+      padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 1.5rem);
     }
-    .pill {
-      display: inline-flex;
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 320px));
+      gap: 1.25rem;
+      justify-content: center;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .game-card {
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      padding: 0.15rem 0.55rem;
-      border-radius: 999px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: #e9d5ff;
-      background: color-mix(in srgb, var(--violet-soft) 28%, transparent);
-      border: 1px solid color-mix(in srgb, var(--violet) 40%, transparent);
+      gap: 0.75rem;
+      padding: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
     }
-    .doc-card h2 {
-      margin: 0 0 0.3rem;
-      font-size: clamp(1.05rem, 3vw, 1.2rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
+    .game-title {
+      margin: 0;
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
     }
-    .doc-card p {
+    .game-art {
+      position: relative;
+      display: block;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      text-decoration: none;
+    }
+    .game-art img { display: block; width: 100%; height: auto; }
+    .game-open {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      padding: 0.5rem;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    a.game-art:hover { border-color: var(--accent); }
+    .game-card.is-locked .game-art { opacity: 0.5; filter: grayscale(0.7); }
+    .progress-status {
       margin: 0;
       color: var(--muted);
-      font-size: clamp(0.84rem, 2.4vw, 0.9rem);
-      overflow-wrap: break-word;
+      font-size: 0.85rem;
     }
-    .doc-card .go {
-      display: inline-block;
-      margin-top: 0.85rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #c084fc;
+    .progress-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
     }
+    .progress-actions button {
+      min-height: 2.25rem;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--panel2);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .progress-actions button:hover:not(:disabled) { border-color: var(--accent); }
+    .progress-actions button:disabled { opacity: 0.5; cursor: default; }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <h1 class="brand">Hedros Games</h1>
-    <p class="tagline">Documentação de projetos. Escolha um kit pra abrir.</p>
-
-    <p class="section-label">Documentação</p>
-    <div class="docs">
-      <a class="doc-card" href="Digimon%20World%203/index.html">
-        <div class="meta"><span class="pill">Guia</span></div>
-        <h2>Digimon World 3</h2>
-        <p>Walkthrough, rotas, Digivolution, boosters, fraquezas, stats e GDD de balance.</p>
-        <span class="go">Abrir documentação →</span>
+<main class="shell">
+  <div class="game-grid">
+    <section class="game-card">
+      <h2 class="game-title">Digimon World 3</h2>
+      <a class="game-art" href="Digimon%20World%203/digimon-world-3-agumon-tree.html">
+        <img src="Digimon%20World%203/assets/digimon-world-3-cover.jpg" width="632" height="630" alt="Capa de Digimon World 3 no PlayStation" decoding="async">
+        <span class="game-open">Abrir guias →</span>
       </a>
-    </div>
-  </main>
+      <p class="progress-status" id="progressStatus">Lendo…</p>
+      <div class="progress-actions">
+        <button type="button" id="exportProgress">Exportar</button>
+        <button type="button" id="importProgress">Importar</button>
+      </div>
+    </section>
+
+    <section class="game-card is-locked">
+      <h2 class="game-title">Digimon World 2</h2>
+      <div class="game-art">
+        <img src="Digimon%20World%203/assets/digimon-world-2-cover.jpg" width="632" height="624" alt="Capa de Digimon World 2 no PlayStation" decoding="async">
+      </div>
+      <p class="progress-status">Guias ainda não disponíveis.</p>
+      <div class="progress-actions">
+        <button type="button" disabled>Em breve</button>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+(function () {
+  const KEY_RE = /^dw3-/;
+  const PROGRESS_URL = "Digimon%20World%203/dw3-progress.json";
+  const statusEl = document.getElementById("progressStatus");
+
+  function snapshot() {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (KEY_RE.test(k)) data[k] = localStorage.getItem(k);
+    }
+    return data;
+  }
+
+  function summarize(data) {
+    const keys = Object.keys(data);
+    if (!keys.length) return "Nada marcado neste domínio ainda.";
+    const bits = [];
+    if (data["dw3-booster-cards-owned-v1"]) {
+      try { bits.push(JSON.parse(data["dw3-booster-cards-owned-v1"]).length + " cartas"); } catch (_) { bits.push("cartas"); }
+    }
+    if (data["dw3-steal-items-owned-v1"]) {
+      try { bits.push(JSON.parse(data["dw3-steal-items-owned-v1"]).length + " itens"); } catch (_) { bits.push("itens"); }
+    }
+    const evoKeys = keys.filter(k => /-owned-v1$/.test(k) && k !== "dw3-booster-cards-owned-v1" && k !== "dw3-steal-items-owned-v1");
+    if (evoKeys.length) {
+      let n = 0;
+      evoKeys.forEach(k => { try { n += JSON.parse(data[k]).length; } catch (_) {} });
+      bits.push(n + " Digivolutions (" + evoKeys.length + " partners)");
+    }
+    return "Neste domínio: " + bits.join(" · ") + " — " + keys.length + " chave(s).";
+  }
+
+  function applyData(data) {
+    let n = 0;
+    Object.keys(data).forEach(k => {
+      if (!KEY_RE.test(k)) return;
+      localStorage.setItem(k, typeof data[k] === "string" ? data[k] : JSON.stringify(data[k]));
+      n++;
+    });
+    return n;
+  }
+
+  function refresh() {
+    statusEl.textContent = summarize(snapshot());
+  }
+
+  document.getElementById("exportProgress").addEventListener("click", () => {
+    const data = snapshot();
+    if (!Object.keys(data).length) {
+      statusEl.textContent = "Não tem nada pra exportar neste domínio.";
+      return;
+    }
+    const blob = new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), data }, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "dw3-progress.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    statusEl.textContent = "dw3-progress.json baixado.";
+  });
+
+  document.getElementById("importProgress").addEventListener("click", async () => {
+    const hasLocal = Object.keys(snapshot()).length > 0;
+    const msg = hasLocal
+      ? "Isso sobrescreve o progresso salvo neste navegador com o JSON do repositório. Continuar?"
+      : "Importar o progresso do repositório neste navegador?";
+    if (!confirm(msg)) return;
+
+    statusEl.textContent = "Buscando dw3-progress.json…";
+    try {
+      const res = await fetch(PROGRESS_URL + "?t=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("http " + res.status);
+      const parsed = await res.json();
+      const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
+      const n = applyData(data);
+      if (!n) throw new Error("no keys");
+      statusEl.textContent = "Importado: " + n + " chave(s). " + summarize(snapshot());
+      refresh();
+    } catch (_) {
+      statusEl.textContent = "Não deu pra carregar o dw3-progress.json.";
+    }
+  });
+
+  refresh();
+})();
+</script>
 </body>
 </html>

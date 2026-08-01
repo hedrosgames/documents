@@ -10,13 +10,13 @@ Com GitHub Pages ativo na raiz da `main`:
 
 **[https://hedrosgames.github.io/documents/](https://hedrosgames.github.io/documents/)**
 
-O lobby lista os kits disponíveis. Cada pasta de projeto tem o próprio índice e páginas.
+O lobby na raiz lista os jogos disponíveis e leva direto para a primeira página de cada kit.
 
 ## Documentação disponível
 
 | Projeto | Pasta | Entrada |
 |--------|--------|---------|
-| Digimon World 3 | [`Digimon World 3/`](Digimon%20World%203/) | [`index.html`](Digimon%20World%203/index.html) |
+| Digimon World 3 | [`Digimon World 3/`](Digimon%20World%203/) | [`digimon-world-3-agumon-tree.html`](Digimon%20World%203/digimon-world-3-agumon-tree.html) |
 
 Novos documentos entram como pasta nova + card no lobby da raiz.
 
@@ -48,8 +48,8 @@ Outros docs não-Unity ficam em `C:\CursorProjects\` (`privatedocuments`, `bugst
 ## Como contribuir (fluxo interno)
 
 1. Crie ou edite a pasta do projeto.  
-2. Garanta um `index.html` de entrada no kit.  
-3. Adicione o card correspondente em [`index.html`](index.html) na raiz.  
+2. Defina qual página é a entrada do kit.  
+3. Adicione o card correspondente em [`index.html`](index.html) na raiz, apontando para essa página.  
 4. Atualize esta tabela quando publicar um kit novo.
 
 ## Observação
