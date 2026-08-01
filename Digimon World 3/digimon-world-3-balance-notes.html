@@ -22,30 +22,15 @@
 a { color: var(--link); }
 
 
-/* page header chrome from .site-header (shell); content width via .wrap */
-header h1 {
-  margin: 0 0 0.4rem;
-  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-header p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.92rem;
-  max-width: 40rem;
-}
-
-/* doc de prosa: a coluna fecha em ~1200px e o bloco todo centraliza no ultrawide */
-:root { --shell-max: 1200px; }
+/* header chrome e largura útil vêm do shell — mesma coluna das outras guias */
 
 .wrap {
   max-width: var(--shell-w);
   margin: 0 auto;
   padding: 0.85rem var(--shell-pad) 2.5rem;
   display: grid;
-  grid-template-columns: minmax(180px, 230px) minmax(0, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  gap: 1.25rem;
   align-items: start;
 }
 .main-col { min-width: 0; }
@@ -93,18 +78,19 @@ section h3 {
   font-weight: 650;
   color: var(--text);
 }
-/* a coluna de conteúdo já é a medida de leitura (shell-max abaixo);
-   a prosa preenche a coluna e tabelas/grids usam tudo */
+/* a prosa fecha na medida de leitura; tabelas e grids usam a coluna inteira */
 section p {
   margin: 0.45rem 0;
   color: #c9d4e0;
   font-size: 0.92rem;
+  max-width: 90ch;
 }
 section ul, section ol {
   margin: 0.4rem 0 0.55rem;
   padding-left: 1.2rem;
   color: #c9d4e0;
   font-size: 0.9rem;
+  max-width: 90ch;
 }
 section li { margin: 0.28rem 0; }
 code {
@@ -128,6 +114,7 @@ code {
   border-left: 2px solid var(--accent);
   font-size: 0.86rem;
   color: #b8c5d4;
+  max-width: 90ch;
   line-height: 1.6;
 }
 .flow b { color: var(--text); font-weight: 650; }
@@ -135,9 +122,10 @@ code {
 
 .tracks {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
   margin: 0.75rem 0;
+  max-width: 90rem;
 }
 .tracks div {
   padding-left: 0.75rem;
@@ -158,6 +146,7 @@ code {
   margin: 0.55rem 0 0;
   padding: 0;
   list-style: none;
+  max-width: 70rem;
 }
 .files li {
   display: grid;
@@ -184,6 +173,7 @@ code {
   margin: 0.4rem 0;
   font-size: 0.9rem;
   color: #c9d4e0;
+  max-width: 90ch;
 }
 .prio li::before {
   content: counter(step);
@@ -212,13 +202,14 @@ table.tbl th {
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
-table.tbl td.wrap { white-space: normal; min-width: 16rem; }
+table.tbl td.txt { white-space: normal; min-width: 16rem; }
 table.tbl td.num { font-variant-numeric: tabular-nums; }
 
 .note {
   color: var(--muted);
   font-size: 0.8rem;
   margin-top: 1rem;
+  max-width: 90ch;
 }
 
 @media (max-width: 1100px) {
@@ -382,11 +373,11 @@ table.tbl td.num { font-variant-numeric: tabular-nums; }
           <tr><th>Tier</th><th>Custo por nível</th><th>Total</th><th>Exemplos</th></tr>
         </thead>
         <tbody>
-          <tr><td>1</td><td>10 até 99</td><td class="num">980</td><td class="wrap">Greymon, Growlmon, Angemon, Kyubimon, ExVeemon, Stingmon</td></tr>
-          <tr><td>2</td><td>10 até 95, 50 até 99</td><td class="num">1.140</td><td class="wrap">MetalGreymon, WarGrowlmon, Taomon, Paildramon, Angewomon</td></tr>
-          <tr><td>3</td><td>10 até 90, 50 até 99</td><td class="num">1.340</td><td class="wrap">WarGreymon, Gallantmon, Seraphimon, Imperialdramon, MetalGarurumon</td></tr>
-          <tr><td>4</td><td>10 até 80, 50 até 99</td><td class="num">1.740</td><td class="wrap">Imperialdramon FM, MegaGargomon, GranKuwagamon, Phoenixmon, MaloMyotismon</td></tr>
-          <tr><td>5</td><td>10 até 60, 50 até 99</td><td class="num">2.540</td><td class="wrap">Omnimon, Imperialdramon PM, Diaboromon, Beelzemon</td></tr>
+          <tr><td>1</td><td>10 até 99</td><td class="num">980</td><td class="txt">Greymon, Growlmon, Angemon, Kyubimon, ExVeemon, Stingmon</td></tr>
+          <tr><td>2</td><td>10 até 95, 50 até 99</td><td class="num">1.140</td><td class="txt">MetalGreymon, WarGrowlmon, Taomon, Paildramon, Angewomon</td></tr>
+          <tr><td>3</td><td>10 até 90, 50 até 99</td><td class="num">1.340</td><td class="txt">WarGreymon, Gallantmon, Seraphimon, Imperialdramon, MetalGarurumon</td></tr>
+          <tr><td>4</td><td>10 até 80, 50 até 99</td><td class="num">1.740</td><td class="txt">Imperialdramon FM, MegaGargomon, GranKuwagamon, Phoenixmon, MaloMyotismon</td></tr>
+          <tr><td>5</td><td>10 até 60, 50 até 99</td><td class="num">2.540</td><td class="txt">Omnimon, Imperialdramon PM, Diaboromon, Beelzemon</td></tr>
         </tbody>
       </table>
     </div>
