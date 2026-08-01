@@ -10,7 +10,7 @@
 <body>
 <header class="site-header">
   <h1>Backup de progresso</h1>
-  <p>Exporta ou importa cartas, Digivolutions e itens marcados neste domínio (localStorage).</p>
+  <p>Exporta o cache deste navegador ou importa o <code>dw3-progress.json</code> do repositório.</p>
   <nav class="doc-nav" aria-label="Guides">
     <a href="index.html">Hub</a>
   </nav>
@@ -21,15 +21,15 @@
     <p class="progress-status" id="progressStatus">Lendo…</p>
     <div class="progress-actions">
       <button type="button" id="exportProgress">Exportar</button>
-      <label class="file-btn">Importar<input type="file" id="importProgress" accept="application/json,.json" hidden></label>
+      <button type="button" id="importProgress">Importar</button>
     </div>
-    <p class="progress-hint">Abre este arquivo no mesmo lugar onde você marcou (pasta local ou GitHub Pages). Exporta num, importa no outro.</p>
-    <pre id="progressKeys" style="margin:0.75rem 0 0;padding:0.65rem 0.75rem;background:var(--panel2);border-radius:8px;font-size:0.75rem;overflow:auto;max-height:12rem;color:var(--muted)"></pre>
+    <pre id="progressKeys" style="margin:0.75rem 0 0;padding:0.65rem 0.75rem;background:var(--panel2);border-radius:8px;font-size:0.75rem;overflow:auto;max-height:12rem;color:var(--muted);text-align:left"></pre>
   </section>
 </main>
 <script>
 (function () {
   const KEY_RE = /^dw3-/;
+  const PROGRESS_URL = "dw3-progress.json";
   const statusEl = document.getElementById("progressStatus");
   const keysEl = document.getElementById("progressKeys");
 
@@ -40,6 +40,16 @@
       if (KEY_RE.test(k)) data[k] = localStorage.getItem(k);
     }
     return data;
+  }
+
+  function applyData(data) {
+    let n = 0;
+    Object.keys(data).forEach(k => {
+      if (!KEY_RE.test(k)) return;
+      localStorage.setItem(k, typeof data[k] === "string" ? data[k] : JSON.stringify(data[k]));
+      n++;
+    });
+    return n;
   }
 
   function refresh() {
@@ -73,32 +83,29 @@
     a.download = "dw3-progress.json";
     a.click();
     URL.revokeObjectURL(a.href);
-    statusEl.textContent = "Exportado: dw3-progress.json";
+    statusEl.textContent = "Baixado. Pra atualizar o Git, troca Digimon World 3/dw3-progress.json e faz commit.";
   });
 
-  document.getElementById("importProgress").addEventListener("change", (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
-        let n = 0;
-        Object.keys(data).forEach(k => {
-          if (!KEY_RE.test(k)) return;
-          localStorage.setItem(k, typeof data[k] === "string" ? data[k] : JSON.stringify(data[k]));
-          n++;
-        });
-        if (!n) throw new Error("no keys");
-        statusEl.textContent = "Importado: " + n + " chave(s).";
-        refresh();
-      } catch (_) {
-        statusEl.textContent = "Arquivo inválido.";
-      }
-      e.target.value = "";
-    };
-    reader.readAsText(file);
+  document.getElementById("importProgress").addEventListener("click", async () => {
+    const hasLocal = Object.keys(snapshot()).length > 0;
+    const msg = hasLocal
+      ? "Isso sobrescreve o progresso salvo neste navegador com o JSON do repositório. Continuar?"
+      : "Importar o progresso do repositório neste navegador?";
+    if (!confirm(msg)) return;
+
+    statusEl.textContent = "Buscando dw3-progress.json…";
+    try {
+      const res = await fetch(PROGRESS_URL + "?t=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("http " + res.status);
+      const parsed = await res.json();
+      const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
+      const n = applyData(data);
+      if (!n) throw new Error("no keys");
+      statusEl.textContent = "Importado do Git: " + n + " chave(s).";
+      refresh();
+    } catch (_) {
+      statusEl.textContent = "Não deu pra importar. Confere se dw3-progress.json está no mesmo domínio.";
+    }
   });
 
   refresh();

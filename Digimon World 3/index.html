@@ -32,13 +32,14 @@
     <p class="progress-status" id="progressStatus">Lendo…</p>
     <div class="progress-actions">
       <button type="button" id="exportProgress">Exportar</button>
-      <label class="file-btn">Importar<input type="file" id="importProgress" accept="application/json,.json" hidden></label>
+      <button type="button" id="importProgress">Importar</button>
     </div>
   </section>
 </main>
 <script>
 (function () {
   const KEY_RE = /^dw3-/;
+  const PROGRESS_URL = "dw3-progress.json";
   const statusEl = document.getElementById("progressStatus");
 
   function snapshot() {
@@ -69,6 +70,16 @@
     return "Neste domínio: " + bits.join(" · ") + " — " + keys.length + " chave(s).";
   }
 
+  function applyData(data) {
+    let n = 0;
+    Object.keys(data).forEach(k => {
+      if (!KEY_RE.test(k)) return;
+      localStorage.setItem(k, typeof data[k] === "string" ? data[k] : JSON.stringify(data[k]));
+      n++;
+    });
+    return n;
+  }
+
   function refresh() {
     statusEl.textContent = summarize(snapshot());
   }
@@ -85,32 +96,30 @@
     a.download = "dw3-progress.json";
     a.click();
     URL.revokeObjectURL(a.href);
-    statusEl.textContent = "Exportado. Agora importa esse JSON no outro domínio.";
+    statusEl.textContent = "Baixado. Pra atualizar o Git, troca Digimon World 3/dw3-progress.json por esse arquivo e faz commit.";
   });
 
-  document.getElementById("importProgress").addEventListener("change", (e) => {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
-        let n = 0;
-        Object.keys(data).forEach(k => {
-          if (!KEY_RE.test(k)) return;
-          localStorage.setItem(k, typeof data[k] === "string" ? data[k] : JSON.stringify(data[k]));
-          n++;
-        });
-        if (!n) throw new Error("no keys");
-        statusEl.textContent = "Importado: " + n + " chave(s). Abre Boosters / Digivolution / Steal Items pra conferir.";
-        refresh();
-      } catch (_) {
-        statusEl.textContent = "Arquivo inválido. Precisa ser o JSON exportado daqui.";
-      }
-      e.target.value = "";
-    };
-    reader.readAsText(file);
+  document.getElementById("importProgress").addEventListener("click", async () => {
+    const current = snapshot();
+    const hasLocal = Object.keys(current).length > 0;
+    const msg = hasLocal
+      ? "Isso sobrescreve o progresso salvo neste navegador com o JSON do repositório. Continuar?"
+      : "Importar o progresso do repositório neste navegador?";
+    if (!confirm(msg)) return;
+
+    statusEl.textContent = "Buscando dw3-progress.json…";
+    try {
+      const res = await fetch(PROGRESS_URL + "?t=" + Date.now(), { cache: "no-store" });
+      if (!res.ok) throw new Error("http " + res.status);
+      const parsed = await res.json();
+      const data = parsed.data && typeof parsed.data === "object" ? parsed.data : parsed;
+      const n = applyData(data);
+      if (!n) throw new Error("no keys");
+      statusEl.textContent = "Importado do Git: " + n + " chave(s). " + summarize(snapshot());
+      refresh();
+    } catch (_) {
+      statusEl.textContent = "Não deu pra importar. Confere se dw3-progress.json está no mesmo domínio (Pages ou servidor local).";
+    }
   });
 
   refresh();
