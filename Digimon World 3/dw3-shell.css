@@ -304,11 +304,6 @@ input[type="search"] {
   border-color: var(--accent);
 }
 
-.progress-hint {
-  margin-bottom: 0 !important;
-  font-size: 0.78rem !important;
-}
-
 .group-label,
 .toc-glabel {
   margin: 0.55rem 0.35rem 0.25rem;
