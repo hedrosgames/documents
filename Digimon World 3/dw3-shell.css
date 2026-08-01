@@ -1,6 +1,13 @@
 /* Digimon World 3 — shared shell
-   Tokens + chrome + responsive breakpoints: 1100 / 700 / 520 */
+   Tokens + chrome + responsive breakpoints: 1100 / 700 / 520
+
+   Largura útil: header e conteúdo usam a MESMA coluna centralizada (--shell-w).
+   Cada página pode apertar a coluna redefinindo --shell-max no próprio <style>. */
 :root {
+  --shell-max: 2560px;
+  --shell-pad: 1.25rem;
+  --shell-w: min(96vw, var(--shell-max));
+
   --bg: #0c1017;
   --panel: #151c27;
   --panel2: #1c2635;
@@ -65,9 +72,19 @@ a:focus-visible {
 .top,
 header.site-header,
 body > header {
-  padding: 1.25rem 1.5rem 0.9rem;
+  display: grid;
+  grid-template-columns: minmax(0, var(--shell-w));
+  justify-content: center;
+  padding: 1.25rem 0 0.9rem;
   border-bottom: 1px solid var(--border);
   background: color-mix(in srgb, var(--panel) 55%, transparent);
+}
+
+.site-header > *,
+.top > *,
+header.site-header > *,
+body > header > * {
+  padding-inline: var(--shell-pad);
 }
 
 .site-header h1,
@@ -123,9 +140,9 @@ body > header > p {
 }
 
 /* —— Width shells —— */
-.shell-wide { max-width: 1440px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem; }
-.shell-app { max-width: 1200px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem; }
-.shell-prose { max-width: 720px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem; }
+.shell-wide,
+.shell-app { max-width: var(--shell-w); margin: 0 auto; padding: 0.85rem var(--shell-pad) 2.5rem; }
+.shell-prose { max-width: min(96vw, 46rem); margin: 0 auto; padding: 0.85rem var(--shell-pad) 2.5rem; }
 .wrap.shell-wide,
 .wrap.shell-app,
 .wrap.shell-prose { margin-left: auto; margin-right: auto; }
@@ -340,11 +357,13 @@ img, svg, video {
 
 /* —— Canonical breakpoints —— */
 @media (max-width: 1100px) {
-  .site-header, .top, header.site-header { padding: 1rem 1rem 0.75rem; }
-  .shell-wide, .shell-app, .shell-prose { padding: 0.75rem 1rem 2rem; }
+  :root { --shell-pad: 1rem; }
+  .site-header, .top, header.site-header { padding: 1rem 0 0.75rem; }
+  .shell-wide, .shell-app, .shell-prose { padding-block: 0.75rem 2rem; }
 }
 
 @media (max-width: 700px) {
+  :root { --shell-pad: 0.75rem; }
   body { font-size: 1rem; }
   .doc-nav a {
     min-height: 2.75rem;
@@ -353,7 +372,7 @@ img, svg, video {
   .chip, .search, input[type="search"] {
     min-height: 2.75rem;
   }
-  .shell-wide, .shell-app, .shell-prose { padding: 0.65rem 0.75rem 2rem; }
+  .shell-wide, .shell-app, .shell-prose { padding-block: 0.65rem 2rem; }
   .map-nav, .exp-nav, .el-nav {
     display: flex !important;
     flex-wrap: nowrap;

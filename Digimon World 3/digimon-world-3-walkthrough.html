@@ -26,7 +26,8 @@ a:hover { color:#9ad4ff; }
 .top { padding:1.25rem 1.5rem .9rem; border-bottom:1px solid var(--border); background:color-mix(in srgb,var(--panel) 55%,transparent); }
 .top h1 { margin:0 0 .25rem; font-size:clamp(1.15rem,2.2vw,1.45rem); letter-spacing:-.02em; }
 .top p { margin:0; color:var(--muted); font-size:.88rem; max-width:48rem; }
-.layout { display:grid; grid-template-columns:minmax(230px,290px) minmax(0,1fr); max-width:1200px; margin:0 auto; }
+:root { --shell-max:1600px; }
+.layout { display:grid; grid-template-columns:minmax(230px,320px) minmax(0,1fr); max-width:var(--shell-w); margin:0 auto; }
 .toc {
   position:sticky; top:0; align-self:start; height:100vh; overflow:auto;
   padding:.85rem .7rem 2rem; border-right:1px solid var(--border);
@@ -65,6 +66,8 @@ a:hover { color:#9ad4ff; }
 .badge.srv-both { color:var(--special); background:color-mix(in srgb,var(--special) 16%,transparent); }
 .badge.srv-special { color:var(--special); background:color-mix(in srgb,var(--special) 16%,transparent); }
 .ch-body { padding:.95rem 1.05rem 1.1rem; font-size:.94rem; }
+/* prosa tem limite de leitura mesmo em tela larga; grids e tabelas usam tudo */
+.ch-body > p, .ch-body > ol, .ch-body > ul { max-width:80ch; }
 .ch-body p { margin:0 0 .75rem; }
 .ch-body ul, .ch-body ol { margin:0 0 .85rem; padding-left:1.2rem; }
 .ch-body li { margin:.28rem 0; }
