@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digimon World 3 — Walkthrough</title>
+<style>
+:root {
+  --bg:#0c1017; --panel:#151c27; --panel2:#1c2635; --text:#edf2f7;
+  --muted:#8fa0b5; --border:#2a3648; --accent:#3ecf8e;
+  --asuka:#4db6ff; --amaterasu:#f0a020; --warn:#ff8a65; --tip:#4fc3f7; --special:#b388ff;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:1rem; }
+body {
+  margin:0; font-family:"Segoe UI",system-ui,sans-serif; color:var(--text); line-height:1.55;
+  background:
+    radial-gradient(ellipse 60% 35% at 0 0,rgba(77,182,255,.08),transparent),
+    radial-gradient(ellipse 50% 30% at 100% 0,rgba(240,160,32,.07),transparent),
+    var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+a { color:var(--asuka); }
+a:hover { color:#9ad4ff; }
+.doc-nav { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.75rem; }
+.doc-nav a {
+  display:inline-flex; text-decoration:none; color:var(--muted);
+  border:1px solid var(--border); background:var(--panel);
+  border-radius:999px; padding:.32rem .75rem; font-size:.78rem; font-weight:600;
+}
+.doc-nav a:hover { color:var(--text); border-color:#4a5d75; }
+.doc-nav a.current { color:var(--text); border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,var(--panel)); }
+.top { padding:1.25rem 1.5rem .9rem; border-bottom:1px solid var(--border); background:color-mix(in srgb,var(--panel) 55%,transparent); }
+.top h1 { margin:0 0 .25rem; font-size:clamp(1.15rem,2.2vw,1.45rem); letter-spacing:-.02em; }
+.top p { margin:0; color:var(--muted); font-size:.88rem; max-width:48rem; }
+.layout { display:grid; grid-template-columns:minmax(230px,290px) minmax(0,1fr); max-width:1200px; margin:0 auto; }
+.toc {
+  position:sticky; top:0; align-self:start; height:100vh; overflow:auto;
+  padding:.85rem .7rem 2rem; border-right:1px solid var(--border);
+  background:color-mix(in srgb,var(--panel) 70%,transparent);
+  scrollbar-width:thin; scrollbar-color:#3a4a60 transparent;
+}
+.toc input { width:100%; border:1px solid var(--border); background:var(--panel2); color:var(--text); border-radius:999px; padding:.4rem .85rem; font-size:.8rem; margin-bottom:.55rem; }
+.toc-group { margin-bottom:.5rem; }
+.toc-glabel { font-size:.64rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); font-weight:800; margin:.55rem 0 .3rem .35rem; }
+.toc a { display:grid; grid-template-columns:1.6rem 1fr; gap:.05rem .4rem; text-decoration:none; color:var(--text); border:1px solid transparent; border-radius:9px; padding:.4rem .45rem; font-size:.79rem; }
+.toc a .tn { color:var(--accent); font-weight:750; }
+.toc a .tt { font-weight:650; }
+.toc a .tw { grid-column:2; color:var(--muted); font-size:.66rem; }
+.toc a:hover { border-color:#4a5d75; background:var(--panel2); }
+.toc a.active { border-color:var(--accent); background:color-mix(in srgb,var(--accent) 10%,var(--panel2)); }
+.toc a.hidden { display:none; }
+.main { padding:.85rem 1.25rem 3rem; min-width:0; }
+.progress {
+  position:sticky; top:0; z-index:5; margin:-.85rem -1.25rem .85rem; padding:.55rem 1.25rem;
+  background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border); display:flex; flex-wrap:wrap; gap:.45rem; align-items:center; font-size:.78rem; color:var(--muted);
+}
+.progress strong { color:var(--text); }
+.progress .bar { flex:1 1 120px; height:6px; border-radius:999px; background:var(--panel2); overflow:hidden; }
+.progress .bar > i { display:block; height:100%; width:0; background:var(--accent); border-radius:inherit; transition:width .2s ease; }
+.chapter { background:var(--panel); border:1px solid var(--border); border-radius:14px; margin-bottom:.85rem; overflow:hidden; scroll-margin-top:3.2rem; }
+.ch-head { display:flex; gap:.85rem; padding:.9rem 1rem; background:var(--panel2); border-bottom:1px solid var(--border); align-items:flex-start; }
+.ch-head .num { flex:0 0 auto; width:2.6rem; height:2.6rem; border-radius:10px; display:grid; place-items:center; font-weight:800; font-size:.95rem; background:color-mix(in srgb,var(--accent) 16%,var(--panel)); border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border)); color:var(--accent); }
+.ch-head .en { margin:0; color:var(--muted); font-size:.72rem; font-weight:600; }
+.ch-head h2 { margin:.1rem 0 .3rem; font-size:1.15rem; letter-spacing:-.02em; }
+.where-row { display:flex; flex-wrap:wrap; gap:.3rem; }
+.badge { padding:.14rem .5rem; border-radius:6px; font-size:.68rem; font-weight:750; }
+.badge.sector { background:var(--panel); border:1px solid var(--border); color:var(--muted); }
+.badge.srv-asuka { color:var(--asuka); background:color-mix(in srgb,var(--asuka) 16%,transparent); }
+.badge.srv-amaterasu { color:var(--amaterasu); background:color-mix(in srgb,var(--amaterasu) 16%,transparent); }
+.badge.srv-both { color:var(--special); background:color-mix(in srgb,var(--special) 16%,transparent); }
+.badge.srv-special { color:var(--special); background:color-mix(in srgb,var(--special) 16%,transparent); }
+.ch-body { padding:.95rem 1.05rem 1.1rem; font-size:.94rem; }
+.ch-body p { margin:0 0 .75rem; }
+.ch-body ul, .ch-body ol { margin:0 0 .85rem; padding-left:1.2rem; }
+.ch-body li { margin:.28rem 0; }
+.block-title { margin:1rem 0 .4rem; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+.meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-bottom:.7rem; }
+.meta-grid > div { background:var(--panel2); border:1px solid var(--border); border-radius:10px; padding:.55rem .7rem; font-size:.86rem; }
+.k { display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:800; margin-bottom:.2rem; }
+.drops { display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; margin-bottom:.7rem; }
+.drops .k { display:inline; margin:0 .3rem 0 0; }
+.pill { background:color-mix(in srgb,var(--accent) 12%,var(--panel2)); border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border)); color:#bff0d8; border-radius:999px; padding:.14rem .55rem; font-size:.72rem; font-weight:650; }
+.map-fig { margin:.2rem 0 1rem; }
+.sector-map { width:100%; height:auto; background:var(--panel2); border:1px solid var(--border); border-radius:12px; padding:.4rem; }
+.map-fig figcaption { color:var(--muted); font-size:.72rem; margin-top:.35rem; }
+.packs-box ul { list-style:none; padding:0; }
+.packs-box li { background:var(--panel2); border:1px solid var(--border); border-radius:8px; padding:.4rem .6rem; margin:.3rem 0; }
+.path { font-family:ui-monospace,Consolas,monospace; font-size:.9rem; padding:.55rem .75rem; background:var(--panel2); border:1px solid var(--border); border-radius:8px; }
+.boss-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.5rem; }
+.boss-card { border:1px solid color-mix(in srgb,var(--amaterasu) 40%,var(--border)); background:color-mix(in srgb,var(--amaterasu) 8%,var(--panel2)); border-radius:11px; padding:.6rem .7rem; }
+.boss-card.opt { border-color:var(--border); background:var(--panel2); }
+.boss-name { font-weight:750; font-size:.9rem; margin-bottom:.3rem; }
+.opt-tag { font-size:.62rem; color:var(--muted); border:1px solid var(--border); border-radius:5px; padding:.05rem .3rem; font-weight:700; }
+.boss-row { font-size:.8rem; margin:.15rem 0; color:#d5e2f0; }
+.boss-row span { color:var(--muted); font-weight:700; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; margin-right:.3rem; }
+.backtrack { margin:.85rem 0; padding:.65rem .8rem; border-radius:10px; border:1px solid color-mix(in srgb,var(--tip) 40%,var(--border)); background:color-mix(in srgb,var(--tip) 8%,var(--panel2)); }
+.backtrack ul { margin:.3rem 0 0; }
+.tip, .warn { margin:.75rem 0; padding:.65rem .8rem; border-radius:10px; font-size:.88rem; border:1px solid var(--border); }
+.tip { background:color-mix(in srgb,var(--tip) 10%,var(--panel2)); border-color:color-mix(in srgb,var(--tip) 40%,var(--border)); }
+.warn { background:color-mix(in srgb,var(--warn) 12%,var(--panel2)); border-color:color-mix(in srgb,var(--warn) 45%,var(--border)); }
+.tip b, .warn b { display:inline-block; margin-right:.35rem; }
+.tip ul { margin:.35rem 0 0; }
+.ch-nav { display:flex; justify-content:space-between; gap:.75rem; flex-wrap:wrap; margin-top:1.1rem; padding-top:.85rem; border-top:1px solid var(--border); }
+.ch-nav a { text-decoration:none; color:var(--text); font-size:.82rem; font-weight:650; border:1px solid var(--border); background:var(--panel2); border-radius:999px; padding:.4rem .85rem; }
+.ch-nav a:hover { border-color:var(--accent); }
+.ref-section .ch-head .num { color:var(--special); background:color-mix(in srgb,var(--special) 16%,var(--panel)); border-color:color-mix(in srgb,var(--special) 45%,var(--border)); }
+.place-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.55rem; }
+.place-card { border:1px solid var(--border); background:var(--panel2); border-radius:11px; padding:.65rem .75rem; scroll-margin-top:3.5rem; }
+.place-top { display:flex; justify-content:space-between; align-items:center; gap:.4rem; margin-bottom:.35rem; }
+.place-top strong { font-size:.92rem; }
+.place-card .what { font-size:.82rem; margin:0 0 .45rem; }
+.place-card .reach { font-size:.8rem; margin:0; color:#d5e2f0; }
+.place-card .reach .k { display:inline; margin:0 .3rem 0 0; }
+.item-table { border:1px solid var(--border); border-radius:11px; overflow:hidden; }
+.it-head, .it-row { display:grid; grid-template-columns:minmax(120px,1.1fr) 1.6fr 1.6fr; gap:.5rem; padding:.5rem .7rem; font-size:.82rem; }
+.it-head { background:var(--panel2); color:var(--muted); font-size:.66rem; text-transform:uppercase; letter-spacing:.05em; font-weight:800; }
+.it-row { border-top:1px solid var(--border); }
+.it-row:nth-child(even) { background:rgba(0,0,0,.12); }
+.it-name { font-weight:700; color:#bff0d8; }
+.foot { color:var(--muted); font-size:.78rem; margin-top:.6rem; }
+.target-flash { animation:flash 1.4s ease; }
+@keyframes flash { 0%,100% { box-shadow:none; } 30% { box-shadow:0 0 0 2px var(--accent); } }
+@media (max-width:880px) {
+  .layout { grid-template-columns:1fr; }
+  .toc { position:relative; height:auto; max-height:44vh; border-right:none; border-bottom:1px solid var(--border); }
+  .progress { position:static; margin:0 0 .85rem; }
+  .meta-grid { grid-template-columns:1fr; }
+  .it-head, .it-row { grid-template-columns:1fr; gap:.15rem; }
+  .it-head { display:none; }
+  .it-name { color:#bff0d8; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Digimon World 3 — Walkthrough</h1>
+  <p>Caminho crítico do começo ao fim. Cada capítulo traz objetivo, pré-requisito, mapa esquemático do setor, passo a passo, cards de chefe e como voltar. Nome de mapa, item e Digimon em inglês; a prosa em português. Lugares que se repetem (Secret Room, Master Room, Control Room…) têm ficha própria em <a href="#places">Lugares recorrentes</a>.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
+    <a href="digimon-world-3-steal-items.html">Steal Items</a>
+    <a href="digimon-world-3-boosters.html">Boosters</a>
+    <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a>
+    <a href="digimon-world-3-monster-stats.html">Monster Stats</a>
+    <a href="digimon-world-3-level-exp.html">Level EXP</a>
+    <a href="digimon-world-3-routes.html">Routes</a>
+    <a class="current" href="digimon-world-3-walkthrough.html">Walkthrough</a>
+    <a href="digimon-world-3-balance-gdd.html">Balance GDD</a>
+  </nav>
+</header>
+
+<div class="layout">
+  <aside class="toc" id="toc">
+    <input type="search" id="tocSearch" placeholder="Buscar momento..." autocomplete="off">
+    <nav id="tocNav"><div class="toc-group"><div class="toc-glabel">Asuka — início</div><a href="#start" data-id="start"><span class="tn">01</span><span class="tt">Começo em Kusanagi</span><span class="tw">Asuka · Intro</span></a><a href="#asuka-city" data-id="asuka-city"><span class="tn">02</span><span class="tt">Asuka City e o básico</span><span class="tw">Asuka · Central</span></a><a href="#seiryu" data-id="seiryu"><span class="tn">03</span><span class="tt">Badge Seiryu</span><span class="tw">Asuka · East</span></a><a href="#blue-card" data-id="blue-card"><span class="tn">04</span><span class="tt">Blue Card e gondola</span><span class="tw">Asuka · East → South</span></a></div><div class="toc-group"><div class="toc-glabel">Asuka — South & West</div><a href="#suzaku" data-id="suzaku"><span class="tn">05</span><span class="tt">Zanbamon e Badge Suzaku</span><span class="tw">Asuka · South</span></a><a href="#admin-infiltrate" data-id="admin-infiltrate"><span class="tn">06</span><span class="tt">Entrar no Admin Center</span><span class="tw">Asuka · Central</span></a><a href="#digiegg-west" data-id="digiegg-west"><span class="tn">07</span><span class="tt">Digi-Egg e caminho pro West</span><span class="tw">Asuka · South → West</span></a><a href="#byakko-first" data-id="byakko-first"><span class="tn">08</span><span class="tt">Byakko City (primeira visita)</span><span class="tw">Asuka · West</span></a><a href="#mirage" data-id="mirage"><span class="tn">09</span><span class="tt">Mirage Tower e Badge Byakko</span><span class="tw">Asuka · West</span></a><a href="#dum-dum" data-id="dum-dum"><span class="tn">10</span><span class="tt">Dum Dum Factory e Lucky Mouse</span><span class="tw">Asuka · West</span></a></div><div class="toc-group"><div class="toc-glabel">Asuka — invasão & North</div><a href="#game-master" data-id="game-master"><span class="tn">11</span><span class="tt">Esgoto, Datamon e Game Master</span><span class="tw">Asuka · Central</span></a><a href="#bulbmon" data-id="bulbmon"><span class="tn">12</span><span class="tt">Bulbmon e entrada em Amaterasu</span><span class="tw">Asuka · South → Amaterasu</span></a><a href="#genbu-dungeons" data-id="genbu-dungeons"><span class="tn">14</span><span class="tt">North Sector, Genbu e as dungeons</span><span class="tw">Asuka · North</span></a></div><div class="toc-group"><div class="toc-glabel">Amaterasu</div><a href="#amaterasu-badges" data-id="amaterasu-badges"><span class="tn">13</span><span class="tt">Qing Long, Zhu Que e Digi-Egg</span><span class="tw">Amaterasu · East → South</span></a><a href="#id-passes" data-id="id-passes"><span class="tn">15</span><span class="tt">Resistance e os ID Passes</span><span class="tw">Amaterasu · West → North → City</span></a><a href="#chief-officer" data-id="chief-officer"><span class="tn">16</span><span class="tt">Chief Officer e Destromon</span><span class="tw">Amaterasu · City</span></a><a href="#oinkmon-cure" data-id="oinkmon-cure"><span class="tn">17</span><span class="tt">Curar os Oinkmon</span><span class="tw">Amaterasu · City → Asuka</span></a></div><div class="toc-group"><div class="toc-glabel">Final</div><a href="#matrix-break" data-id="matrix-break"><span class="tn">18</span><span class="tt">Matrix ainda quebrada</span><span class="tw">Asuka / Amaterasu · Login → Master Room</span></a><a href="#gunslinger" data-id="gunslinger"><span class="tn">19</span><span class="tt">Gunslinger e Galacticmon</span><span class="tw">Asuka / Amaterasu · Gunslinger</span></a></div><div class="toc-group"><div class="toc-glabel">Referência</div>
+    <a href="#places" data-id="places"><span class="tn">◆</span><span class="tt">Lugares recorrentes</span><span class="tw">Glossário + como chegar</span></a>
+    <a href="#items" data-id="items"><span class="tn">◆</span><span class="tt">Itens-chave</span><span class="tw">Onde pega · onde usa</span></a>
+    <a href="#side" data-id="side"><span class="tn">◆</span><span class="tt">Side quests</span><span class="tw">Opcionais</span></a>
+  </div></nav>
+  </aside>
+  <main class="main">
+    <div class="progress" id="progress">
+      <strong id="progLabel">1 / 19</strong>
+      <div class="bar"><i id="progBar"></i></div>
+      <span id="progTitle">Começo em Kusanagi</span>
+    </div>
+    
+<section class="chapter" id="start" data-n="1" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">01</span>
+    <div>
+      <p class="en">Junior's Day Out</p>
+      <h2>Começo em Kusanagi</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">Intro</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Escolher o Starter Pack e entrar no Asuka Server.</div>
+      <div><span class="k">Pré-requisito</span>Nenhum. É a abertura do jogo.</div>
+    </div>
+    
+    
+    <p>O jogo abre na esquina de Kusanagi City, com o Junior esperando Teddy e Ivy pra jogar Digimon Online. Na TV rola a notícia: a SAP e o exército prenderam a cúpula europeia da A.o.A. Quando os dois amigos chegam, o trio vai pro Digimon Center.</p>
+<p>No balcão você cria a conta e escolhe um <strong>Starter Pack</strong> com três Rookies. Dá pra liberar os outros mais tarde, então não trave aqui: pegue o pack com o Digimon que você mais curte.</p>
+    <div class="packs-box"><h3 class="block-title">Starter Packs</h3><ul><li>A — Balance: Kotemon, Renamon, Patamon (arma + magia + cura)</li><li>B — Powerful: Monmon, Agumon, Renamon (ofensivo)</li><li>C — Maniac: Kumamon, Guilmon, Patamon (esquisito, mas forte)</li></ul></div>
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Assista à cena na esquina e siga pro Digimon Center com Teddy e Ivy.</li><li>No balcão, defina o nome do personagem.</li><li>Escolha um dos três Starter Packs (você fica com ele por um bom tempo).</li></ol>
+    
+    
+    
+    
+    
+    <nav class="ch-nav">
+      <span></span>
+      <a class="next" href="#asuka-city">Asuka City e o básico →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="asuka-city" data-n="2" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">02</span>
+    <div>
+      <p class="en">Asuka City basics</p>
+      <h2>Asuka City e o básico</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">Central</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Aprender o básico, pegar o Folder Bag e treinar até uns 5 de nível.</div>
+      <div><span class="k">Pré-requisito</span>Ter escolhido o Starter Pack.</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Folder Bag</span></div>
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="90" y1="40" x2="90" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="90" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="230" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="230" y1="120" x2="300" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="300" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="200" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><text x="435" y="142" fill="#8fa0b5" font-size="9" text-anchor="middle">via ruínas</text><line x1="440" y1="40" x2="570" y2="170" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="230" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="200" x2="230" y2="120" stroke="#4fc3f7" stroke-width="1.5" stroke-dasharray="2 4"/><text x="160" y="157" fill="#8fa0b5" font-size="9" text-anchor="middle">Seabed</text><g>
+      <rect x="56" y="28" width="68" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="90" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Asuka City</text>
+    </g><g>
+      <rect x="50.599999999999994" y="108" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="90" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Central Park</text>
+    </g><g>
+      <rect x="53.3" y="188" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="90" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Shell Beach</text>
+    </g><g>
+      <rect x="198.7" y="108" width="62.6" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="230" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Plug Cape</text>
+    </g><g>
+      <rect x="263.3" y="28" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Wire Forest</text>
+    </g><g>
+      <rect x="271.4" y="188" width="57.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Protocol</text>
+    </g><g>
+      <rect x="403.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="440" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Seiryu City</text>
+    </g><g>
+      <rect x="392.5" y="108" width="95" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="440" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Divermon's Lake</text>
+    </g><g>
+      <rect x="525.2" y="78" width="89.60000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="570" y="94" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tyranno Valley</text>
+    </g><g>
+      <rect x="525.2" y="158" width="89.60000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="174" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Kicking Forest</text>
+    </g><g>
+      <rect x="530.6" y="218" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="234" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · Central. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Você desembarca no lobby de <a href="#place-asuka-city">Asuka City</a> e pega seus Digimon no balcão. Assim que sai pra rua, o <strong>Tamer Genji</strong> te puxa pra um tutorial de luta — sem estresse, é só pra ensinar. Depois o jogo te leva ao Digimon Lab, onde o Dr. Kadomatsu troca Digivolution e carrega techniques.</p>
+<p>Vale conhecer a cidade antes de sair: a inn (Gatomon cura, Guardromon salva), os Smiths (Wizardmon vende cura, Gomamon vende anéis de status, Gargomon vende equipamento) e o <a href="#place-yellow-cruiser">Yellow Cruiser</a>, onde o Divermon te entrega o <strong>Folder Bag</strong> pra jogar cartas.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Ganhe o tutorial contra o Tamer Genji ao sair do prédio inicial.</li><li>Visite o Digimon Lab (Dr. Kadomatsu) pra entender Digivolution e techniques.</li><li>Na inn, desça a escada e pegue a porta ao lado dela (Underground Path).</li><li>Siga até o Yellow Cruiser e fale com o Divermon pra receber o Folder Bag.</li><li>Treine no Central Park até uns 5 de nível (Leomon's Gym gasta TP; tem um Power Charge no alto do ginásio).</li></ol>
+    
+    
+    
+    <div class="tip"><b>Tips</b><ul><li>Missões opcionais que dá pra começar cedo: <strong>Tree Boots</strong> (carta Gabumon no armário do porão da inn → menino em Plug Cape) e <strong>Fishing Rod</strong> (velho em Shell Beach; peças com Divermon e Dokugumon).</li><li>Charisma decide se um Tamer no campo te ignora, dueliza carta ou luta Digimon. Detalhe em Boosters.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#start">← Começo em Kusanagi</a>
+      <a class="next" href="#seiryu">Badge Seiryu →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="seiryu" data-n="3" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">03</span>
+    <div>
+      <p class="en">Enter the Dragon</p>
+      <h2>Badge Seiryu</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">East</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Derrotar o MasterTyrannomon e depois o Seiryu Leader pra pegar o primeiro badge.</div>
+      <div><span class="k">Pré-requisito</span>Ter passado por Asuka City. Time em torno de Lv 8–10 ajuda.</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Old Claw</span></div>
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="90" y1="40" x2="90" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="90" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="230" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="230" y1="120" x2="300" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="300" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="200" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><text x="435" y="142" fill="#8fa0b5" font-size="9" text-anchor="middle">via ruínas</text><line x1="440" y1="40" x2="570" y2="170" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="230" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="200" x2="230" y2="120" stroke="#4fc3f7" stroke-width="1.5" stroke-dasharray="2 4"/><text x="160" y="157" fill="#8fa0b5" font-size="9" text-anchor="middle">Seabed</text><g>
+      <rect x="56" y="28" width="68" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="90" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Asuka City</text>
+    </g><g>
+      <rect x="50.599999999999994" y="108" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="90" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Central Park</text>
+    </g><g>
+      <rect x="53.3" y="188" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="90" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Shell Beach</text>
+    </g><g>
+      <rect x="198.7" y="108" width="62.6" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="230" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Plug Cape</text>
+    </g><g>
+      <rect x="263.3" y="28" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Wire Forest</text>
+    </g><g>
+      <rect x="271.4" y="188" width="57.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Protocol</text>
+    </g><g>
+      <rect x="403.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="440" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Seiryu City</text>
+    </g><g>
+      <rect x="392.5" y="108" width="95" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="440" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Divermon's Lake</text>
+    </g><g>
+      <rect x="525.2" y="78" width="89.60000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="570" y="94" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tyranno Valley</text>
+    </g><g>
+      <rect x="525.2" y="158" width="89.60000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="174" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Kicking Forest</text>
+    </g><g>
+      <rect x="530.6" y="218" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="234" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · East. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Saindo de Asuka City pelo leste, você passa o Wire Forest Entrance, o West Wire e o East Wire até chegar em <strong>Seiryu City</strong>, que já tem loja e inn melhores. Na Forest Inn dá pra curar e salvar no meio do caminho. Na torre de Seiryu, um menino conta que o Leader está treinando nas Protocol Ruins.</p>
+<p>As Protocol Ruins ficam atravessando a Protocol Forest, um labirinto de folhagem ao norte do East Wire. Lá dentro, escadas à direita levam ao <strong>Pharaohmon</strong> (opcional, mas rende EXP). Depois do trono você fala com o <strong>Seiryu Leader</strong>, que só aceita a luta depois que você derruba o <strong>MasterTyrannomon</strong> em Tyranno Valley.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Vá de Asuka City ao East Sector: Wire Forest Entrance → West Wire → East Wire.</li><li>Em Seiryu City, suba a torre e ouça o menino sobre o Leader.</li><li>Atravesse a Protocol Forest até as Protocol Ruins (opcional: derrote o Pharaohmon nas escadas à direita).</li><li>Fale com o Seiryu Leader: ele exige a vitória sobre o MasterTyrannomon.</li><li>Vá pra Tyranno Valley (via Wind Prairie → Kicking Forest) e derrote o MasterTyrannomon; guarde o Old Claw.</li><li>Cure em Seiryu, suba a torre e vença o Seiryu Leader pra ganhar o Seiryu Badge.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card opt">
+        <div class="boss-name">Pharaohmon <span class="opt-tag">opcional</span></div>
+        <div class="boss-row"><span>Onde</span> Protocol Ruins (escadas à direita)</div>
+        <div class="boss-row"><span>Gimmick</span> Opcional. Bom EXP se seu time aguentar.</div>
+        <div class="boss-row"><span>Counter</span> Leve Power Charges; não é obrigatório.</div>
+        <div class="boss-row"><span>Recompensa</span> EXP</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">MasterTyrannomon</div>
+        <div class="boss-row"><span>Onde</span> Tyranno Valley (fim do mapa)</div>
+        <div class="boss-row"><span>Gimmick</span> Tanque físico.</div>
+        <div class="boss-row"><span>Counter</span> Digivolua e mantenha cura; é o gate pro Leader.</div>
+        <div class="boss-row"><span>Recompensa</span> Old Claw</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Seiryu Leader</div>
+        <div class="boss-row"><span>Onde</span> Topo da Seiryu Tower</div>
+        <div class="boss-row"><span>Gimmick</span> Primeiro Leader; pode derrubar 1–2 Digimon.</div>
+        <div class="boss-row"><span>Counter</span> Cure antes; time evoluído resolve.</div>
+        <div class="boss-row"><span>Recompensa</span> Seiryu Badge</div>
+      </div></div></div>
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Tyranno Valley</strong> — A pé por Wind Prairie → Kicking Forest → subir as escadas.</li></ul></div>
+    
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#asuka-city">← Asuka City e o básico</a>
+      <a class="next" href="#blue-card">Blue Card e gondola →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="blue-card" data-n="4" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">04</span>
+    <div>
+      <p class="en">Go South, Young Man</p>
+      <h2>Blue Card e gondola</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">East → South</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Achar o Blue Card verdadeiro e ativar a gondola pra descer ao South Sector.</div>
+      <div><span class="k">Pré-requisito</span>Seiryu Badge.</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Blue Card</span></div>
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="70" y1="40" x2="70" y2="130" stroke="#4a5d75" stroke-width="1.5"/><text x="70" y="82" fill="#8fa0b5" font-size="9" text-anchor="middle">gondola</text><line x1="70" y1="130" x2="210" y2="130" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="130" x2="210" y2="210" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="340" y1="150" x2="470" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="470" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="590" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="590" y1="150" x2="590" y2="220" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="30.599999999999994" y="28" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g><g>
+      <rect x="27.9" y="118" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Station</text>
+    </g><g>
+      <rect x="176" y="118" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="210" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Swamp</text>
+    </g><g>
+      <rect x="173.3" y="198" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="210" y="214" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Bridge</text>
+    </g><g>
+      <rect x="295.2" y="48" width="89.60000000000001" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="340" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tranquil Swamp</text>
+    </g><g>
+      <rect x="300.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="340" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Jungle Grave</text>
+    </g><g>
+      <rect x="306" y="208" width="68" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="340" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bios Swamp</text>
+    </g><g>
+      <rect x="433.3" y="108" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="470" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Phoenix Bay</text>
+    </g><g>
+      <rect x="433.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="470" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Suzaku City</text>
+    </g><g>
+      <rect x="550.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Ether Jungle</text>
+    </g><g>
+      <rect x="556" y="208" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Cape</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · East → South. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>A gondola de <strong>East Station</strong> pede um <strong>Blue Card</strong>. Isso vira uma caça meio cômica entre vários Guilmon espalhados pelo East, porque o primeiro cartão que você recebe é falso (um “8lue Card”). Siga a sequência abaixo até pegar o verdadeiro, no porão da Forest Inn.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>East Station pede Blue Card — comece a procurar entre os Guilmon.</li><li>Guilmon em Seiryu City → não tem; Guilmon na Asuka Inn 2F → não tem.</li><li>Guilmon na Forest Inn → aponta outro.</li><li>Tricky Guilmon no Zephyr Tower te dá um cartão… falso (8lue Card).</li><li>Guilmon perto do moinho manda você ao porão da Forest Inn.</li><li>No porão da Forest Inn, o Tricky Guilmon entrega o Blue Card verdadeiro.</li><li>Cure, salve e ative a gondola em East Station.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Bulbmon (gondola)</div>
+        <div class="boss-row"><span>Onde</span> Deeper Crevice, no meio da viagem</div>
+        <div class="boss-row"><span>Gimmick</span> Luta scriptada: você só enfraquece, ele foge.</div>
+        <div class="boss-row"><span>Counter</span> Não precisa vencer; sobreviva.</div>
+        <div class="boss-row"><span>Recompensa</span> Segue viagem ao South</div>
+      </div></div></div>
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Forest Inn (porão)</strong> — A pé pelo East Sector; a Forest Inn fica entre East Wire e Divermon's Lake.</li></ul></div>
+    <div class="tip"><b>Tips</b><ul><li>Encha a bolsa de cura antes de descer: no South os wilds sobem de nível de verdade.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#seiryu">← Badge Seiryu</a>
+      <a class="next" href="#suzaku">Zanbamon e Badge Suzaku →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="suzaku" data-n="5" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">05</span>
+    <div>
+      <p class="en">In Search of the Phoenix</p>
+      <h2>Zanbamon e Badge Suzaku</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">South</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Resolver a linha do Sepikmon, espantar o Zanbamon e vencer a Suzaku Leader.</div>
+      <div><span class="k">Pré-requisito</span>Ter chegado ao South pela gondola.</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Smelly Herb</span></div>
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="70" y1="40" x2="70" y2="130" stroke="#4a5d75" stroke-width="1.5"/><text x="70" y="82" fill="#8fa0b5" font-size="9" text-anchor="middle">gondola</text><line x1="70" y1="130" x2="210" y2="130" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="130" x2="210" y2="210" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="340" y1="150" x2="470" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="470" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="590" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="590" y1="150" x2="590" y2="220" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="30.599999999999994" y="28" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g><g>
+      <rect x="27.9" y="118" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Station</text>
+    </g><g>
+      <rect x="176" y="118" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="210" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Swamp</text>
+    </g><g>
+      <rect x="173.3" y="198" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="210" y="214" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Bridge</text>
+    </g><g>
+      <rect x="295.2" y="48" width="89.60000000000001" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="340" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tranquil Swamp</text>
+    </g><g>
+      <rect x="300.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="340" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Jungle Grave</text>
+    </g><g>
+      <rect x="306" y="208" width="68" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="340" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bios Swamp</text>
+    </g><g>
+      <rect x="433.3" y="108" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="470" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Phoenix Bay</text>
+    </g><g>
+      <rect x="433.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="470" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Suzaku City</text>
+    </g><g>
+      <rect x="550.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Ether Jungle</text>
+    </g><g>
+      <rect x="556" y="208" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Cape</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · South. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Do South Station você abre Bulk Swamp e Bulk Bridge. Em <strong>Tranquil Swamp</strong> tem inn e a <a href="#place-shaman-house">Shaman House</a> do Sepikmon, onde essa parte da história avança. Em <strong>Jungle Grave</strong> você encontra o <strong>Zanbamon</strong>: a primeira luta é scriptada e seus Digimon fogem. A Gatomon da inn te manda falar com o Sepikmon, que perdeu a máscara.</p>
+<p>A máscara passa por várias mãos. A sequência abaixo é o caminho que os FAQs batem juntos; no fim o Sepikmon te dá o <strong>Smelly Herb</strong>, que espanta o Zanbamon de vez.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Em Jungle Grave, fale com o Zanbamon (luta scriptada; seus Digimon fogem).</li><li>Na Shaman House (Tranquil Swamp), fale com o Sepikmon: ele perdeu a máscara.</li><li>Siga o rastro: Baronmon nas Protocol Ruins → Sepikmon na Asuka Bridge → o cara em Divermon's Lake reclama do Etemon.</li><li>Ache o Etemon em Asuka City (onde o senhor queria virar Digimon); ele foge pro esgoto e larga a máscara.</li><li>Volte ao Sepikmon: receba o Smelly Herb.</li><li>Volte a Jungle Grave com o herb pra espantar o Zanbamon.</li><li>Siga a Phoenix Bay → Suzaku City; cure, equipe e vença a Suzaku Leader (Suzaku Badge).</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Zanbamon</div>
+        <div class="boss-row"><span>Onde</span> Jungle Grave</div>
+        <div class="boss-row"><span>Gimmick</span> Some com o Smelly Herb; a primeira luta é scriptada.</div>
+        <div class="boss-row"><span>Counter</span> Não tente vencer antes do herb.</div>
+        <div class="boss-row"><span>Recompensa</span> Libera o caminho ao South</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Suzaku Leader</div>
+        <div class="boss-row"><span>Onde</span> Suzaku City (sala do Leader)</div>
+        <div class="boss-row"><span>Gimmick</span> Segundo Leader.</div>
+        <div class="boss-row"><span>Counter</span> Time Lv ~15 ou um Ultimate resolve.</div>
+        <div class="boss-row"><span>Recompensa</span> Suzaku Badge</div>
+      </div></div></div>
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Asuka City</strong> — A pé subindo pelos setores, ou já usando o Seabed onde disponível (veja Routes).</li><li><strong>Jungle Grave</strong> — A pé: South Station → Bulk Bridge → caminho sul.</li></ul></div>
+    <div class="tip"><b>Tips</b><ul><li>Ao sair de Suzaku, Kail avisa que Teddy sumiu e cita o Admin Center — é o gancho do próximo capítulo.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#blue-card">← Blue Card e gondola</a>
+      <a class="next" href="#admin-infiltrate">Entrar no Admin Center →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="admin-infiltrate" data-n="6" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">06</span>
+    <div>
+      <p class="en">I Wanna Be a Digimon!</p>
+      <h2>Entrar no Admin Center</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">Central</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Usar o disfarce de Agumon pra entrar no Admin Center e ouvir a Game Master.</div>
+      <div><span class="k">Pré-requisito</span>Suzaku Badge.</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="90" y1="40" x2="90" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="90" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="230" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="230" y1="120" x2="300" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="300" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="200" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><text x="435" y="142" fill="#8fa0b5" font-size="9" text-anchor="middle">via ruínas</text><line x1="440" y1="40" x2="570" y2="170" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="230" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="200" x2="230" y2="120" stroke="#4fc3f7" stroke-width="1.5" stroke-dasharray="2 4"/><text x="160" y="157" fill="#8fa0b5" font-size="9" text-anchor="middle">Seabed</text><g>
+      <rect x="56" y="28" width="68" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="90" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Asuka City</text>
+    </g><g>
+      <rect x="50.599999999999994" y="108" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="90" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Central Park</text>
+    </g><g>
+      <rect x="53.3" y="188" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="90" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Shell Beach</text>
+    </g><g>
+      <rect x="198.7" y="108" width="62.6" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="230" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Plug Cape</text>
+    </g><g>
+      <rect x="263.3" y="28" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Wire Forest</text>
+    </g><g>
+      <rect x="271.4" y="188" width="57.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Protocol</text>
+    </g><g>
+      <rect x="403.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="440" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Seiryu City</text>
+    </g><g>
+      <rect x="392.5" y="108" width="95" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="440" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Divermon's Lake</text>
+    </g><g>
+      <rect x="525.2" y="78" width="89.60000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="570" y="94" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tyranno Valley</text>
+    </g><g>
+      <rect x="525.2" y="158" width="89.60000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="174" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Kicking Forest</text>
+    </g><g>
+      <rect x="530.6" y="218" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="234" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · Central. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Você e a Kail tentam entrar no <a href="#place-admin-center">Admin Center</a> em Asuka City, mas o guarda barra. Perguntando pela cidade você descobre o esquema do Etemon: no Underground Path, onde ficava o casal de velhos, agora tem dois Agumon gêmeos que ele deixou lá. O próprio Etemon aparece e foge de novo.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Tente o Admin Center: o guarda te barra.</li><li>Pergunte pela cidade e vá ao Underground Path (dois Agumon gêmeos que o Etemon deixou).</li><li>No esgoto, ache o homem e mande ele falar com a Kail: é o Etemon disfarçado.</li><li>Ele empresta os dois Agumon como disfarce; agora o guarda deixa entrar.</li><li>Suba até a Master Room e ouça a Game Master: ela manda capturar o Lucky Mouse no West Sector.</li></ol>
+    
+    
+    
+    
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#suzaku">← Zanbamon e Badge Suzaku</a>
+      <a class="next" href="#digiegg-west">Digi-Egg e caminho pro West →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="digiegg-west" data-n="7" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">07</span>
+    <div>
+      <p class="en">A Brief Interlude</p>
+      <h2>Digi-Egg e caminho pro West</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">South → West</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Pegar o Digi-Egg of Reliability e chamar o Submarimon pra abrir o West.</div>
+      <div><span class="k">Pré-requisito</span>Missão do Lucky Mouse (fim do capítulo anterior).</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Digi-Egg of Reliability</span></div>
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="70" y1="40" x2="70" y2="130" stroke="#4a5d75" stroke-width="1.5"/><text x="70" y="82" fill="#8fa0b5" font-size="9" text-anchor="middle">gondola</text><line x1="70" y1="130" x2="210" y2="130" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="130" x2="210" y2="210" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="340" y1="150" x2="470" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="470" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="590" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="590" y1="150" x2="590" y2="220" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="30.599999999999994" y="28" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g><g>
+      <rect x="27.9" y="118" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Station</text>
+    </g><g>
+      <rect x="176" y="118" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="210" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Swamp</text>
+    </g><g>
+      <rect x="173.3" y="198" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="210" y="214" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Bridge</text>
+    </g><g>
+      <rect x="295.2" y="48" width="89.60000000000001" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="340" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tranquil Swamp</text>
+    </g><g>
+      <rect x="300.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="340" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Jungle Grave</text>
+    </g><g>
+      <rect x="306" y="208" width="68" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="340" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bios Swamp</text>
+    </g><g>
+      <rect x="433.3" y="108" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="470" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Phoenix Bay</text>
+    </g><g>
+      <rect x="433.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="470" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Suzaku City</text>
+    </g><g>
+      <rect x="550.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Ether Jungle</text>
+    </g><g>
+      <rect x="556" y="208" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Cape</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · South → West. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Em Phoenix Bay, uma menina aponta o Digi-Egg atrás do shrine em <strong>Bios Swamp</strong>. Você examina a parede e nota uma rachadura, mas não consegue entrar ainda. O Sepikmon manda falar com o Baronmon, que faz um <strong>TNT Chip</strong> se você trouxer uma <strong>TNT Ball</strong> (drop de Triceramon em Plug Cape ou Tyranno Valley).</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Em Phoenix Bay, fale com a menina sobre o Digi-Egg.</li><li>Examine a parede atrás do shrine em Bios Swamp (tem rachadura).</li><li>Consiga uma TNT Ball (Triceramon em Plug Cape ou Tyranno Valley) e leve ao Baronmon nas Protocol Ruins → TNT Chip.</li><li>Volte a Bios Swamp, estoure a rachadura e pegue o Digi-Egg of Reliability.</li><li>Vá ao dock (South Cape ou Plug Cape) e chame o Submarimon rumo ao West.</li></ol>
+    
+    
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Protocol Ruins (Baronmon)</strong> — A pé pelo East: Seiryu City → Protocol Forest → Ruins.</li><li><strong>West Sector</strong> — Submarimon no dock (veja Routes: Plug Cape / South Cape).</li></ul></div>
+    <div class="tip"><b>Tips</b><ul><li>Jungle Temple em Ether Jungle é cruel cedo (~Lv 20+). Garudamon's Gym em South Cape serve pra treinar antes.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#admin-infiltrate">← Entrar no Admin Center</a>
+      <a class="next" href="#byakko-first">Byakko City (primeira visita) →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="byakko-first" data-n="8" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">08</span>
+    <div>
+      <p class="en">The Journey West</p>
+      <h2>Byakko City (primeira visita)</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">West</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Chegar a Byakko, cair na emboscada e escapar da caverna com o Numemon.</div>
+      <div><span class="k">Pré-requisito</span>Digi-Egg of Reliability (acesso ao West).</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="80" y1="60" x2="80" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="220" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="220" y1="60" x2="220" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="220" y1="150" x2="220" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="360" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="360" y1="120" x2="360" y2="210" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="490" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="490" y1="60" x2="490" y2="140" stroke="#4a5d75" stroke-width="1.5"/><line x1="360" y1="210" x2="600" y2="200" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="37.9" y="48" width="84.2" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="80" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Badland</text>
+    </g><g>
+      <rect x="40.599999999999994" y="138" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="80" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Noise Desert</text>
+    </g><g>
+      <rect x="183.3" y="48" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="220" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">N Badland E</text>
+    </g><g>
+      <rect x="183.3" y="138" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="220" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">N Badland W</text>
+    </g><g>
+      <rect x="180.6" y="208" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="220" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Pelche Oasis</text>
+    </g><g>
+      <rect x="323.3" y="108" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="360" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Byakko City</text>
+    </g><g>
+      <rect x="317.9" y="198" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="360" y="214" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bullet Valley</text>
+    </g><g>
+      <rect x="447.9" y="48" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="490" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Mobius Desert</text>
+    </g><g>
+      <rect x="450.6" y="128" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="490" y="144" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Mirage Tower</text>
+    </g><g>
+      <rect x="552.5" y="188" width="95" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="600" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Dum Dum Factory</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · West. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Do West você atravessa South Badlands, Noise Desert e os North Badlands. Pelche Oasis serve de ponto de cura e save, e o Togemon Gym no North Badland E ajuda a Machine Tolerance. Ao entrar em <strong>Byakko City</strong> (cheia de “soldados”), você “vence” o líder local e vai buscar o badge na sala — aí o chão desaba e cai a ficha de que é uma emboscada.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Atravesse South Badlands → Noise Desert → North Badlands (cure/salve em Pelche Oasis).</li><li>Entre em Byakko City e enfrente o líder local.</li><li>Vá buscar o badge na sala: o chão desaba (emboscada da A.o.A.).</li><li>Na Underground Cave, vá ao canto inferior direito: o Numemon te tira dali.</li><li>Você sai em Bullet Valley; volte por Pelche → Noise Desert → S Noise Desert.</li></ol>
+    
+    
+    
+    <div class="tip"><b>Tips</b><ul><li>O Numemon que te salva é o Lucky Mouse disfarçado — guarde isso pra frente.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#digiegg-west">← Digi-Egg e caminho pro West</a>
+      <a class="next" href="#mirage">Mirage Tower e Badge Byakko →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="mirage" data-n="9" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">09</span>
+    <div>
+      <p class="en">Tiger of the Wind</p>
+      <h2>Mirage Tower e Badge Byakko</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">West</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Atravessar o Mobius Desert e vencer o Byakko Leader de verdade.</div>
+      <div><span class="k">Pré-requisito</span>Ter escapado da caverna de Byakko.</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="80" y1="60" x2="80" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="220" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="220" y1="60" x2="220" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="220" y1="150" x2="220" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="360" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="360" y1="120" x2="360" y2="210" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="490" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="490" y1="60" x2="490" y2="140" stroke="#4a5d75" stroke-width="1.5"/><line x1="360" y1="210" x2="600" y2="200" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="37.9" y="48" width="84.2" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="80" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Badland</text>
+    </g><g>
+      <rect x="40.599999999999994" y="138" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="80" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Noise Desert</text>
+    </g><g>
+      <rect x="183.3" y="48" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="220" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">N Badland E</text>
+    </g><g>
+      <rect x="183.3" y="138" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="220" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">N Badland W</text>
+    </g><g>
+      <rect x="180.6" y="208" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="220" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Pelche Oasis</text>
+    </g><g>
+      <rect x="323.3" y="108" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="360" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Byakko City</text>
+    </g><g>
+      <rect x="317.9" y="198" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="360" y="214" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bullet Valley</text>
+    </g><g>
+      <rect x="447.9" y="48" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="490" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Mobius Desert</text>
+    </g><g>
+      <rect x="450.6" y="128" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="490" y="144" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Mirage Tower</text>
+    </g><g>
+      <rect x="552.5" y="188" width="95" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="600" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Dum Dum Factory</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · West. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Em S Noise Desert você fala com o Agumon e o Guilmon e entra no <strong>Mobius Desert</strong>, que embaralha a orientação. O caminho clássico dos FAQs até a Mirage Tower é uma sequência fixa de direções. Na torre dá pra curar, equipar e salvar, mas <strong>não se vende item de cura</strong> — leve estoque de antes.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Em S Noise Desert, fale com Agumon e Guilmon e entre no Mobius Desert.</li><li>Siga a sequência de direções até a Mirage Tower.</li><li>Na torre, cure/equipe/salve (não há venda de cura aqui).</li><li>Suba e vença o Byakko Leader (Byakko Badge). Ele manda achar o Numemon na Dum Dum Factory.</li></ol>
+    <p class="path">NW → SW → NW → SW → NW</p>
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Byakko Leader</div>
+        <div class="boss-row"><span>Onde</span> Topo da Mirage Tower</div>
+        <div class="boss-row"><span>Gimmick</span> Ataques podem stunear seus Digimon.</div>
+        <div class="boss-row"><span>Counter</span> Leve muita cura; a torre não vende itens.</div>
+        <div class="boss-row"><span>Recompensa</span> Byakko Badge</div>
+      </div></div></div>
+    
+    
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#byakko-first">← Byakko City (primeira visita)</a>
+      <a class="next" href="#dum-dum">Dum Dum Factory e Lucky Mouse →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="dum-dum" data-n="10" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">10</span>
+    <div>
+      <p class="en">The Secret Under the Stairs</p>
+      <h2>Dum Dum Factory e Lucky Mouse</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">West</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Perseguir o Numemon, vencer HiAndromon e WaruMonzaemon e descobrir quem é o Kurt.</div>
+      <div><span class="k">Pré-requisito</span>Byakko Badge.</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Sewer Key</span></div>
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="80" y1="60" x2="80" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="220" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="220" y1="60" x2="220" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="220" y1="150" x2="220" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="360" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="360" y1="120" x2="360" y2="210" stroke="#4a5d75" stroke-width="1.5"/><line x1="80" y1="150" x2="490" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="490" y1="60" x2="490" y2="140" stroke="#4a5d75" stroke-width="1.5"/><line x1="360" y1="210" x2="600" y2="200" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="37.9" y="48" width="84.2" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="80" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Badland</text>
+    </g><g>
+      <rect x="40.599999999999994" y="138" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="80" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Noise Desert</text>
+    </g><g>
+      <rect x="183.3" y="48" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="220" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">N Badland E</text>
+    </g><g>
+      <rect x="183.3" y="138" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="220" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">N Badland W</text>
+    </g><g>
+      <rect x="180.6" y="208" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="220" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Pelche Oasis</text>
+    </g><g>
+      <rect x="323.3" y="108" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="360" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Byakko City</text>
+    </g><g>
+      <rect x="317.9" y="198" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="360" y="214" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bullet Valley</text>
+    </g><g>
+      <rect x="447.9" y="48" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="490" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Mobius Desert</text>
+    </g><g>
+      <rect x="450.6" y="128" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="490" y="144" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Mirage Tower</text>
+    </g><g>
+      <rect x="552.5" y="188" width="95" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="600" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Dum Dum Factory</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · West. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>De Bullet Valley você segue ao norte até a <a href="#place-dum-dum">Dum Dum Factory</a>. Os Digimon daqui paralisam, então Life Ring ajuda. Você persegue o Numemon por salas e baús até a Operations Room, onde encara o <strong>HiAndromon</strong>. Depois, nos esgotos da fábrica, salva a Lisa do <strong>WaruMonzaemon</strong> — e o Numemon finalmente se revela como <strong>Lucky Mouse</strong>, que te leva pro esconderijo dele, a <a href="#place-secret-room">Secret Room</a>.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Suba por Bullet Valley até a Dum Dum Factory (Life Ring ajuda contra paralisia).</li><li>Persiga o Numemon por salas e baús até a Operations Room.</li><li>Vença o HiAndromon (Atomic Ray pode KO na hora): ele dá a Sewer Key.</li><li>Siga pelas Secret Stairs até os esgotos da fábrica.</li><li>Salve a Lisa vencendo o WaruMonzaemon; o Numemon se revela Lucky Mouse.</li><li>Na Secret Room, a A.o.A. chega com a Kail refém: cena longa + luta contra o knight; o Kurt vira Oinkmon.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">HiAndromon</div>
+        <div class="boss-row"><span>Onde</span> Operations Room (Dum Dum Factory)</div>
+        <div class="boss-row"><span>Gimmick</span> Atomic Ray pode KO instantâneo.</div>
+        <div class="boss-row"><span>Counter</span> Leve Life Disk; recupere KO rápido.</div>
+        <div class="boss-row"><span>Recompensa</span> Sewer Key</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">WaruMonzaemon</div>
+        <div class="boss-row"><span>Onde</span> Esgotos da Dum Dum Factory</div>
+        <div class="boss-row"><span>Gimmick</span> Ameaça a Lisa; luta scriptada de resgate.</div>
+        <div class="boss-row"><span>Counter</span> Cura padrão; seus Digimon chegam curados.</div>
+        <div class="boss-row"><span>Recompensa</span> Revela o Lucky Mouse</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">AoA knight</div>
+        <div class="boss-row"><span>Onde</span> Secret Room</div>
+        <div class="boss-row"><span>Gimmick</span> Depois que atiram no Kurt.</div>
+        <div class="boss-row"><span>Counter</span> Luta direta.</div>
+        <div class="boss-row"><span>Recompensa</span> Avança a história</div>
+      </div></div></div>
+    
+    <div class="tip"><b>Tips</b><ul><li>A Kail revela que o Lucky Mouse é o Kurt, irmão dela. Ela pede que você volte a Asuka e derrube a Game Master.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#mirage">← Mirage Tower e Badge Byakko</a>
+      <a class="next" href="#game-master">Esgoto, Datamon e Game Master →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="game-master" data-n="11" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">11</span>
+    <div>
+      <p class="en">Liberation</p>
+      <h2>Esgoto, Datamon e Game Master</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">Central</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Abrir o portão do Admin Center, infiltrar e vencer a Game Master.</div>
+      <div><span class="k">Pré-requisito</span>Ter revelado o Kurt na Secret Room.</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Staff ID Pass</span></div>
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="90" y1="40" x2="90" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="90" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="120" x2="230" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="230" y1="120" x2="300" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="300" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="40" x2="440" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="300" y1="200" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><text x="435" y="142" fill="#8fa0b5" font-size="9" text-anchor="middle">via ruínas</text><line x1="440" y1="40" x2="570" y2="170" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="90" stroke="#4a5d75" stroke-width="1.5"/><line x1="570" y1="170" x2="570" y2="230" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="200" x2="230" y2="120" stroke="#4fc3f7" stroke-width="1.5" stroke-dasharray="2 4"/><text x="160" y="157" fill="#8fa0b5" font-size="9" text-anchor="middle">Seabed</text><g>
+      <rect x="56" y="28" width="68" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="90" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Asuka City</text>
+    </g><g>
+      <rect x="50.599999999999994" y="108" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="90" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Central Park</text>
+    </g><g>
+      <rect x="53.3" y="188" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="90" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Shell Beach</text>
+    </g><g>
+      <rect x="198.7" y="108" width="62.6" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="230" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Plug Cape</text>
+    </g><g>
+      <rect x="263.3" y="28" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Wire Forest</text>
+    </g><g>
+      <rect x="271.4" y="188" width="57.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="300" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Protocol</text>
+    </g><g>
+      <rect x="403.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="440" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Seiryu City</text>
+    </g><g>
+      <rect x="392.5" y="108" width="95" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="440" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Divermon's Lake</text>
+    </g><g>
+      <rect x="525.2" y="78" width="89.60000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="570" y="94" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tyranno Valley</text>
+    </g><g>
+      <rect x="525.2" y="158" width="89.60000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="174" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Kicking Forest</text>
+    </g><g>
+      <rect x="530.6" y="218" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="570" y="234" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · Central. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Os portões de Asuka City estão trancados. Você contorna pelo <a href="#place-asuka-sewers">Asuka Sewers</a>: no dock à direita da Asuka Bridge, chame o Submarimon e emerja dentro do esgoto. Na <a href="#place-control-room">Control Room</a> você enfrenta o <strong>Datamon</strong>, que pede um <strong>Staff ID Pass</strong> pra abrir o portão do Admin Center.</p>
+<p>O Staff ID está com o Kurt, mas a <a href="#place-secret-room">Secret Room</a> está bagunçada demais. A Lisa te manda buscar o Keith e o Nick (no <a href="#place-suzaku-ug">Suzaku UG Lake</a>) pra ajudar a limpar. Depois que o Nick acha o pass, você volta à Control Room e o Datamon abre o portão. Daí é uma sequência de lutas até a <a href="#place-master-room">Master Room</a> e a Game Master.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>No dock à direita da Asuka Bridge, chame o Submarimon → emerja nos Asuka Sewers (de brinde, pegue os Iron Gloves na saída lateral).</li><li>Na Control Room, vença o Datamon: ele pede o Staff ID Pass.</li><li>Vá à Secret Room (Dum Dum Factory) — está bagunçada; a Lisa manda achar Keith e Nick.</li><li>Vá ao Suzaku UG Lake (dock atrás do Suzaku Hall) e traga Keith e Nick.</li><li>De volta à Secret Room, o Nick acha o Staff ID Pass.</li><li>Volte à Control Room: o Datamon abre o portão do Admin Center (saindo da sala, vire à direita até a abertura na parede).</li><li>Suba pelo Admin Center Basement/2F vencendo os knights; no topo, três guards e o Vemmon.</li><li>Na Master Room, toque os retratos na ordem M-O-N-S-T-E-R pra abrir o HQ da A.o.A.</li><li>No HQ, vença os três agentes e depois a Game Master.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Datamon</div>
+        <div class="boss-row"><span>Onde</span> Control Room (Asuka Sewers)</div>
+        <div class="boss-row"><span>Gimmick</span> Guarda o portão do Admin Center.</div>
+        <div class="boss-row"><span>Counter</span> Luta direta; depois exige o Staff ID Pass.</div>
+        <div class="boss-row"><span>Recompensa</span> Rusty Gloves + abre o portão</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Vemmon</div>
+        <div class="boss-row"><span>Onde</span> Topo do Admin Center 2F</div>
+        <div class="boss-row"><span>Gimmick</span> Não é o Veemon; mini-boss antes da Master Room.</div>
+        <div class="boss-row"><span>Counter</span> Luta direta.</div>
+        <div class="boss-row"><span>Recompensa</span> Avança pro HQ</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Game Master</div>
+        <div class="boss-row"><span>Onde</span> AoA HQ (via Master Room)</div>
+        <div class="boss-row"><span>Gimmick</span> O último Digimon dela é pesado.</div>
+        <div class="boss-row"><span>Counter</span> Leve Super Charge e Life Disk.</div>
+        <div class="boss-row"><span>Recompensa</span> Presa pela SAP</div>
+      </div></div></div>
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Secret Room (Dum Dum Factory)</strong> — A pé pelos esgotos da fábrica no West Sector — não é uma sala de Asuka City.</li><li><strong>Suzaku UG Lake</strong> — Suzaku City → Suzaku Hall → dock atrás dele → Submarimon (veja Routes).</li><li><strong>Control Room</strong> — Asuka Bridge dock → Submarimon → Asuka Sewers.</li></ul></div>
+    
+    <div class="warn"><b>Save / aviso</b> Guarde um save separado <em>antes</em> de reentrar no HQ de Asuka mais tarde (depois do Chief Officer). Salvar por cima no momento errado tira a chance de reverter os Oinkmon na versão NA.</div>
+    <nav class="ch-nav">
+      <a class="prev" href="#dum-dum">← Dum Dum Factory e Lucky Mouse</a>
+      <a class="next" href="#bulbmon">Bulbmon e entrada em Amaterasu →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="bulbmon" data-n="12" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">12</span>
+    <div>
+      <p class="en">A Bug's Life</p>
+      <h2>Bulbmon e entrada em Amaterasu</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">South → Amaterasu</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Achar a falha de rede e atravessar pro Amaterasu Server.</div>
+      <div><span class="k">Pré-requisito</span>Game Master derrotada.</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="70" y1="40" x2="70" y2="130" stroke="#4a5d75" stroke-width="1.5"/><text x="70" y="82" fill="#8fa0b5" font-size="9" text-anchor="middle">gondola</text><line x1="70" y1="130" x2="210" y2="130" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="130" x2="210" y2="210" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="210" x2="340" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="340" y1="150" x2="470" y2="120" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="470" y2="40" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="120" x2="590" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="590" y1="150" x2="590" y2="220" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="30.599999999999994" y="28" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">East Station</text>
+    </g><g>
+      <rect x="27.9" y="118" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="70" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Station</text>
+    </g><g>
+      <rect x="176" y="118" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="210" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Swamp</text>
+    </g><g>
+      <rect x="173.3" y="198" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="210" y="214" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bulk Bridge</text>
+    </g><g>
+      <rect x="295.2" y="48" width="89.60000000000001" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="340" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Tranquil Swamp</text>
+    </g><g>
+      <rect x="300.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="340" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Jungle Grave</text>
+    </g><g>
+      <rect x="306" y="208" width="68" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="340" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Bios Swamp</text>
+    </g><g>
+      <rect x="433.3" y="108" width="73.4" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="470" y="124" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Phoenix Bay</text>
+    </g><g>
+      <rect x="433.3" y="28" width="73.4" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="470" y="44" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Suzaku City</text>
+    </g><g>
+      <rect x="550.6" y="138" width="78.80000000000001" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Ether Jungle</text>
+    </g><g>
+      <rect x="556" y="208" width="68" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="590" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">South Cape</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · South → Amaterasu. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>Em Byakko, o líder preso da A.o.A. conta que eles vieram de Amaterasu usando o <strong>Bulbmon</strong>, que abre caminho na rede. A barreira do Lucky Mouse deixou o Bulbmon louco, e ele foi pro South. Sentindo os tremores, você segue até a Jungle Shrine, no Ether Forest, onde encontra a Suzaku Leader.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Em Byakko, ouça o líder preso sobre o Bulbmon.</li><li>Vá ao South: em Suzaku, o Patamon diz que a Leader foi pro Ether Forest.</li><li>Atravesse a Jungle Shrine e as Catacombs (se ainda faltou o Zanbamon, resolva agora).</li><li>Entre no buraco → Bug Maze: primeira rampa, desça, contorne o círculo até aparecer o ícone de escada, suba e siga pro ninho.</li><li>Vença o Bulbmon de novo: você chega ao Amaterasu Server.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card opt">
+        <div class="boss-name">Zanbamon (se faltou) <span class="opt-tag">opcional</span></div>
+        <div class="boss-row"><span>Onde</span> Catacombs</div>
+        <div class="boss-row"><span>Gimmick</span> Hunting Knife pode KO na hora.</div>
+        <div class="boss-row"><span>Counter</span> Só obrigatório se você pulou antes.</div>
+        <div class="boss-row"><span>Recompensa</span> Libera o caminho</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Bulbmon</div>
+        <div class="boss-row"><span>Onde</span> Bug Maze (ninho)</div>
+        <div class="boss-row"><span>Gimmick</span> Reencontro; agora é pra valer.</div>
+        <div class="boss-row"><span>Counter</span> Luta direta com cura.</div>
+        <div class="boss-row"><span>Recompensa</span> Acesso ao Amaterasu Server</div>
+      </div></div></div>
+    
+    <div class="tip"><b>Tips</b><ul><li>Bug Maze tem escadas invisíveis; siga o contorno do círculo até o ícone de escada aparecer.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#game-master">← Esgoto, Datamon e Game Master</a>
+      <a class="next" href="#amaterasu-badges">Qing Long, Zhu Que e Digi-Egg →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="amaterasu-badges" data-n="13" data-server="amaterasu">
+  <header class="ch-head">
+    <span class="num">13</span>
+    <div>
+      <p class="en">Brave New World</p>
+      <h2>Qing Long, Zhu Que e Digi-Egg</h2>
+      <div class="where-row">
+        <span class="badge srv-amaterasu">Amaterasu</span>
+        <span class="badge sector">East → South</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Pegar Red/Blue ID Pass e o Digi-Egg of Knowledge; voltar a Asuka.</div>
+      <div><span class="k">Pré-requisito</span>Ter cruzado pro Amaterasu Server.</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Crony ID</span><span class="pill">Red / Blue / Black / White ID Pass</span><span class="pill">Digi-Egg of Knowledge</span></div>
+    
+    <p>No Forest Inn BF você encontra o <strong>Kenny</strong>, um dos poucos que não virou Oinkmon. Ele quer achar a Rebel Base e te dá o <strong>Crony ID</strong>, que te deixa andar entre os soldados A.o.A. sem briga imediata. Amaterasu é o mesmo mapa de Asuka, só que com nomes chineses e wilds bem mais duros.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>No Forest Inn BF, fale com o Kenny e pegue o Crony ID.</li><li>Em Qing Long City (o Seiryu de Amaterasu), derrube o líder da torre → Red ID Pass no chão.</li><li>Gondola não funciona: vá de Submarimon em Shell Beach até Phoenix Bay.</li><li>Em Zhu Que City (o Suzaku), derrube o líder → Blue ID Pass.</li><li>No Zhu Que UG Lake, suba e abra o baú do Digi-Egg of Knowledge.</li><li>Volte a Asuka pelas Catacombs.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Qing Long Leader</div>
+        <div class="boss-row"><span>Onde</span> Qing Long Tower</div>
+        <div class="boss-row"><span>Gimmick</span> Versão Amaterasu do Seiryu Leader.</div>
+        <div class="boss-row"><span>Counter</span> Time de fim de jogo passa fácil.</div>
+        <div class="boss-row"><span>Recompensa</span> Red ID Pass</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Zhu Que Leader</div>
+        <div class="boss-row"><span>Onde</span> Zhu Que City</div>
+        <div class="boss-row"><span>Gimmick</span> Versão do Suzaku Leader.</div>
+        <div class="boss-row"><span>Counter</span> Cura padrão.</div>
+        <div class="boss-row"><span>Recompensa</span> Blue ID Pass</div>
+      </div></div></div>
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Phoenix Bay (Amaterasu)</strong> — Shell Beach → Submarimon (a gondola não funciona aqui).</li><li><strong>Asuka Server</strong> — Catacombs (mesma passagem do Bug Maze).</li></ul></div>
+    
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#bulbmon">← Bulbmon e entrada em Amaterasu</a>
+      <a class="next" href="#genbu-dungeons">North Sector, Genbu e as dungeons →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="genbu-dungeons" data-n="14" data-server="asuka">
+  <header class="ch-head">
+    <span class="num">14</span>
+    <div>
+      <p class="en">The Final Badge</p>
+      <h2>North Sector, Genbu e as dungeons</h2>
+      <div class="where-row">
+        <span class="badge srv-asuka">Asuka</span>
+        <span class="badge sector">North</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Pegar o Genbu Badge e atravessar Ice, Fire e Dark Dungeon.</div>
+      <div><span class="k">Pré-requisito</span>Digi-Egg of Knowledge (acesso ao Circuit Board).</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="70" y1="130" x2="210" y2="130" stroke="#f0a020" stroke-width="1.5" stroke-dasharray="6 4"/><text x="140" y="127" fill="#8fa0b5" font-size="9" text-anchor="middle">Circuit Board</text><line x1="210" y1="130" x2="340" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="340" y1="60" x2="340" y2="200" stroke="#4a5d75" stroke-width="1.5"/><line x1="340" y1="60" x2="470" y2="60" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="130" x2="210" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="210" y1="130" x2="470" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="150" x2="470" y2="220" stroke="#4a5d75" stroke-width="1.5"/><line x1="470" y1="220" x2="590" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="340" y1="200" x2="470" y2="60" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="38.7" y="118" width="62.6" height="24" rx="6" fill="#123244" stroke="#4fc3f7" stroke-width="1.2"/>
+      <text x="70" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Plug Cape</text>
+    </g><g>
+      <rect x="167.9" y="118" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="210" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Boot Mountain</text>
+    </g><g>
+      <rect x="297.9" y="48" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="340" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Snow Mountain</text>
+    </g><g>
+      <rect x="292.5" y="188" width="95" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="340" y="204" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Freeze Mountain</text>
+    </g><g>
+      <rect x="436" y="48" width="68" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="470" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Genbu City</text>
+    </g><g>
+      <rect x="436" y="138" width="68" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="470" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Kulon Mine</text>
+    </g><g>
+      <rect x="438.7" y="208" width="62.6" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="470" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Kulon Pit</text>
+    </g><g>
+      <rect x="553.3" y="138" width="73.4" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="590" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Ice Dungeon</text>
+    </g><g>
+      <rect x="167.9" y="208" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="210" y="224" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Legendary Gym</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka · North. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>De Plug Cape, o buraco no topo do penhasco chama o <a href="#place-circuit-board">Digmon</a> e te leva ao <strong>Circuit Board</strong> rumo ao <strong>Boot Mountain</strong>, no North Sector. Dali dá pra seguir a leste até Genbu (via Snow Mountain) ou a oeste até o Legendary Gym.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Em Plug Cape, use o buraco no topo do penhasco → Circuit Board → Boot Mountain.</li><li>Vá a leste (Snow Mountain) até Genbu City; suba o Battle Gate e vença o Genbu Leader (Genbu Badge).</li><li>Em Kulon Mine/Pit, entre no Ice Dungeon: portais azul (ida), vermelho (saída do azul), verde (dois sentidos). Vença a Ice Witch.</li><li>No Fire Dungeon, as minas deixam HP em 1; ache o Fire Knight.</li><li>No Dark Dungeon, pise nas luzes e evite o portal azul que te joga no começo; enfrente o Dark Knight lá fora.</li><li>Na Emergency Room, fale com a operadora → Underwater Station com timer (~180s); ativa controles, não dá tempo, pegue baú e espere.</li><li>FMV: Juggernaut + Vemmon viram Destromon. Volte a Asuka/Master Room e reporte sobre o Kenny e a Resistance.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Genbu Leader</div>
+        <div class="boss-row"><span>Onde</span> Battle Gate (Genbu City)</div>
+        <div class="boss-row"><span>Gimmick</span> Último dos quatro Leaders.</div>
+        <div class="boss-row"><span>Counter</span> Um Mega resolve; leve cura.</div>
+        <div class="boss-row"><span>Recompensa</span> Genbu Badge</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Ice Witch</div>
+        <div class="boss-row"><span>Onde</span> Ice Dungeon</div>
+        <div class="boss-row"><span>Gimmick</span> Guarda a passagem pro Fire Dungeon.</div>
+        <div class="boss-row"><span>Counter</span> Luta direta.</div>
+        <div class="boss-row"><span>Recompensa</span> Acesso ao Fire Dungeon</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Fire Knight</div>
+        <div class="boss-row"><span>Onde</span> Fire Dungeon</div>
+        <div class="boss-row"><span>Gimmick</span> Minas deixam HP em 1.</div>
+        <div class="boss-row"><span>Counter</span> Cure sempre; pise com cuidado.</div>
+        <div class="boss-row"><span>Recompensa</span> Acesso ao Dark Dungeon</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Dark Knight</div>
+        <div class="boss-row"><span>Onde</span> Saída do Dark Dungeon</div>
+        <div class="boss-row"><span>Gimmick</span> Escuridão; pise nas luzes.</div>
+        <div class="boss-row"><span>Counter</span> Evite o portal azul.</div>
+        <div class="boss-row"><span>Recompensa</span> Chega à Emergency Room</div>
+      </div></div></div>
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Asuka City / Master Room</strong> — Pelo teleporter da sala e o Circuit Board de volta (lembre a saída de Boot Mountain).</li></ul></div>
+    <div class="tip"><b>Tips</b><ul><li>Anote a posição da saída em Boot Mountain — você vai reutilizar esse buraco.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#amaterasu-badges">← Qing Long, Zhu Que e Digi-Egg</a>
+      <a class="next" href="#id-passes">Resistance e os ID Passes →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="id-passes" data-n="15" data-server="amaterasu">
+  <header class="ch-head">
+    <span class="num">15</span>
+    <div>
+      <p class="en">A Race Against Time</p>
+      <h2>Resistance e os ID Passes</h2>
+      <div class="where-row">
+        <span class="badge srv-amaterasu">Amaterasu</span>
+        <span class="badge sector">West → North → City</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Completar os ID Passes e entrar em Amaterasu City.</div>
+      <div><span class="k">Pré-requisito</span>Ter formado o Destromon (fim do capítulo anterior).</div>
+    </div>
+    <div class="drops"><span class="k">Itens-chave daqui</span><span class="pill">Red / Blue / Black / White ID Pass</span></div>
+    
+    <p>Na Mirage Tower de Amaterasu, o líder da Resistance quer atacar a ponte, mas precisa dos ID Passes das cidades — você já tem dois. A Bai Hu City (o Byakko) fica bloqueada pela A.o.A. até a Lisa e o Keith pedirem ajuda da Resistance em Asuka.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Fale com o líder da Resistance na Mirage Tower (Amaterasu).</li><li>Bai Hu bloqueada: volte à Master Room de Asuka; Lisa e Keith destravam o caminho.</li><li>Derrube o líder de Bai Hu → Black ID Pass.</li><li>Derrube o líder de Zhen Wu (o Genbu) → último ID Pass.</li><li>Entre em Amaterasu City; o Nick manda limpar a A.o.A. no Admin Center.</li><li>Na Master Room, a porta secreta abre sozinha → AoA HQ.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Bai Hu Leader</div>
+        <div class="boss-row"><span>Onde</span> Bai Hu City</div>
+        <div class="boss-row"><span>Gimmick</span> Versão do Byakko Leader.</div>
+        <div class="boss-row"><span>Counter</span> Cura padrão.</div>
+        <div class="boss-row"><span>Recompensa</span> Black ID Pass</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Zhen Wu Leader</div>
+        <div class="boss-row"><span>Onde</span> Zhen Wu City</div>
+        <div class="boss-row"><span>Gimmick</span> Versão do Genbu Leader.</div>
+        <div class="boss-row"><span>Counter</span> Cura padrão.</div>
+        <div class="boss-row"><span>Recompensa</span> Último ID Pass</div>
+      </div></div></div>
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Amaterasu ↔ Asuka</strong> — Buracos Digmon nos Badlands / Kicking Forest (veja Routes).</li></ul></div>
+    
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#genbu-dungeons">← North Sector, Genbu e as dungeons</a>
+      <a class="next" href="#chief-officer">Chief Officer e Destromon →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="chief-officer" data-n="16" data-server="amaterasu">
+  <header class="ch-head">
+    <span class="num">16</span>
+    <div>
+      <p class="en">But Where There's Hope...</p>
+      <h2>Chief Officer e Destromon</h2>
+      <div class="where-row">
+        <span class="badge srv-amaterasu">Amaterasu</span>
+        <span class="badge sector">City</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Derrotar o Principal Officer e desligar o Destromon.</div>
+      <div><span class="k">Pré-requisito</span>Todos os ID Passes de Amaterasu.</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="90" y1="60" x2="90" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="150" x2="240" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="240" y1="150" x2="240" y2="60" stroke="#4a5d75" stroke-width="1.5"/><text x="240" y="102" fill="#8fa0b5" font-size="9" text-anchor="middle">HQ</text><line x1="240" y1="60" x2="400" y2="60" stroke="#4a5d75" stroke-width="1.5"/><text x="320" y="57" fill="#8fa0b5" font-size="9" text-anchor="middle">depois</text><line x1="400" y1="60" x2="400" y2="150" stroke="#4a5d75" stroke-width="1.5"/><text x="400" y="102" fill="#8fa0b5" font-size="9" text-anchor="middle">portal</text><line x1="400" y1="150" x2="520" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="520" y1="150" x2="520" y2="70" stroke="#4a5d75" stroke-width="1.5"/><line x1="520" y1="70" x2="610" y2="130" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="45.199999999999996" y="48" width="89.60000000000001" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="90" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Amaterasu City</text>
+    </g><g>
+      <rect x="50.599999999999994" y="138" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="90" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Admin Center</text>
+    </g><g>
+      <rect x="203.3" y="138" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="240" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Master Room</text>
+    </g><g>
+      <rect x="197.9" y="48" width="84.2" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="240" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Chief Officer</text>
+    </g><g>
+      <rect x="347.1" y="48" width="105.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="400" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Asuka Master Room</text>
+    </g><g>
+      <rect x="357.9" y="138" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="400" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Gunslinger 1F</text>
+    </g><g>
+      <rect x="477.9" y="138" width="84.2" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="520" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Gunslinger 2F</text>
+    </g><g>
+      <rect x="480.6" y="58" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="520" y="74" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Control Room</text>
+    </g><g>
+      <rect x="573.3" y="118" width="73.4" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="610" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Galacticmon</text>
+    </g></svg><figcaption>Mapa esquemático — Amaterasu · City. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>No AoA HQ de Amaterasu, três Royal Guards com Knightmon caem fácil. Aí o “presidente” de Amaterasu se revela: é o <strong>MAGAMI President / Principal Officer</strong> (o Chief Officer). A luta é pesada, mas em geral mais leve que a Game Master.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>No AoA HQ, vença os três Royal Guards.</li><li>Enfrente o Chief Officer (Principal Officer).</li><li>Ele se rende; a Lisa prende. O Teddy desliga o Destromon e ele explode.</li><li>A cidade fica “salva”, mas muita gente ainda é Oinkmon.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Chief Officer</div>
+        <div class="boss-row"><span>Onde</span> AoA HQ (Amaterasu)</div>
+        <div class="boss-row"><span>Gimmick</span> Revelação do vilão intermediário.</div>
+        <div class="boss-row"><span>Counter</span> Leve cura; mais leve que a Game Master.</div>
+        <div class="boss-row"><span>Recompensa</span> Destromon desligado</div>
+      </div></div></div>
+    
+    
+    <div class="warn"><b>Save / aviso</b> Este é o ponto do aviso de save: guarde um arquivo separado <em>antes</em> de reentrar no HQ de Asuka. Salvar por cima no momento errado bloqueia a reversão dos Oinkmon (versão NA).</div>
+    <nav class="ch-nav">
+      <a class="prev" href="#id-passes">← Resistance e os ID Passes</a>
+      <a class="next" href="#oinkmon-cure">Curar os Oinkmon →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="oinkmon-cure" data-n="17" data-server="amaterasu">
+  <header class="ch-head">
+    <span class="num">17</span>
+    <div>
+      <p class="en">Into the Mountains</p>
+      <h2>Curar os Oinkmon</h2>
+      <div class="where-row">
+        <span class="badge srv-amaterasu">Amaterasu</span>
+        <span class="badge sector">City → Asuka</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Ligar o gerador com o Airdramon e humanizar a população.</div>
+      <div><span class="k">Pré-requisito</span>Chief Officer derrotado.</div>
+    </div>
+    
+    
+    <p>A Lisa e o Nick contam que o Keith está na Qing Long Tower com uma máquina que reverte Oinkmon — mas está sem energia. O gerador fica num lugar ventoso, e pra ligar você precisa acordar o Airdramon em Asuka.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>Vá à Qing Long Tower (Amaterasu): o Keith explica a máquina sem energia.</li><li>Volte a Asuka pelo buraco Digmon em Kicking Forest.</li><li>Em Seiryu / Gale Tower, fale com o Airdramon; ao sair, ele acorda.</li><li>Amaterasu volta a ser humana.</li></ol>
+    
+    
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Asuka (Seiryu / Gale Tower)</strong> — Buraco Digmon em Kicking Forest (veja Routes).</li></ul></div>
+    <div class="tip"><b>Tips</b><ul><li>Melhor janela do jogo pra farmar, fechar cartas, pegar DRI partners e itens fortes antes do fim.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#chief-officer">← Chief Officer e Destromon</a>
+      <a class="next" href="#matrix-break">Matrix ainda quebrada →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="matrix-break" data-n="18" data-server="both">
+  <header class="ch-head">
+    <span class="num">18</span>
+    <div>
+      <p class="en">The Front Door</p>
+      <h2>Matrix ainda quebrada</h2>
+      <div class="where-row">
+        <span class="badge srv-both">Asuka / Amaterasu</span>
+        <span class="badge sector">Login → Master Room</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Descobrir que você ainda está preso e liberar o portal do Gunslinger.</div>
+      <div><span class="k">Pré-requisito</span>Ter humanizado Amaterasu.</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="90" y1="60" x2="90" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="150" x2="240" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="240" y1="150" x2="240" y2="60" stroke="#4a5d75" stroke-width="1.5"/><text x="240" y="102" fill="#8fa0b5" font-size="9" text-anchor="middle">HQ</text><line x1="240" y1="60" x2="400" y2="60" stroke="#4a5d75" stroke-width="1.5"/><text x="320" y="57" fill="#8fa0b5" font-size="9" text-anchor="middle">depois</text><line x1="400" y1="60" x2="400" y2="150" stroke="#4a5d75" stroke-width="1.5"/><text x="400" y="102" fill="#8fa0b5" font-size="9" text-anchor="middle">portal</text><line x1="400" y1="150" x2="520" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="520" y1="150" x2="520" y2="70" stroke="#4a5d75" stroke-width="1.5"/><line x1="520" y1="70" x2="610" y2="130" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="45.199999999999996" y="48" width="89.60000000000001" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="90" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Amaterasu City</text>
+    </g><g>
+      <rect x="50.599999999999994" y="138" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="90" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Admin Center</text>
+    </g><g>
+      <rect x="203.3" y="138" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="240" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Master Room</text>
+    </g><g>
+      <rect x="197.9" y="48" width="84.2" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="240" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Chief Officer</text>
+    </g><g>
+      <rect x="347.1" y="48" width="105.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="400" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Asuka Master Room</text>
+    </g><g>
+      <rect x="357.9" y="138" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="400" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Gunslinger 1F</text>
+    </g><g>
+      <rect x="477.9" y="138" width="84.2" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="520" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Gunslinger 2F</text>
+    </g><g>
+      <rect x="480.6" y="58" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="520" y="74" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Control Room</text>
+    </g><g>
+      <rect x="573.3" y="118" width="73.4" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="610" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Galacticmon</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka / Amaterasu · Login → Master Room. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>No Login Room, o Kurt avisa que o Matrix ainda tem falha: você continua preso. De volta à <a href="#place-master-room">Master Room</a> de Asuka, a coisa desanda — o Vemmon foge e transforma a cidade inteira em Oinkmon. Você corre pra Amaterasu pelo Circuit Board (Kicking Forest → Central Park) e reencontra a Kail, ainda humana.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>No Login Room, ouça o Kurt sobre a falha do Matrix.</li><li>Volte à Master Room de Asuka: o Vemmon foge e todos viram Oinkmon.</li><li>Corra pra Amaterasu (Digmon / Circuit Board → Central Park); fale com a Kail.</li><li>Na Master Room, entre pela porta secreta → AoA HQ.</li><li>Aparece o Lord Megadeath: entre no portal da arma Gunslinger pra pará-lo.</li></ol>
+    
+    
+    <div class="backtrack"><h3 class="block-title">Como voltar</h3>
+    <ul><li><strong>Amaterasu (Central Park)</strong> — Buraco Digmon em Kicking Forest → Circuit Board (veja Routes).</li></ul></div>
+    
+    <div class="warn"><b>Save / aviso</b> Antes do portal do Gunslinger: salve, compre Super/Ultra Charge, Life Disk, Life Plug e arma boa. Depois que entra, <strong>não dá pra voltar</strong>.</div>
+    <nav class="ch-nav">
+      <a class="prev" href="#oinkmon-cure">← Curar os Oinkmon</a>
+      <a class="next" href="#gunslinger">Gunslinger e Galacticmon →</a>
+    </nav>
+  </div>
+</section>
+<section class="chapter" id="gunslinger" data-n="19" data-server="both">
+  <header class="ch-head">
+    <span class="num">19</span>
+    <div>
+      <p class="en">Into the Heart of the Beast</p>
+      <h2>Gunslinger e Galacticmon</h2>
+      <div class="where-row">
+        <span class="badge srv-both">Asuka / Amaterasu</span>
+        <span class="badge sector">Gunslinger</span>
+      </div>
+    </div>
+  </header>
+  <div class="ch-body">
+    <div class="meta-grid">
+      <div><span class="k">Objetivo</span>Vencer Megadeath, Snatchmon/Galacticmon e fechar o jogo.</div>
+      <div><span class="k">Pré-requisito</span>Entrar no portal do Gunslinger.</div>
+    </div>
+    
+    <figure class="map-fig"><svg viewBox="0 0 640 260" class="sector-map" role="img" preserveAspectRatio="xMidYMid meet"><line x1="90" y1="60" x2="90" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="90" y1="150" x2="240" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="240" y1="150" x2="240" y2="60" stroke="#4a5d75" stroke-width="1.5"/><text x="240" y="102" fill="#8fa0b5" font-size="9" text-anchor="middle">HQ</text><line x1="240" y1="60" x2="400" y2="60" stroke="#4a5d75" stroke-width="1.5"/><text x="320" y="57" fill="#8fa0b5" font-size="9" text-anchor="middle">depois</text><line x1="400" y1="60" x2="400" y2="150" stroke="#4a5d75" stroke-width="1.5"/><text x="400" y="102" fill="#8fa0b5" font-size="9" text-anchor="middle">portal</text><line x1="400" y1="150" x2="520" y2="150" stroke="#4a5d75" stroke-width="1.5"/><line x1="520" y1="150" x2="520" y2="70" stroke="#4a5d75" stroke-width="1.5"/><line x1="520" y1="70" x2="610" y2="130" stroke="#4a5d75" stroke-width="1.5"/><g>
+      <rect x="45.199999999999996" y="48" width="89.60000000000001" height="24" rx="6" fill="#1c2635" stroke="#4db6ff" stroke-width="1.2"/>
+      <text x="90" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Amaterasu City</text>
+    </g><g>
+      <rect x="50.599999999999994" y="138" width="78.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="90" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Admin Center</text>
+    </g><g>
+      <rect x="203.3" y="138" width="73.4" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="240" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Master Room</text>
+    </g><g>
+      <rect x="197.9" y="48" width="84.2" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="240" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Chief Officer</text>
+    </g><g>
+      <rect x="347.1" y="48" width="105.80000000000001" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="400" y="64" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Asuka Master Room</text>
+    </g><g>
+      <rect x="357.9" y="138" width="84.2" height="24" rx="6" fill="#161f2c" stroke="#2a3648" stroke-width="1.2"/>
+      <text x="400" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Gunslinger 1F</text>
+    </g><g>
+      <rect x="477.9" y="138" width="84.2" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="520" y="154" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Gunslinger 2F</text>
+    </g><g>
+      <rect x="480.6" y="58" width="78.80000000000001" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="520" y="74" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Control Room</text>
+    </g><g>
+      <rect x="573.3" y="118" width="73.4" height="24" rx="6" fill="#3a2130" stroke="#ff8a65" stroke-width="1.2"/>
+      <text x="610" y="134" fill="#edf2f7" font-size="10.5" text-anchor="middle" font-weight="600">Galacticmon</text>
+    </g></svg><figcaption>Mapa esquemático — Asuka / Amaterasu · Gunslinger. Linha pontilhada fina = Seabed (Submarimon); tracejada = buraco (Digmon).</figcaption></figure>
+    <p>O <strong>Gunslinger 1F</strong> usa teleporters no estilo Ice Dungeon: verde vai e volta, azul manda ao vermelho, vermelho é saída. Você ativa painéis pra tirar blocos e limpa Metal Soldiers (Infermon / Apokarimon) até subir pro 2F. Na escada longa o canhão vibra e você encara o <strong>Armageddemon</strong>, depois chega à <a href="#place-control-room">Control Room</a> pro confronto com o Megadeath.</p>
+    
+    <h3 class="block-title">Passo a passo</h3>
+    <ol><li>No Gunslinger 1F, use os teleporters (verde = ida e volta) e ative os painéis pra remover blocos.</li><li>Suba pro 2F; na escada longa, vença o Armageddemon.</li><li>Na Control Room, vença o Lord Megadeath (Fujinmon / Suijinmon / Raijinmon).</li><li>Cure e siga o portal: quatro Vemmon viram Snatchmon → Galacticmon.</li><li>Vença a cauda (físico; Counter Crest / Final Purification ajudam).</li><li>Encare a cabeça (evade alto, charge telegraphed): use Mega Boost / Protection / Strength.</li></ol>
+    
+    <div class="boss-wrap"><h3 class="block-title">Chefes deste momento</h3>
+    <div class="boss-grid">
+      <div class="boss-card">
+        <div class="boss-name">Armageddemon</div>
+        <div class="boss-row"><span>Onde</span> Gunslinger 2F (escada)</div>
+        <div class="boss-row"><span>Gimmick</span> Trigger na subida.</div>
+        <div class="boss-row"><span>Counter</span> Luta direta com cura.</div>
+        <div class="boss-row"><span>Recompensa</span> Segue à Control Room</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Lord Megadeath</div>
+        <div class="boss-row"><span>Onde</span> Control Room</div>
+        <div class="boss-row"><span>Gimmick</span> Fujinmon/Suijinmon/Raijinmon com HP altíssimo.</div>
+        <div class="boss-row"><span>Counter</span> Cure sempre; foco alvo a alvo.</div>
+        <div class="boss-row"><span>Recompensa</span> Foge pra ativar o Snatchmon</div>
+      </div>
+      <div class="boss-card">
+        <div class="boss-name">Galacticmon (Tail → Head)</div>
+        <div class="boss-row"><span>Onde</span> Final</div>
+        <div class="boss-row"><span>Gimmick</span> Ragnarok Cannon joga HP em 1; a cabeça tem evade alto.</div>
+        <div class="boss-row"><span>Counter</span> Cauda com counter; cabeça com Mega Boost/Protection/Strength.</div>
+        <div class="boss-row"><span>Recompensa</span> Ending</div>
+      </div></div></div>
+    
+    <div class="tip"><b>Tips</b><ul><li>Depois da cabeça, é ending. Respira.</li></ul></div>
+    
+    <nav class="ch-nav">
+      <a class="prev" href="#matrix-break">← Matrix ainda quebrada</a>
+      <a class="next" href="#places">Lugares & itens →</a>
+    </nav>
+  </div>
+</section>
+    
+<section class="chapter ref-section" id="places">
+  <header class="ch-head">
+    <span class="num">◆</span>
+    <div><p class="en">Glossário</p><h2>Lugares recorrentes</h2>
+    <div class="where-row"><span class="badge sector">O que é · onde fica · como chegar</span></div></div>
+  </header>
+  <div class="ch-body">
+    <p>Os capítulos citam esses lugares o tempo todo. Aqui fica o que cada um é e como voltar — porque em Digimon World 3 quase tudo exige backtracking.</p>
+    <div class="place-grid">
+      
+        <div class="place-card" id="place-asuka-city">
+          <div class="place-top">
+            <strong>Asuka City</strong>
+            <span class="badge srv-asuka">Asuka · Central</span>
+          </div>
+          <p class="what">A cidade-base do Asuka Server. Tem inn, lojas, Yellow Cruiser (cartas), El Dorado, o Underground Path e o Admin Center.</p>
+          <p class="reach"><span class="k">Como chegar</span> É o ponto de partida. Do East ou South você volta a pé pelos setores, ou de Submarimon quando os portões estão fechados (dock à direita da Asuka Bridge).</p>
+        </div>
+        <div class="place-card" id="place-yellow-cruiser">
+          <div class="place-top">
+            <strong>Yellow Cruiser</strong>
+            <span class="badge srv-asuka">Asuka · Central</span>
+          </div>
+          <p class="what">O bar de cartas na parte baixa de Asuka City. O Divermon te dá o Folder Bag e os Tamers ali ensinam o card game.</p>
+          <p class="reach"><span class="k">Como chegar</span> Na inn de Asuka City, desça a escada e pegue a porta ao lado da escada (Underground Path). Siga à esquerda até a parte baixa da cidade.</p>
+        </div>
+        <div class="place-card" id="place-shaman-house">
+          <div class="place-top">
+            <strong>Shaman House</strong>
+            <span class="badge srv-asuka">Asuka · South</span>
+          </div>
+          <p class="what">A casa do Sepikmon em Tranquil Swamp. É onde a linha do Zanbamon avança (máscara e Smelly Herb).</p>
+          <p class="reach"><span class="k">Como chegar</span> Vá pra Tranquil Swamp, no South Sector (South Station → Bulk Bridge → caminho noroeste antes da ponte). A casa fica dentro do vilarejo do pântano.</p>
+        </div>
+        <div class="place-card" id="place-admin-center">
+          <div class="place-top">
+            <strong>Admin Center</strong>
+            <span class="badge srv-asuka">Asuka · Central</span>
+          </div>
+          <p class="what">O prédio do governo em Asuka City. Leva à Master Room, à prisão e, no meio do jogo, ao HQ da A.o.A.</p>
+          <p class="reach"><span class="k">Como chegar</span> Fica em Asuka City. No começo você só entra com o disfarce de Agumon. Mais tarde, pela Control Room dos Asuka Sewers (Datamon abre o portão).</p>
+        </div>
+        <div class="place-card" id="place-master-room">
+          <div class="place-top">
+            <strong>Master Room</strong>
+            <span class="badge srv-asuka">Asuka · Central</span>
+          </div>
+          <p class="what">A sala no topo do Admin Center. Nela ficam a Game Master (cedo) e o quebra-cabeça M-O-N-S-T-E-R que abre o HQ da A.o.A.</p>
+          <p class="reach"><span class="k">Como chegar</span> Suba pelo Admin Center de Asuka City. O caminho longo passa pelos Asuka Sewers e Admin Center Basement/2F.</p>
+        </div>
+        <div class="place-card" id="place-asuka-sewers">
+          <div class="place-top">
+            <strong>Asuka Sewers</strong>
+            <span class="badge srv-asuka">Asuka · Central</span>
+          </div>
+          <p class="what">Os esgotos sob Asuka City. Contêm a Control Room (Datamon) e o portão que Datamon abre pro Admin Center.</p>
+          <p class="reach"><span class="k">Como chegar</span> Com os portões da cidade fechados: dock à direita da Asuka Bridge → Submarimon → emerge nos Sewers. Veja a rota em Routes.</p>
+        </div>
+        <div class="place-card" id="place-control-room">
+          <div class="place-top">
+            <strong>Control Room</strong>
+            <span class="badge srv-asuka">Asuka · Central</span>
+          </div>
+          <p class="what">A sala de controle dentro dos Asuka Sewers. É onde o Datamon fica; com o Staff ID Pass ele abre o portão pro Admin Center.</p>
+          <p class="reach"><span class="k">Como chegar</span> Nos Asuka Sewers, suba as escadas e siga o caminho longo até a porta à direita.</p>
+        </div>
+        <div class="place-card" id="place-dum-dum">
+          <div class="place-top">
+            <strong>Dum Dum Factory</strong>
+            <span class="badge srv-asuka">Asuka · West</span>
+          </div>
+          <p class="what">A fábrica no West Sector. Guarda o HiAndromon, o WaruMonzaemon e o esconderijo do Kurt (a Secret Room).</p>
+          <p class="reach"><span class="k">Como chegar</span> Do Byakko/Bullet Valley, siga ao norte até a estrada da fábrica. É uma área do West Sector.</p>
+        </div>
+        <div class="place-card" id="place-secret-room">
+          <div class="place-top">
+            <strong>Secret Room</strong>
+            <span class="badge srv-asuka">Asuka · West</span>
+          </div>
+          <p class="what">O esconderijo do Kurt (Lucky Mouse) nos esgotos abaixo da Dum Dum Factory. Base da resistência no meio do jogo; é onde acham o Staff ID Pass.</p>
+          <p class="reach"><span class="k">Como chegar</span> Fica nos esgotos da Dum Dum Factory (West Sector). Pra voltar você faz o trajeto a pé pelos esgotos da fábrica — não é uma sala de Asuka City.</p>
+        </div>
+        <div class="place-card" id="place-suzaku-ug">
+          <div class="place-top">
+            <strong>Suzaku UG Lake</strong>
+            <span class="badge srv-asuka">Asuka · South</span>
+          </div>
+          <p class="what">O lago subterrâneo sob Suzaku City. Tem o Crossbow e liga a caça ao Staff ID Pass (Keith e Nick).</p>
+          <p class="reach"><span class="k">Como chegar</span> Em Suzaku City, entre no Suzaku Hall e use o dock atrás dele → Submarimon, dois screens. Veja Routes (Suzaku City).</p>
+        </div>
+        <div class="place-card" id="place-circuit-board">
+          <div class="place-top">
+            <strong>Circuit Board</strong>
+            <span class="badge srv-special">Especial · Underground</span>
+          </div>
+          <p class="what">A rede subterrânea acessada por buracos com o Digmon (Digi-Egg of Knowledge). Liga setores e servers.</p>
+          <p class="reach"><span class="k">Como chegar</span> Chame o Digmon num buraco. Os pares de entrada/saída estão no guia de Routes.</p>
+        </div>
+        <div class="place-card" id="place-seabed">
+          <div class="place-top">
+            <strong>Seabed</strong>
+            <span class="badge srv-special">Especial · Underwater</span>
+          </div>
+          <p class="what">As passagens submarinas do Submarimon (Digi-Egg of Sincerity). Ligam setores dentro de um server.</p>
+          <p class="reach"><span class="k">Como chegar</span> Chame o Submarimon num dock. Todos os docks e destinos estão em Routes.</p>
+        </div>
+    </div>
+    <p class="foot">Rotas de Submarimon e buracos com destino completo ficam em <a href="digimon-world-3-routes.html">Routes</a>.</p>
+  </div>
+</section>
+    
+<section class="chapter ref-section" id="items">
+  <header class="ch-head">
+    <span class="num">◆</span>
+    <div><p class="en">Tracker</p><h2>Itens-chave</h2>
+    <div class="where-row"><span class="badge sector">Onde pega · pra que serve</span></div></div>
+  </header>
+  <div class="ch-body">
+    <div class="item-table">
+      <div class="it-head"><span>Item</span><span>Onde pega</span><span>Pra que serve</span></div>
+      <div class="it-row"><span class="it-name">Folder Bag</span><span>Divermon no Yellow Cruiser (Asuka City)</span><span>Libera o card game (packs de carta).</span></div><div class="it-row"><span class="it-name">Fishing Rod</span><span>Velho em Shell Beach + Red Snapper (Divermon's Lake) + Spider Web (Dokugumon, Protocol Forest)</span><span>Pesca Cardmon (packs B).</span></div><div class="it-row"><span class="it-name">Tree Boots</span><span>Carta Gabumon (armário do porão da Asuka Inn) → menino em Plug Cape</span><span>Chuta árvore pra achar Cardmon (packs B).</span></div><div class="it-row"><span class="it-name">Old Claw</span><span>MasterTyrannomon em Tyranno Valley</span><span>Arma forte pro início/meio.</span></div><div class="it-row"><span class="it-name">Blue Card</span><span>Tricky Guilmon no porão da Forest Inn (versão verdadeira)</span><span>Ativa a gondola em East Station rumo ao South.</span></div><div class="it-row"><span class="it-name">Smelly Herb</span><span>Sepikmon, depois de recuperar a máscara dele</span><span>Espanta o Zanbamon em Jungle Grave.</span></div><div class="it-row"><span class="it-name">Digi-Egg of Reliability</span><span>Atrás do shrine em Bios Swamp (estoura com TNT Chip do Baronmon)</span><span>Chama o Submarimon → abre o West Sector.</span></div><div class="it-row"><span class="it-name">Digi-Egg of Knowledge</span><span>Baú no Zhu Que UG Lake (Amaterasu)</span><span>Chama o Digmon → abre o Circuit Board e o North Sector.</span></div><div class="it-row"><span class="it-name">Sewer Key</span><span>HiAndromon na Dum Dum Factory</span><span>Abre caminho na fábrica rumo à Secret Room.</span></div><div class="it-row"><span class="it-name">Staff ID Pass</span><span>Nick acha na Secret Room (depois de limpar a sala)</span><span>Datamon abre o portão do Admin Center na Control Room.</span></div><div class="it-row"><span class="it-name">Crony ID</span><span>Kenny na Forest Inn BF (Amaterasu)</span><span>Passa pelos soldados A.o.A. em Amaterasu.</span></div><div class="it-row"><span class="it-name">Red / Blue / Black / White ID Pass</span><span>Líderes das cidades de Amaterasu (Qing Long, Zhu Que, Bai Hu, Zhen Wu)</span><span>Liberam as cidades e o Admin Center de Amaterasu.</span></div>
+    </div>
+  </div>
+</section>
+    
+<section class="chapter ref-section" id="side">
+  <header class="ch-head">
+    <span class="num">◆</span>
+    <div><p class="en">Opcional</p><h2>Side quests & atalhos</h2>
+    <div class="where-row"><span class="badge sector">Vale fazer cedo</span></div></div>
+  </header>
+  <div class="ch-body">
+    <h3 class="block-title">Fishing Rod</h3>
+    <p>Fale com o velho em Shell Beach. Peças: stick (ele encaminha), thread e hook — o <strong>Red Snapper</strong> vem de ajudar o Divermon no lago, e a <strong>Spider Web</strong> cai do Dokugumon em Protocol Forest. Com a vara você pesca Cardmon (packs B).</p>
+    <h3 class="block-title">Tree Boots</h3>
+    <p>Pegue a carta Gabumon no armário do porão da Asuka Inn e leve ao menino em Plug Cape. Com as botas você chuta árvore e acha Cardmon.</p>
+    <h3 class="block-title">Charisma e Tamers</h3>
+    <p>A soma de Charisma dos 3 Digimon decide se um Tamer no campo te ignora, dueliza carta ou parte pra luta. O Yellow Cruiser é bom pra testar. Detalhe nos guias de <a href="digimon-world-3-boosters.html">Boosters</a>.</p>
+    <h3 class="block-title">Guias irmãos</h3>
+    <p><a href="digimon-world-3-routes.html">Routes</a> · <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a> · <a href="digimon-world-3-steal-items.html">Steal Items</a> · <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a> · <a href="digimon-world-3-monster-stats.html">Monster Stats</a></p>
+  </div>
+</section>
+    <p class="foot">Fatos cruzados com FAQs de GameFAQs (EmeraldPhoenix, Dark Zero), o Circuit Board Guide do Shalios e walkthroughs públicos (StratsWiki, Revolution Arena). Onde os guias divergem num labirinto, o texto segue o caminho em que eles batem juntos. Os mapas são esquemas de conexão feitos a partir dessas fontes — não são screenshots do jogo.</p>
+  </main>
+</div>
+
+<script>
+const chapters = [{"id":"start","n":1,"title":"Começo em Kusanagi"},{"id":"asuka-city","n":2,"title":"Asuka City e o básico"},{"id":"seiryu","n":3,"title":"Badge Seiryu"},{"id":"blue-card","n":4,"title":"Blue Card e gondola"},{"id":"suzaku","n":5,"title":"Zanbamon e Badge Suzaku"},{"id":"admin-infiltrate","n":6,"title":"Entrar no Admin Center"},{"id":"digiegg-west","n":7,"title":"Digi-Egg e caminho pro West"},{"id":"byakko-first","n":8,"title":"Byakko City (primeira visita)"},{"id":"mirage","n":9,"title":"Mirage Tower e Badge Byakko"},{"id":"dum-dum","n":10,"title":"Dum Dum Factory e Lucky Mouse"},{"id":"game-master","n":11,"title":"Esgoto, Datamon e Game Master"},{"id":"bulbmon","n":12,"title":"Bulbmon e entrada em Amaterasu"},{"id":"amaterasu-badges","n":13,"title":"Qing Long, Zhu Que e Digi-Egg"},{"id":"genbu-dungeons","n":14,"title":"North Sector, Genbu e as dungeons"},{"id":"id-passes","n":15,"title":"Resistance e os ID Passes"},{"id":"chief-officer","n":16,"title":"Chief Officer e Destromon"},{"id":"oinkmon-cure","n":17,"title":"Curar os Oinkmon"},{"id":"matrix-break","n":18,"title":"Matrix ainda quebrada"},{"id":"gunslinger","n":19,"title":"Gunslinger e Galacticmon"}];
+const total = chapters.length;
+const tocLinks = [...document.querySelectorAll("#tocNav a")];
+const sections = [...document.querySelectorAll("section.chapter")];
+
+document.getElementById("tocSearch").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  tocLinks.forEach(a => a.classList.toggle("hidden", q && !(a.textContent||"").toLowerCase().includes(q)));
+});
+
+function setActive(id) {
+  tocLinks.forEach(a => a.classList.toggle("active", a.dataset.id === id));
+  const idx = chapters.findIndex(c => c.id === id);
+  const label = document.getElementById("progLabel");
+  const bar = document.getElementById("progBar");
+  const title = document.getElementById("progTitle");
+  if (idx >= 0) {
+    label.textContent = (idx+1) + " / " + total;
+    bar.style.width = ((idx+1)/total*100).toFixed(1) + "%";
+    title.textContent = chapters[idx].title;
+  } else {
+    label.textContent = "Ref";
+    bar.style.width = "100%";
+    const map = { places:"Lugares recorrentes", items:"Itens-chave", side:"Side quests" };
+    title.textContent = map[id] || "Referência";
+  }
+}
+const io = new IntersectionObserver(entries => {
+  const vis = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+  if (vis) setActive(vis.target.id);
+}, { rootMargin:"-18% 0px -60% 0px", threshold:[0.1,0.25,0.5] });
+sections.forEach(s => io.observe(s));
+setActive(chapters[0].id);
+
+// flash a place card when navigated to via inline link
+document.querySelectorAll('a[href^="#place-"]').forEach(a => {
+  a.addEventListener("click", () => {
+    const el = document.querySelector(a.getAttribute("href"));
+    if (el) { el.classList.remove("target-flash"); void el.offsetWidth; el.classList.add("target-flash"); }
+  });
+});
+</script>
+</body>
+</html>

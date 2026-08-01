@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digimon World 3 — Submarimon & Digmon Routes</title>
+<style>
+:root {
+  --bg:#0c1017; --panel:#151c27; --panel2:#1c2635; --text:#edf2f7;
+  --muted:#8fa0b5; --border:#2a3648; --accent:#3ecf8e;
+  --sub:#4fc3f7; --hole:#f0a020; --asuka:#4db6ff; --amaterasu:#f0a020;
+  --special:#b388ff; --return:#7e8fa6;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; font-family:"Segoe UI",system-ui,sans-serif; color:var(--text);
+  background:
+    radial-gradient(ellipse 60% 32% at 0 0, rgba(79,195,247,.09),transparent),
+    radial-gradient(ellipse 50% 30% at 100% 0, rgba(240,160,32,.08),transparent),
+    var(--bg);
+  line-height:1.45; -webkit-font-smoothing:antialiased;
+}
+button,input { font:inherit; }
+button { cursor:pointer; color:inherit; }
+header {
+  padding:1.25rem 1.5rem .9rem; border-bottom:1px solid var(--border);
+  background:color-mix(in srgb,var(--panel) 55%,transparent);
+}
+header h1 { margin:0 0 .25rem; font-size:clamp(1.15rem,2.2vw,1.45rem); }
+header p { margin:0; max-width:52rem; color:var(--muted); font-size:.88rem; }
+.doc-nav { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.75rem; }
+.doc-nav a {
+  display:inline-flex; text-decoration:none; color:var(--muted);
+  border:1px solid var(--border); background:var(--panel);
+  border-radius:999px; padding:.32rem .75rem; font-size:.78rem; font-weight:600;
+}
+.doc-nav a:hover { color:var(--text); border-color:#4a5d75; }
+.doc-nav a.current {
+  color:var(--text); border-color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 14%,var(--panel));
+}
+.wrap { max-width:1280px; margin:0 auto; padding:.85rem 1.25rem 2.5rem; }
+.toolbar {
+  display:flex; flex-wrap:wrap; align-items:center; gap:.45rem;
+  margin-bottom:.85rem; padding:.65rem .75rem;
+  background:var(--panel); border:1px solid var(--border); border-radius:12px;
+}
+.toolbar .label {
+  color:var(--muted); font-size:.68rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.chip {
+  border:1px solid var(--border); background:var(--panel2);
+  border-radius:999px; padding:.3rem .75rem; font-size:.78rem; font-weight:650;
+}
+.chip:hover { border-color:#4a5d75; }
+.chip.active[data-kind="sub"] { border-color:var(--sub); color:#9adcfb; }
+.chip.active[data-kind="hole"] { border-color:var(--hole); color:#ffd180; }
+.search {
+  margin-left:auto; min-width:190px; flex:1 1 190px; max-width:300px;
+  border:1px solid var(--border); background:var(--panel2); color:var(--text);
+  border-radius:999px; padding:.38rem .85rem; font-size:.82rem;
+}
+.layout {
+  display:grid; grid-template-columns:minmax(220px,300px) minmax(0,1fr);
+  gap:.85rem; align-items:start;
+}
+.route-list {
+  max-height:calc(100vh - 11rem); overflow:auto; position:sticky; top:.75rem;
+  padding:.55rem; border:1px solid var(--border); border-radius:12px;
+  background:var(--panel); scrollbar-width:thin; scrollbar-color:#3a4a60 transparent;
+}
+.route-list .group-label {
+  margin:.55rem .35rem .25rem; font-size:.64rem; font-weight:800;
+  text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
+}
+.route-list button {
+  display:grid; grid-template-columns:2rem 1fr; gap:.1rem .5rem; width:100%;
+  text-align:left; border:1px solid transparent; background:transparent;
+  border-radius:9px; padding:.5rem; margin:.12rem 0;
+}
+.route-list button:hover { background:var(--panel2); border-color:#4a5d75; }
+.route-list button.active {
+  background:color-mix(in srgb,var(--accent) 10%,var(--panel2));
+  border-color:var(--accent);
+}
+.route-list .ico { grid-row:1/3; font-size:1.15rem; align-self:center; }
+.route-list .name { font-size:.79rem; font-weight:700; }
+.route-list .dest { color:var(--muted); font-size:.68rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.empty { padding:1.5rem; text-align:center; color:var(--muted); }
+.viewer { min-width:0; }
+.manual-nav {
+  display:grid; grid-template-columns:auto 1fr auto; gap:.5rem; align-items:center;
+  margin-bottom:.65rem;
+}
+.manual-nav button {
+  border:1px solid var(--border); background:var(--panel); border-radius:10px;
+  min-width:2.6rem; min-height:2.6rem; font-weight:800; font-size:1rem;
+}
+.manual-nav button:hover { border-color:var(--accent); }
+.counter { text-align:center; color:var(--muted); font-size:.78rem; }
+.counter strong { display:block; color:var(--text); font-size:.9rem; }
+.route-card {
+  border:1px solid var(--border); border-radius:14px; overflow:hidden;
+  background:var(--panel);
+}
+.route-head {
+  display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem;
+  background:var(--panel2); border-bottom:1px solid var(--border);
+}
+.route-head .big-icon {
+  flex:0 0 auto; width:2.7rem; height:2.7rem; display:grid; place-items:center;
+  border:1px solid var(--border); border-radius:10px; font-size:1.25rem;
+}
+.route-head h2 { margin:0; font-size:1.1rem; }
+.route-head p { margin:.18rem 0 0; color:var(--muted); font-size:.78rem; }
+.badges { display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.42rem; }
+.badge {
+  padding:.12rem .42rem; border-radius:5px; font-size:.66rem; font-weight:750;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.badge.asuka { color:var(--asuka); background:color-mix(in srgb,var(--asuka) 18%,transparent); }
+.badge.amaterasu { color:var(--amaterasu); background:color-mix(in srgb,var(--amaterasu) 18%,transparent); }
+.badge.special { color:var(--special); background:color-mix(in srgb,var(--special) 18%,transparent); }
+.badge.sub { color:#9adcfb; background:color-mix(in srgb,var(--sub) 18%,transparent); }
+.badge.hole { color:#ffd180; background:color-mix(in srgb,var(--hole) 18%,transparent); }
+.card-body { padding:1rem; }
+.how {
+  margin:0 0 .9rem; padding:.65rem .75rem; border-radius:10px;
+  border:1px solid var(--border); background:var(--panel2); font-size:.86rem;
+}
+.how .k {
+  display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--muted); font-weight:800; margin-bottom:.25rem;
+}
+.flow-wrap { margin-bottom:1rem; }
+.flow-label {
+  margin:0 0 .4rem; font-size:.72rem; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--muted); font-weight:700;
+}
+.flow {
+  display:grid; grid-template-columns:minmax(140px,200px) auto minmax(0,1fr);
+  align-items:stretch; gap:.65rem;
+}
+.node {
+  border:1px solid var(--border); border-radius:12px;
+  padding:.7rem .75rem; display:flex; flex-direction:column; justify-content:center;
+  background:var(--panel2); text-align:left;
+}
+.node.source { border-color:color-mix(in srgb,var(--accent) 55%,var(--border)); }
+.node .small { color:var(--muted); font-size:.67rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; }
+.node strong { margin-top:.15rem; font-size:.95rem; }
+.node span { color:var(--muted); font-size:.76rem; margin-top:.18rem; }
+.arrow-col {
+  display:flex; align-items:center; justify-content:center;
+  color:var(--accent); font-weight:850; font-size:1.2rem; min-width:2rem;
+}
+.dest-stack { display:flex; flex-direction:column; gap:.4rem; }
+.dest-btn {
+  display:grid; grid-template-columns:auto 1fr auto; gap:.45rem; align-items:center;
+  width:100%; text-align:left; border:1px solid var(--border); border-radius:11px;
+  padding:.55rem .7rem; background:var(--panel2); transition:border-color .15s, background .15s;
+}
+.dest-btn:hover:not(:disabled) {
+  border-color:var(--accent); background:color-mix(in srgb,var(--accent) 8%,var(--panel2));
+}
+.dest-btn:disabled { cursor:default; opacity:.92; }
+.dest-btn.has-link { cursor:pointer; }
+.dest-btn .tag {
+  font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+  padding:.12rem .4rem; border-radius:5px; border:1px solid var(--border);
+}
+.dest-btn .tag.exit { color:#9adcfb; border-color:color-mix(in srgb,var(--sub) 50%,var(--border)); }
+.dest-btn .tag.return { color:var(--return); }
+.dest-btn .tag.encounter { color:#ffd180; border-color:color-mix(in srgb,var(--hole) 50%,var(--border)); }
+.dest-btn .tag.map { color:#c5d8ea; }
+.dest-btn strong { display:block; font-size:.88rem; }
+.dest-btn .detail { color:var(--muted); font-size:.74rem; margin-top:.1rem; }
+.dest-btn .go {
+  font-size:.72rem; font-weight:700; color:var(--accent); white-space:nowrap;
+}
+.dest-btn:disabled .go { display:none; }
+.note {
+  margin-top:.15rem; padding:.65rem .75rem; border-radius:9px;
+  border:1px solid var(--border); color:#c5d8ea; font-size:.86rem;
+  background:color-mix(in srgb,var(--special) 8%,var(--panel2));
+}
+.siblings {
+  margin-top:.85rem; padding:.65rem .75rem; border-radius:10px;
+  border:1px solid var(--border); background:var(--panel2);
+}
+.siblings .k {
+  display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--muted); font-weight:800; margin-bottom:.35rem;
+}
+.sib-row { display:flex; flex-wrap:wrap; gap:.35rem; }
+.sib-row button {
+  border:1px solid var(--border); background:var(--panel); border-radius:999px;
+  padding:.28rem .65rem; font-size:.76rem; font-weight:650;
+}
+.sib-row button:hover { border-color:var(--accent); }
+.sib-row button.current {
+  border-color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,var(--panel));
+}
+.hint {
+  margin-top:.75rem; color:var(--muted); font-size:.74rem;
+}
+@media (max-width:800px) {
+  .layout { grid-template-columns:1fr; }
+  .route-list { position:static; max-height:260px; }
+}
+@media (max-width:560px) {
+  .flow { grid-template-columns:1fr; }
+  .arrow-col { transform:rotate(90deg); min-height:1.6rem; }
+  .toolbar .search { margin-left:0; max-width:none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Submarimon & Digmon Routes</h1>
+  <p>Cada dock do Submarimon e cada buraco do Digmon: de onde você entra, pra onde sai, e como achar a entrada no mapa. Clique num destino pra abrir o card daquele ponto — se ele também for um dock ou buraco.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
+    <a href="digimon-world-3-steal-items.html">Steal Items</a>
+    <a href="digimon-world-3-boosters.html">Boosters</a>
+    <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a>
+    <a href="digimon-world-3-monster-stats.html">Monster Stats</a>
+    <a href="digimon-world-3-level-exp.html">Level EXP</a>
+    <a href="digimon-world-3-walkthrough.html">Walkthrough</a>
+    <a class="current" href="digimon-world-3-routes.html">Routes</a>
+    <a href="digimon-world-3-balance-gdd.html">Balance GDD</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <span class="label">Tipo</span>
+    <button class="chip active" data-kind="sub" type="button">🛥️ Submarimon</button>
+    <button class="chip" data-kind="hole" type="button">⛏️ Buracos / Digmon</button>
+    <input class="search" id="search" type="search" placeholder="Buscar mapa ou destino..." autocomplete="off">
+  </div>
+
+  <div class="layout">
+    <aside class="route-list" id="routeList"></aside>
+    <main class="viewer">
+      <div class="manual-nav">
+        <button id="prev" type="button" aria-label="Rota anterior">←</button>
+        <div class="counter"><strong id="counterTitle"></strong><span id="counter"></span></div>
+        <button id="next" type="button" aria-label="Próxima rota">→</button>
+      </div>
+      <article class="route-card" id="routeCard" aria-live="polite"></article>
+    </main>
+  </div>
+</div>
+
+<script>
+/* Destinos: type = exit | return | encounter | map
+   link = id de outro card (quando o destino também é um dock/buraco documentado)
+   group = id da rede (irmãos navegáveis entre si) */
+const ROUTES = [
+  /* ——— Submarimon ——— */
+  {
+    id:"sub-plug", kind:"sub", world:"both", icon:"🛥️", name:"Plug Cape",
+    group:"west-plug", groupLabel:"West · Plug Cape",
+    spot:"Dock no fim da trilha oeste",
+    how:"Em Plug Cape, siga a trilha até o fim oeste. O dock fica na beira da água.",
+    destinations:[
+      { name:"North Badland E", detail:"West Sector · Asuka / Amaterasu", type:"exit" },
+      { name:"Plug Cape", detail:"Volta pelo mesmo caminho", type:"return" }
+    ],
+    note:"Depois do Digi-Egg of Sincerity, essa é a travessia da história pro West Sector."
+  },
+  {
+    id:"sub-south-cape", kind:"sub", world:"both", icon:"🛥️", name:"South Cape",
+    group:"west-south", groupLabel:"West · South Cape",
+    spot:"Dock perto de Garudamon's Gym",
+    how:"Em South Cape, o dock fica perto do ginásio do Garudamon.",
+    destinations:[
+      { name:"South Badland", detail:"West Sector · Asuka / Amaterasu", type:"exit" },
+      { name:"South Cape", detail:"Volta pelo mesmo caminho", type:"return" }
+    ],
+    note:"Atalho entre o South Sector e o West. É outro dock — não é o de Phoenix Bay."
+  },
+  {
+    id:"sub-kicking", kind:"sub", world:"both", icon:"🛥️", name:"Kicking Forest",
+    group:"ces", groupLabel:"Central ↔ East ↔ South",
+    spot:"Dock na parte baixa, no penhasco",
+    how:"Em Kicking Forest, desça até a área baixa do penhasco. O dock está ali.",
+    destinations:[
+      { name:"Central Park", detail:"Central Sector", type:"exit", link:"sub-central" },
+      { name:"Bulk Swamp", detail:"South Sector", type:"exit", link:"sub-bulk" },
+      { name:"Kicking Forest", detail:"Volta ao East Sector", type:"return" }
+    ],
+    note:"Debaixo d'água você escolhe a saída: Central Park, Bulk Swamp ou de volta aqui."
+  },
+  {
+    id:"sub-central", kind:"sub", world:"both", icon:"🛥️", name:"Central Park",
+    group:"ces", groupLabel:"Central ↔ East ↔ South",
+    spot:"Dock na parte baixa do mapa",
+    how:"Em Central Park, desça até a parte baixa. O dock fica perto da água.",
+    destinations:[
+      { name:"Kicking Forest", detail:"East Sector", type:"exit", link:"sub-kicking" },
+      { name:"Bulk Swamp", detail:"South Sector", type:"exit", link:"sub-bulk" },
+      { name:"Central Park", detail:"Volta ao Central Sector", type:"return" }
+    ],
+    note:"Mesmo caminho submarino que liga Central, East e South. Escolha a saída debaixo d'água."
+  },
+  {
+    id:"sub-bulk", kind:"sub", world:"both", icon:"🛥️", name:"Bulk Swamp",
+    group:"ces", groupLabel:"Central ↔ East ↔ South",
+    spot:"Dock perto de South Station",
+    how:"Em Bulk Swamp, o dock fica perto de South Station.",
+    destinations:[
+      { name:"Central Park", detail:"Central Sector", type:"exit", link:"sub-central" },
+      { name:"Kicking Forest", detail:"East Sector", type:"exit", link:"sub-kicking" },
+      { name:"Bulk Swamp", detail:"Volta ao South Sector", type:"return" }
+    ],
+    note:"Fecha o trio Central Park / Kicking Forest / Bulk Swamp."
+  },
+  {
+    id:"sub-shell", kind:"sub", world:"both", icon:"🛥️", name:"Shell Beach",
+    group:"spe", groupLabel:"Shell ↔ Phoenix ↔ Ether",
+    spot:"Dock ao sul da entrada",
+    how:"Em Shell Beach, o dock fica ao sul, perto da entrada do mapa.",
+    destinations:[
+      { name:"Phoenix Bay", detail:"South Sector", type:"exit", link:"sub-phoenix" },
+      { name:"Ether Jungle", detail:"Canto isolado perto de Phoenix Bay", type:"exit", link:"sub-ether" },
+      { name:"Shell Beach", detail:"Volta ao Central Sector", type:"return" }
+    ],
+    note:"Em Amaterasu, quando a gondola não funciona, você usa essa rota pra chegar em Zhu Que City (Phoenix Bay)."
+  },
+  {
+    id:"sub-phoenix", kind:"sub", world:"both", icon:"🛥️", name:"Phoenix Bay",
+    group:"spe", groupLabel:"Shell ↔ Phoenix ↔ Ether",
+    spot:"Dock na costa",
+    how:"Em Phoenix Bay, o dock fica na costa.",
+    destinations:[
+      { name:"Shell Beach", detail:"Central Sector", type:"exit", link:"sub-shell" },
+      { name:"Ether Jungle", detail:"Canto isolado · GrapLeomon", type:"exit", link:"sub-ether" },
+      { name:"Phoenix Bay", detail:"Volta ao South Sector", type:"return" }
+    ],
+    note:"A saída de Ether Jungle é um pedaço separado do mapa — útil pra DNA Digivolution do GrapLeomon."
+  },
+  {
+    id:"sub-ether", kind:"sub", world:"both", icon:"🛥️", name:"Ether Jungle",
+    group:"spe", groupLabel:"Shell ↔ Phoenix ↔ Ether",
+    spot:"Dock no canto isolado",
+    how:"Você só chega aqui de Submarimon (não a pé pela floresta). O dock fica na beira d'água dessa área isolada.",
+    destinations:[
+      { name:"Phoenix Bay", detail:"South Sector", type:"exit", link:"sub-phoenix" },
+      { name:"Shell Beach", detail:"Central Sector", type:"exit", link:"sub-shell" },
+      { name:"Ether Jungle", detail:"Volta ao canto isolado", type:"return" }
+    ],
+    note:"Esse ponto não é o caminho a pé pela floresta. O Submarimon te deixa numa parte separada do mapa."
+  },
+  {
+    id:"sub-ice", kind:"sub", world:"both", icon:"🛥️", name:"Lake of Ice",
+    group:"ice-oasis", groupLabel:"North ↔ West (opcional)",
+    spot:"Dock no North Sector",
+    how:"No Lake of Ice (North Sector), o dock fica na beira do lago.",
+    destinations:[
+      { name:"Pelche Oasis", detail:"West Sector", type:"exit" },
+      { name:"Lake of Ice", detail:"Volta ao North Sector", type:"return" }
+    ],
+    note:"Rota opcional. Serve pra item e encontros — não é caminho da história."
+  },
+  {
+    id:"sub-divermon", kind:"sub", world:"both", icon:"🛥️", name:"Divermon's Lake",
+    group:"duel", groupLabel:"East · Duel Island",
+    spot:"Dock abaixo da ponte",
+    how:"Em Divermon's Lake, desça até abaixo da ponte. O dock está ali.",
+    destinations:[
+      { name:"Duel Island", detail:"Área isolada · Armormon / Etemon", type:"exit" },
+      { name:"Divermon's Lake", detail:"Volta ao East Sector", type:"return" }
+    ],
+    note:"Duel Island só existe por esta rota. Debaixo d'água são dois screens ao norte."
+  },
+  {
+    id:"sub-bridge", kind:"sub", world:"asuka", icon:"🛥️", name:"Asuka Bridge",
+    group:"asuka-urban", groupLabel:"Asuka City · portão",
+    spot:"Escadas à direita do portão",
+    how:"Na Asuka Bridge, desça as escadas à direita do portão da cidade. O dock fica embaixo.",
+    destinations:[
+      { name:"Asuka Sewers", detail:"Control Room · Datamon", type:"exit" },
+      { name:"Asuka Bridge (north)", detail:"Ramal curto · Iron Gloves", type:"map" },
+      { name:"Asuka Bridge", detail:"Volta ao dock", type:"return" }
+    ],
+    note:"Quando a A.o.A. tranca o portão, você contorna por aqui até os esgotos e a Control Room."
+  },
+  {
+    id:"sub-am-bridge", kind:"sub", world:"amaterasu", icon:"🛥️", name:"Amaterasu Bridge",
+    group:"am-urban", groupLabel:"Amaterasu City · portão",
+    spot:"Dock abaixo do portão",
+    how:"Na Amaterasu Bridge, o dock fica abaixo do portão da cidade.",
+    destinations:[
+      { name:"Amaterasu Sewers", detail:"Área abaixo da cidade", type:"exit" },
+      { name:"Amaterasu Bridge", detail:"Volta ao dock", type:"return" }
+    ],
+    note:"Mesma ideia da Asuka Bridge: passa por baixo quando o portão não deixa entrar."
+  },
+  {
+    id:"sub-suzaku", kind:"sub", world:"asuka", icon:"🛥️", name:"Suzaku City",
+    group:"suzaku-ug", groupLabel:"Suzaku · lago subterrâneo",
+    spot:"Dock atrás de Suzaku Hall",
+    how:"Em Suzaku City, entre no Suzaku Hall e use o dock atrás do prédio.",
+    destinations:[
+      { name:"Suzaku UG Lake", detail:"Área isolada · Crossbow", type:"exit" },
+      { name:"Suzaku City", detail:"Volta ao Hall", type:"return" }
+    ],
+    note:"Rota curta e isolada. É por aqui que você acha Keith e Nick na caça ao Staff ID Pass."
+  },
+
+  /* ——— Digmon / buracos ——— */
+  {
+    id:"hole-as-plug", kind:"hole", world:"asuka", icon:"⛏️", name:"Plug Cape · cliff",
+    group:"as-north-entry", groupLabel:"Asuka · entrada do North",
+    spot:"Buraco no alto do penhasco",
+    how:"Em Plug Cape (Asuka), suba o penhasco. O buraco fica no alto.",
+    destinations:[
+      { name:"Boot Mountain", detail:"Asuka North Sector", type:"exit" },
+      { name:"Plug Cape", detail:"Volta pelo mesmo caminho", type:"return" }
+    ],
+    note:"Rota da história pro North Sector e pro Genbu Badge. Chame o Digmon no buraco."
+  },
+  {
+    id:"hole-am-plug-high", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Plug Cape · buraco alto",
+    group:"am-plug", groupLabel:"Amaterasu · Plug Cape",
+    spot:"Buraco no penhasco",
+    how:"Em Plug Cape (Amaterasu), o buraco alto fica no penhasco — não é o buraco baixo perto da entrada.",
+    destinations:[
+      { name:"North Badland W", detail:"Saída perto da bridge · MarineAngemon", type:"exit" },
+      { name:"Plug Cape", detail:"Volta", type:"return" }
+    ],
+    note:"Este é o buraco alto. O baixo, perto da entrada, leva a um duelo de carta."
+  },
+  {
+    id:"hole-am-plug-low", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Plug Cape · buraco baixo",
+    group:"am-plug", groupLabel:"Amaterasu · Plug Cape",
+    spot:"Perto da entrada, abaixo do alto",
+    how:"Em Plug Cape (Amaterasu), o buraco baixo fica perto da entrada do mapa, abaixo do buraco do penhasco.",
+    destinations:[
+      { name:"BK Agumon", detail:"Carta #31 Delete Matrix · R-Booster 04", type:"encounter" },
+      { name:"Plug Cape", detail:"Volta pelo ponto de entrada", type:"return" }
+    ],
+    note:"Esse caminho termina no duelo de carta. Não sai em North Badland W."
+  },
+  {
+    id:"hole-as-kicking", kind:"hole", world:"asuka", icon:"⛏️", name:"Kicking Forest · ladder",
+    group:"server-hop-a", groupLabel:"Asuka ↔ Amaterasu (par A)",
+    spot:"Parte sul, descendo a rope ladder",
+    how:"Em Kicking Forest (Asuka), vá à parte sul e desça a rope ladder. O buraco fica embaixo.",
+    destinations:[
+      { name:"Amaterasu Central Park", detail:"Saída perto do dock", type:"exit", link:"hole-am-central" },
+      { name:"Asuka Kicking Forest", detail:"Volta", type:"return" }
+    ],
+    note:"Atalho do fim do jogo pra trocar Asuka ↔ Amaterasu sem refazer o caminho longo."
+  },
+  {
+    id:"hole-am-central", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Central Park · perto do dock",
+    group:"server-hop-a", groupLabel:"Asuka ↔ Amaterasu (par A)",
+    spot:"Parte oeste / baixa",
+    how:"Em Central Park (Amaterasu), vá à parte oeste baixa, perto do dock.",
+    destinations:[
+      { name:"Asuka Kicking Forest", detail:"Saída da rope ladder", type:"exit", link:"hole-as-kicking" },
+      { name:"Amaterasu Central Park", detail:"Volta", type:"return" }
+    ],
+    note:"É o outro lado do atalho de Kicking Forest (Asuka)."
+  },
+  {
+    id:"hole-as-central", kind:"hole", world:"asuka", icon:"⛏️", name:"Central Park · western pipe",
+    group:"server-hop-b", groupLabel:"Asuka ↔ Amaterasu (par B)",
+    spot:"Perto do cano saindo do chão",
+    how:"Em Central Park (Asuka), ache o cano saindo do chão na parte oeste. O buraco fica perto.",
+    destinations:[
+      { name:"Amaterasu Kicking Forest", detail:"Saída da ladder", type:"exit", link:"hole-am-kicking" },
+      { name:"Asuka Central Park", detail:"Volta", type:"return" }
+    ],
+    note:"Segundo atalho entre Central Park e Kicking Forest, espelhado nos dois servers."
+  },
+  {
+    id:"hole-am-kicking", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Kicking Forest · ladder",
+    group:"server-hop-b", groupLabel:"Asuka ↔ Amaterasu (par B)",
+    spot:"Parte sul, abaixo da ladder",
+    how:"Em Kicking Forest (Amaterasu), vá à parte sul e desça a ladder. O buraco fica embaixo.",
+    destinations:[
+      { name:"Asuka Central Park", detail:"Saída perto do western pipe", type:"exit", link:"hole-as-central" },
+      { name:"Amaterasu Kicking Forest", detail:"Volta", type:"return" }
+    ],
+    note:"Outro lado do segundo atalho Central Park ↔ Kicking Forest."
+  },
+  {
+    id:"hole-as-nbadland-e", kind:"hole", world:"asuka", icon:"⛏️", name:"North Badland E",
+    group:"west-north-as", groupLabel:"West ↔ North (Asuka)",
+    spot:"Rampa a leste, depois das dogū heads",
+    how:"Em North Badland E (Asuka), suba a rampa a leste depois das cabeças de dogū.",
+    destinations:[
+      { name:"Freeze Mountain", detail:"Asuka North Sector", type:"exit" },
+      { name:"North Badland E", detail:"Volta ao West Sector", type:"return" }
+    ],
+    note:"Atalho West → North sem voltar a Plug Cape."
+  },
+  {
+    id:"hole-am-nbadland-e", kind:"hole", world:"amaterasu", icon:"⛏️", name:"North Badland E",
+    group:"west-north-am", groupLabel:"West ↔ North (Amaterasu)",
+    spot:"Rampa a leste",
+    how:"Em North Badland E (Amaterasu), suba a rampa a leste.",
+    destinations:[
+      { name:"Freeze Mountain", detail:"Amaterasu North Sector", type:"exit" },
+      { name:"North Badland E", detail:"Volta ao West Sector", type:"return" }
+    ],
+    note:"Mesmo atalho West → North, no server Amaterasu."
+  },
+  {
+    id:"hole-am-boot", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Boot Mountain · lado esquerdo",
+    group:"am-north-net", groupLabel:"Amaterasu North",
+    spot:"Suba e pule no buraco",
+    how:"Em Boot Mountain (Amaterasu), suba pelo lado esquerdo e pule no buraco.",
+    destinations:[
+      { name:"Numemon", detail:"Carta #155 SaberLeomon · R-Booster 02", type:"encounter" },
+      { name:"Kulon Mine", detail:"Saída pela entrada norte", type:"exit", link:"hole-kulon" },
+      { name:"Boot Mountain", detail:"Volta", type:"return" }
+    ],
+    note:"O Agumon do mapa avisa: este conjunto só liga áreas de Amaterasu."
+  },
+  {
+    id:"hole-kulon", kind:"hole", world:"both", icon:"⛏️", name:"Kulon Mine · Kulon Pit",
+    group:"am-north-net", groupLabel:"Amaterasu North",
+    spot:"Perto da entrada de Kulon Pit",
+    how:"Em Kulon Mine, o buraco de referência fica perto da entrada de Kulon Pit. O mapa tem mais de um buraco.",
+    destinations:[
+      { name:"Boot Mountain", detail:"Saída oeste", type:"exit", link:"hole-am-boot" },
+      { name:"Freeze Mountain", detail:"Saída oeste / sul", type:"exit" },
+      { name:"Kulon Mine", detail:"Outras entradas do mesmo mapa", type:"return" }
+    ],
+    note:"Mais de um buraco no mesmo mapa. Use o ponto perto de Kulon Pit como referência."
+  },
+  {
+    id:"hole-as-noise", kind:"hole", world:"asuka", icon:"⛏️", name:"Noise Desert · perto de Byakko",
+    group:"secret-noise", groupLabel:"Secret · Noise Desert",
+    spot:"Buraco no caminho da cidade",
+    how:"Em Noise Desert (Asuka), o buraco fica no caminho pra Byakko City.",
+    destinations:[
+      { name:"BK Agumon", detail:"Carta #32 Fortune Gate · R-Booster 01", type:"encounter" },
+      { name:"Noise Desert", detail:"Volta pelo ponto de entrada", type:"return" }
+    ],
+    note:"Entre e siga três áreas ao norte até o duelo de carta."
+  },
+  {
+    id:"hole-as-sbadland", kind:"hole", world:"asuka", icon:"⛏️", name:"South Badland · nível alto",
+    group:"secret-sbad", groupLabel:"Secret · South Badland",
+    spot:"Buraco no topo / meio do mapa",
+    how:"Em South Badland (Asuka), o buraco fica no nível alto, no meio do mapa.",
+    destinations:[
+      { name:"BK Agumon", detail:"Carta #34 Desire Access · R-Booster 05", type:"encounter" },
+      { name:"South Badland", detail:"Volta pelo ponto de entrada", type:"return" }
+    ],
+    note:"Esse caminho só chega no duelo de carta. Não tem outra saída de superfície."
+  },
+  {
+    id:"hole-as-freeze", kind:"hole", world:"asuka", icon:"⛏️", name:"Freeze Mountain · topo",
+    group:"secret-freeze-as", groupLabel:"Secret · Freeze (Asuka)",
+    spot:"Perto da entrada de Battle Gate",
+    how:"Em Freeze Mountain (Asuka), o buraco fica perto da entrada do Battle Gate.",
+    destinations:[
+      { name:"BK Agumon", detail:"Carta #35 Anti-Power", type:"encounter" },
+      { name:"Numemon", detail:"Carta #69 RosemonII · R-Booster 03", type:"encounter" },
+      { name:"Freeze Mountain", detail:"Volta", type:"return" }
+    ],
+    note:"O mesmo buraco abre caminhos diferentes dentro do Circuit Board — um pra cada duelo."
+  },
+  {
+    id:"hole-am-freeze", kind:"hole", world:"amaterasu", icon:"⛏️", name:"Freeze Mountain · topo",
+    group:"secret-freeze-am", groupLabel:"Secret · Freeze (Amaterasu)",
+    spot:"Perto de Battle Gate",
+    how:"Em Freeze Mountain (Amaterasu), o buraco fica perto do Battle Gate.",
+    destinations:[
+      { name:"BK Agumon", detail:"Carta #33 Misery Gate", type:"encounter" },
+      { name:"Numemon", detail:"Carta #198 Gryphonmon · R-Booster 04", type:"encounter" },
+      { name:"Freeze Mountain", detail:"Volta", type:"return" }
+    ],
+    note:"Versão Amaterasu do buraco alto de Freeze Mountain."
+  },
+  {
+    id:"hole-as-snow", kind:"hole", world:"asuka", icon:"⛏️", name:"Snow Mountain · atrás da inn",
+    group:"secret-snow", groupLabel:"Secret · Snow Mountain",
+    spot:"Oeste da inn",
+    how:"Em Snow Mountain (Asuka), o buraco fica a oeste da inn.",
+    destinations:[
+      { name:"Numemon", detail:"Carta #241 Creepymon · R-Booster 05", type:"encounter" },
+      { name:"Snow Mountain", detail:"Volta pelo ponto de entrada", type:"return" }
+    ],
+    note:"Dentro do board: duas áreas ao sul, nordeste, depois três ao norte."
+  },
+  {
+    id:"hole-jungle", kind:"hole", world:"asuka", icon:"⛏️", name:"Jungle Grave · primeiro portão",
+    group:"secret-jungle", groupLabel:"Secret · Jungle Grave",
+    spot:"Antes do arco, vindo de Bulk Bridge",
+    how:"Em Jungle Grave (Asuka), o buraco fica antes do arco, vindo de Bulk Bridge.",
+    destinations:[
+      { name:"BK Agumon", detail:"Sidequest do Etemon's Mic", type:"encounter" },
+      { name:"Jungle Grave", detail:"Volta pelo ponto de entrada", type:"return" }
+    ],
+    note:"Faz parte da cadeia do Etemon's Mic. Não atravessa setor — só o duelo."
+  }
+];
+
+const WORLD_LABEL = { asuka:"Asuka", amaterasu:"Amaterasu", both:"Asuka e Amaterasu" };
+const TYPE_LABEL = { exit:"Sai em", return:"Volta", encounter:"Encontro", map:"Mapa" };
+
+let kind = "sub";
+let query = "";
+let selectedId = "sub-plug";
+
+function filtered() {
+  const q = query.trim().toLowerCase();
+  return ROUTES.filter(r => r.kind === kind).filter(r => {
+    const hay = [r.name, r.spot, r.how, r.note, r.groupLabel || "",
+      ...r.destinations.flatMap(d => [d.name, d.detail])].join(" ").toLowerCase();
+    return !q || hay.includes(q);
+  });
+}
+
+function selectedIndex(rows) {
+  const i = rows.findIndex(r => r.id === selectedId);
+  return i < 0 ? 0 : i;
+}
+
+function worldBadge(r) {
+  const cls = r.world === "both" ? "special" : r.world;
+  return `<span class="badge ${cls}">${WORLD_LABEL[r.world]}</span>`;
+}
+
+function findById(id) {
+  return ROUTES.find(r => r.id === id);
+}
+
+function selectRoute(id, pushHash) {
+  const r = findById(id);
+  if (!r) return;
+  kind = r.kind;
+  selectedId = id;
+  if (pushHash !== false) history.replaceState(null, "", "#" + id);
+  render();
+}
+
+function renderList() {
+  const rows = filtered();
+  const el = document.getElementById("routeList");
+  if (!rows.length) {
+    el.innerHTML = `<div class="empty">Sem resultados</div>`;
+    renderCard(null, rows);
+    return;
+  }
+  if (!rows.some(r => r.id === selectedId)) selectedId = rows[0].id;
+
+  const groups = [];
+  const seen = new Set();
+  rows.forEach(r => {
+    const g = r.group || r.id;
+    if (!seen.has(g)) { seen.add(g); groups.push(g); }
+  });
+
+  el.innerHTML = groups.map(g => {
+    const members = rows.filter(r => (r.group || r.id) === g);
+    const label = members[0].groupLabel || "";
+    return `<div class="group-label">${label}</div>` + members.map(r => `
+      <button type="button" data-id="${r.id}" class="${r.id === selectedId ? "active" : ""}">
+        <span class="ico">${r.icon}</span>
+        <span class="name">${r.name}</span>
+        <span class="dest">→ ${r.destinations.filter(d => d.type !== "return").map(d => d.name).join(" · ")}</span>
+      </button>`).join("");
+  }).join("");
+
+  el.querySelectorAll("button").forEach(btn => btn.addEventListener("click", () => {
+    selectRoute(btn.dataset.id);
+  }));
+  renderCard(rows[selectedIndex(rows)], rows);
+}
+
+function siblingsOf(r) {
+  if (!r.group) return [];
+  return ROUTES.filter(x => x.group === r.group && x.kind === r.kind);
+}
+
+function renderCard(r, rows) {
+  const card = document.getElementById("routeCard");
+  if (!r) {
+    card.innerHTML = `<div class="empty">Nenhuma rota neste filtro.</div>`;
+    document.getElementById("counterTitle").textContent = "—";
+    document.getElementById("counter").textContent = "";
+    return;
+  }
+
+  const typeLabel = r.kind === "sub" ? "Submarimon" : "Digmon / buraco";
+  const outs = r.destinations;
+  const sibs = siblingsOf(r);
+
+  card.innerHTML = `
+    <header class="route-head">
+      <div class="big-icon">${r.icon}</div>
+      <div>
+        <h2>${r.name}</h2>
+        <p>${r.spot}</p>
+        <div class="badges">${worldBadge(r)}<span class="badge ${r.kind}">${typeLabel}</span></div>
+      </div>
+    </header>
+    <div class="card-body">
+      <div class="how"><span class="k">Como achar a entrada</span>${r.how}</div>
+      <div class="flow-wrap">
+        <p class="flow-label">De onde → pra onde (${outs.length} destino${outs.length === 1 ? "" : "s"})</p>
+        <div class="flow">
+          <div class="node source">
+            <span class="small">Você está em</span>
+            <strong>${r.name}</strong>
+            <span>${r.spot}</span>
+          </div>
+          <div class="arrow-col" aria-hidden="true">→</div>
+          <div class="dest-stack">
+            ${outs.map(d => {
+              const linked = d.link && findById(d.link);
+              const disabled = !linked;
+              return `<button type="button" class="dest-btn${linked ? " has-link" : ""}"
+                data-link="${d.link || ""}" ${disabled ? "disabled" : ""}
+                title="${linked ? "Abrir card de " + linked.name : (d.type === "return" ? "Você já está aqui" : "Sem card próprio")}">
+                <span class="tag ${d.type}">${TYPE_LABEL[d.type] || d.type}</span>
+                <span>
+                  <strong>${d.name}</strong>
+                  <span class="detail">${d.detail}</span>
+                </span>
+                <span class="go">Abrir →</span>
+              </button>`;
+            }).join("")}
+          </div>
+        </div>
+      </div>
+      <div class="note">${r.note}</div>
+      ${sibs.length > 1 ? `
+        <div class="siblings">
+          <span class="k">Mesma rota · outros pontos</span>
+          <div class="sib-row">
+            ${sibs.map(s => `<button type="button" data-sib="${s.id}" class="${s.id === r.id ? "current" : ""}">${s.name}</button>`).join("")}
+          </div>
+        </div>` : ""}
+      <p class="hint">Clique num destino com “Abrir →” pra ir ao card dele. Setas ← → ou botões acima passam as rotas do filtro.</p>
+    </div>`;
+
+  card.querySelectorAll(".dest-btn.has-link").forEach(btn => {
+    btn.addEventListener("click", () => selectRoute(btn.dataset.link));
+  });
+  card.querySelectorAll("[data-sib]").forEach(btn => {
+    btn.addEventListener("click", () => selectRoute(btn.dataset.sib));
+  });
+
+  const i = selectedIndex(rows);
+  document.getElementById("counterTitle").textContent = r.name;
+  document.getElementById("counter").textContent = `${i + 1} / ${rows.length}`;
+}
+
+function step(delta) {
+  const rows = filtered();
+  if (!rows.length) return;
+  const i = selectedIndex(rows);
+  selectRoute(rows[(i + delta + rows.length) % rows.length].id);
+}
+
+function render() {
+  document.querySelectorAll(".chip[data-kind]").forEach(b =>
+    b.classList.toggle("active", b.dataset.kind === kind));
+  renderList();
+}
+
+document.querySelectorAll(".chip[data-kind]").forEach(btn => btn.addEventListener("click", () => {
+  kind = btn.dataset.kind;
+  const first = ROUTES.find(r => r.kind === kind);
+  selectRoute(first ? first.id : "", true);
+}));
+document.getElementById("search").addEventListener("input", e => {
+  query = e.target.value;
+  render();
+});
+document.getElementById("prev").addEventListener("click", () => step(-1));
+document.getElementById("next").addEventListener("click", () => step(1));
+document.addEventListener("keydown", e => {
+  if (e.target.matches("input")) return;
+  if (e.key === "ArrowLeft") step(-1);
+  if (e.key === "ArrowRight") step(1);
+});
+
+(function boot() {
+  const hash = location.hash.replace(/^#/, "");
+  if (hash && findById(hash)) {
+    selectRoute(hash, false);
+  } else {
+    render();
+  }
+})();
+</script>
+</body>
+</html>

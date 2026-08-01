@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digimon World 3 — Partner Digivolution Guide</title>
+<style>
+:root {
+  --bg: #0c1017;
+  --panel: #151c27;
+  --panel2: #1c2635;
+  --text: #edf2f7;
+  --muted: #8fa0b5;
+  --accent: #f0a020;
+  --accent2: #3ecf8e;
+  --rookie: #f0a020;
+  --champ: #4db6ff;
+  --ult: #b388ff;
+  --mega: #ff6b6b;
+  --border: #2a3648;
+  --glow: rgba(240, 160, 32, 0.25);
+}
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; }
+button, input { font: inherit; }
+button:focus-visible, input:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+}
+button { user-select: none; -webkit-tap-highlight-color: transparent; }
+.doc-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.doc-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 0.32rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
+.doc-nav a.current {
+  color: var(--text);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
+}
+.panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3a4a60 transparent;
+}
+.panel-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: #3a4a60;
+  border-radius: 999px;
+}
+.panel-scroll::-webkit-scrollbar-track { background: transparent; }
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(240,160,32,0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(77,182,255,0.08), transparent),
+    var(--bg);
+  color: var(--text);
+  line-height: 1.45;
+}
+header {
+  padding: 1.4rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
+}
+header h1 {
+  margin: 0 0 0.3rem;
+  font-size: clamp(1.2rem, 2.4vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  max-width: 46rem;
+  line-height: 1.5;
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) minmax(0, 1fr) minmax(280px, 340px);
+  gap: 1rem;
+  padding: 1rem 1.25rem 2.5rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  align-items: start;
+}
+@media (max-width: 1180px) {
+  .layout { grid-template-columns: minmax(0, 1fr) minmax(260px, 320px); }
+  .attr-panel {
+    grid-column: 1 / -1;
+    position: static;
+    max-height: none;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .attr-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.4rem;
+  }
+}
+@media (max-width: 820px) {
+  .layout { grid-template-columns: 1fr; padding: 0.85rem 0.85rem 2rem; }
+  .right-col { position: static !important; max-height: none; overflow: visible; }
+  .attr-list { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .attr-list { grid-template-columns: 1fr; }
+  header { padding: 1.1rem 0.85rem 0.85rem; }
+  header h1 { font-size: 1.25rem; }
+}
+.attr-panel {
+  position: sticky;
+  top: 3.6rem;
+  align-self: start;
+  max-height: calc(100vh - 4.4rem);
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem;
+}
+.attr-panel .label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+.attr-panel .hint {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 0 0 0.65rem;
+  line-height: 1.35;
+}
+.attr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.attr-list button {
+  appearance: none;
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 9px;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.attr-list button:hover {
+  border-color: #4a5d75;
+}
+.attr-list button.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.attr-list button.owned {
+  border-color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 14%, var(--panel2));
+}
+.attr-list button.owned .stat-name::after {
+  content: " ✓";
+  color: var(--accent2);
+}
+.attr-list .stat-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: #ffd54f;
+}
+.attr-list .stat-meta {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+.filters button {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+.filters button:hover,
+.filters button.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--panel));
+}
+.tree {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.tier {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem;
+}
+.tier-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.65rem;
+  font-weight: 700;
+}
+.tier.rookie .tier-label { color: var(--rookie); }
+.tier.champion .tier-label { color: var(--champ); }
+.tier.ultimate .tier-label { color: var(--ult); }
+.tier.mega .tier-label { color: var(--mega); }
+.nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.node {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  min-width: 132px;
+  max-width: 100%;
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.node:hover {
+  transform: translateY(-1px);
+  border-color: #4a5d75;
+}
+.node.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--glow), 0 8px 24px rgba(0,0,0,0.25);
+  z-index: 1;
+}
+.node.active.owned,
+.node.active.descendant {
+  border-color: var(--accent);
+}
+.node.related {
+  border-color: var(--accent2);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent2) 50%, transparent);
+}
+.node.descendant {
+  border-color: color-mix(in srgb, var(--accent) 70%, #fff);
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel2));
+}
+.node.owned,
+.branch-nodes button.owned {
+  border-color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 16%, var(--panel2));
+}
+.node.owned .name::after,
+.branch-nodes button.owned .bn-name::after {
+  content: " ✓";
+  color: var(--accent2);
+  font-weight: 700;
+}
+.node .name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+.node .req {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.node.hidden { display: none; }
+.owned-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 0.85rem;
+  padding: 0.5rem 0.7rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.owned-bar strong { color: var(--accent2); }
+.owned-bar button {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--muted);
+  border-radius: 7px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.owned-bar button:hover { color: var(--text); border-color: #4a5d75; }
+.branch-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem;
+}
+.branch-panel .branch-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+.branch-panel .branch-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.branch-panel .branch-count {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.branch-empty {
+  color: var(--muted);
+  font-size: 0.84rem;
+  margin: 0;
+}
+.branch-depth {
+  margin-bottom: 0.7rem;
+}
+.branch-depth:last-child { margin-bottom: 0; }
+.branch-depth .depth-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+.branch-depth .depth-label span {
+  color: var(--accent2);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.branch-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.branch-nodes button {
+  appearance: none;
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 9px;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.branch-nodes button:hover { border-color: #4a5d75; }
+.branch-nodes button .bn-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+.branch-nodes button .bn-level {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.74rem;
+  font-weight: 650;
+  color: #ffd54f;
+}
+.branch-nodes button .bn-meta {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.branch-nodes button .bn-from {
+  color: var(--accent2);
+}
+.right-col {
+  position: sticky;
+  top: 3.6rem;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: calc(100vh - 4.4rem);
+  overflow: auto;
+  padding-right: 2px;
+}
+.tech-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem;
+}
+.tech-panel .label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+.tech-panel .hint {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 0 0 0.65rem;
+  line-height: 1.35;
+}
+.tech-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.tech-item {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 0.5rem 0.6rem;
+}
+.tech-item .tech-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+.tech-item .tech-levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.28rem;
+}
+.tech-item .pill {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.tech-item .pill.learn {
+  color: #ffd54f;
+  border-color: color-mix(in srgb, #ffd54f 45%, var(--border));
+  background: color-mix(in srgb, #ffd54f 12%, transparent);
+}
+.tech-item .pill.load {
+  color: var(--accent2);
+  border-color: color-mix(in srgb, var(--accent2) 45%, var(--border));
+  background: color-mix(in srgb, var(--accent2) 12%, transparent);
+}
+.tech-item .pill.mp {
+  color: var(--champ);
+  border-color: color-mix(in srgb, var(--champ) 40%, var(--border));
+}
+.tech-item .tech-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.tech-empty {
+  color: var(--muted);
+  font-size: 0.84rem;
+  margin: 0;
+}
+.partner-bar {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  padding: 0.65rem 1.5rem 0.7rem;
+  background: rgba(12,16,23,0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.partner-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.partner-tabs button {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 0.38rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+.partner-tabs button:hover { color: var(--text); border-color: #4a5d75; }
+.partner-tabs button.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--panel));
+}
+.dna-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.9rem;
+}
+.dna-panel .label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+.dna-panel .dna-title {
+  margin: 0 0 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.dna-sub {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0.75rem 0 0.4rem;
+}
+.dna-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 0.15rem;
+}
+.dna-meta div {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+.dna-meta strong {
+  color: #ffd54f;
+  font-weight: 700;
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.12rem;
+}
+.dna-steps {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.dna-steps li::marker { color: var(--accent); font-weight: 700; }
+.dna-notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.dna-notes li {
+  font-size: 0.74rem;
+  color: var(--muted);
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.55rem;
+  line-height: 1.35;
+}
+.owned-bar button {
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+@media (max-width: 820px) {
+  .partner-bar { padding: 0.55rem 0.85rem 0.6rem; }
+  .partner-tabs { gap: 0.35rem; }
+  .partner-tabs button { padding: 0.32rem 0.7rem; font-size: 0.78rem; }
+}
+@media (max-width: 520px) {
+  .partner-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.15rem;
+  }
+  .partner-tabs button { flex: 0 0 auto; }
+}
+
+footer {
+  padding: 0 1.5rem 2.25rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Partner Digivolution Guide</h1>
+  <p>Escolha um partner e siga a árvore permanente de Digivolution, forma a forma, vendo o que cada uma aprende ou libera no Load. Clique duas vezes numa forma para marcar como desbloqueada — o progresso fica salvo por partner neste navegador.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a class="current" href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
+    <a href="digimon-world-3-steal-items.html">Steal Items</a>
+    <a href="digimon-world-3-boosters.html">Boosters</a>
+    <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a>
+    <a href="digimon-world-3-monster-stats.html">Monster Stats</a>
+    <a href="digimon-world-3-level-exp.html">Level EXP</a>
+    <a href="digimon-world-3-walkthrough.html">Walkthrough</a>
+    <a href="digimon-world-3-routes.html">Routes</a>
+    <a href="digimon-world-3-balance-gdd.html">Balance GDD</a>
+  </nav>
+</header>
+<div class="partner-bar">
+  <div class="partner-tabs" id="partnerTabs" role="tablist" aria-label="Partners"></div>
+</div>
+
+<div class="layout">
+  <aside class="attr-panel panel-scroll">
+    <div class="label">Stat requirements</div>
+    <p class="hint">Gates de status nesta árvore. Clique numa linha para ir até aquele Digimon.</p>
+    <div class="attr-list" id="attrList"></div>
+  </aside>
+  <section>
+    <div class="filters" id="filters">
+      <button type="button" data-filter="all" class="active">All</button>
+      <button type="button" data-filter="Rookie">Rookie</button>
+      <button type="button" data-filter="Champion">Champion</button>
+      <button type="button" data-filter="Ultimate">Ultimate</button>
+      <button type="button" data-filter="Mega">Mega</button>
+    </div>
+    <div class="owned-bar" id="ownedBar"></div>
+    <div class="tree" id="tree"></div>
+  </section>
+
+  <aside class="right-col panel-scroll">
+    <div class="tech-panel" id="techPanel"></div>
+    <div class="branch-panel" id="branchPanel"></div>
+    <div class="dna-panel" id="dnaPanel"></div>
+  </aside>
+</div>
+
+<script>
+const TECHS={"Agumon":[{n:"Pepper Breath",d:"Dispara bolas de fogo pequenas",t:"Magic",mp:30,lv:1,load:null}],"Angemon":[{n:"Air Blast",d:"Dispara bolas de ar",t:"Magic",mp:20,lv:5,load:25},{n:"Small Heal",d:"Cura um pouco do seu HP",t:"Heal",mp:16,lv:10,load:40},{n:"Double Guard",d:"Aumenta sua defesa",t:"Support",mp:42,lv:15,load:75},{n:"Hand of Fate",d:"Soca o inimigo com ataques de vento",t:"Physical",mp:42,lv:60,load:null}],"Angewomon":[{n:"Antidote",d:"Cura o veneno em você",t:"Heal",mp:8,lv:15,load:35},{n:"Divine Rain",d:"Dano water com chuva mágica",t:"Magic",mp:30,lv:20,load:50},{n:"Anti-Paralysis",d:"Cura a paralisia em você",t:"Heal",mp:8,lv:30,load:99},{n:"Celestial Arrow",d:"Flecha divina com ataque de thunder",t:"Physical",mp:44,lv:70,load:null}],"Armormon":[{n:"Bug Buster",d:"Dano enorme vs Digimon Insectoid",t:"Physical",mp:24,lv:5,load:15},{n:"Big Shot",d:"Dano alto se acertar",t:"Physical",mp:20,lv:10,load:35},{n:"Fish Buster",d:"Dano enorme vs Digimon Marine",t:"Physical",mp:30,lv:25,load:50},{n:"Dino Buster",d:"Dano enorme vs Digimon Dinosaur",t:"Physical",mp:40,lv:45,load:80},{n:"Dramon Buster",d:"Dano enorme vs Digimon Dragon",t:"Physical",mp:48,lv:60,load:90},{n:"Justice Strike",d:"Dispara todas as armas",t:"Physical",mp:78,lv:70,load:null}],"Beelzemon":[{n:"Dark Elmental",d:"Envolve com coluna de fogo maligno",t:"Magic",mp:120,lv:5,load:15},{n:"Darkness Chaos",d:"Dano enorme com chama maligna",t:"Magic",mp:180,lv:20,load:40},{n:"Black Scewer",d:"Perfura com várias dark matter",t:"Magic",mp:200,lv:35,load:70},{n:"Confuse Nebula",d:"Golpe magic enorme de confusão",t:"Magic",mp:90,lv:50,load:null},{n:"Soul Plunder",d:"Destrói o inimigo com um spell",t:"Magic",mp:160,lv:60,load:null},{n:"Blast Mode",d:"Vários tiros no inimigo",t:"Physical",mp:250,lv:99,load:null}],"BlackWarGreymon":[{n:"Flame Breath",d:"Envolve o inimigo com bafo de fogo",t:"Magic",mp:72,lv:10,load:25},{n:"Dark Fear",d:"Arremessa chama maligna no inimigo",t:"Magic",mp:48,lv:20,load:40},{n:"Giga Fire",d:"Magic que dispara 3 bolas de fogo",t:"",mp:90,lv:35,load:60},{n:"Black Dart",d:"Dispara vários espinhos malignos",t:"Magic",mp:70,lv:50,load:80},{n:"Fire Field",d:"Fortalece fire, enfraquece ice",t:"Magic",mp:100,lv:70,load:90},{n:"Terra Destroyer",d:"Arremessa dark matter enorme",t:"Physical",mp:140,lv:85,load:null}],"Cannondramon":[{n:"Dino Buster",d:"Dano enorme vs Digimon Dinosaur",t:"Physical",mp:40,lv:25,load:50},{n:"Dramon Buster",d:"Dano enorme vs Digimon Dragon",t:"Physical",mp:48,lv:40,load:75},{n:"Pinpoint Shot",d:"Dano enorme se acertar",t:"Physical",mp:54,lv:60,load:90},{n:"Devil Shot",d:"Dano enorme vs Digimon Evil",t:"Physical",mp:56,lv:80,load:99},{n:"Dynamo Cannon",d:"Dano enorme contra Machines",t:"Physical",mp:136,lv:85,load:null}],"Devimon":[{n:"Dark Matter",d:"Bola de fogo maligna com dano dark",t:"Magic",mp:20,lv:10,load:45},{n:"Evil Poison",d:"Magic com dano e veneno",t:"Magic",mp:18,lv:20,load:80},{n:"Armor Break",d:"Diminui a defesa do inimigo",t:"Support",mp:39,lv:35,load:90},{n:"Stun Shock",d:"Magic com dano e paralisia",t:"Magic",mp:18,lv:55,load:99},{n:"Touch of Evil",d:"Drena HP do inimigo com a garra",t:"Physical",mp:40,lv:70,load:null}],"Diaboromon":[{n:"Deadly Poison",d:"Espuma venenosa com magic",t:"Magic",mp:90,lv:10,load:30},{n:"Paralyze Shock",d:"Magic que paralisa por completo",t:"Magic",mp:90,lv:20,load:null},{n:"Confuse Nebula",d:"Golpe magic enorme de confusão",t:"Magic",mp:90,lv:40,load:null},{n:"Hypno Nebula",d:"Magic que põe o inimigo em sono profundo",t:"Magic",mp:60,lv:55,load:null},{n:"Cable Crusher",d:"Ataque magic poderoso e maligno",t:"Magic",mp:270,lv:90,load:null}],"Digitamamon":[{n:"Hypno Gas",d:"Magic que põe o inimigo para dormir",t:"Magic",mp:40,lv:10,load:50},{n:"Soul Snatcher",d:"Drena a alma com magic",t:"Magic",mp:50,lv:30,load:80},{n:"Hypno Nebula",d:"Magic que põe o inimigo em sono profundo",t:"Magic",mp:60,lv:55,load:99},{n:"Nightmare Syndromer",d:"Ataque dark disparando bolas escuras",t:"Magic",mp:90,lv:85,load:null}],"Dinohumon":[{n:"Heat Cutter",d:"Corte com dano de fogo",t:"Physical",mp:18,lv:5,load:15},{n:"Frost Cutter",d:"Corte com dano de gelo",t:"Physical",mp:18,lv:10,load:30},{n:"Small Heal",d:"Cura um pouco do seu HP",t:"Heal",mp:16,lv:25,load:75},{n:"Double Power",d:"Aumenta seu ataque",t:"Support",mp:42,lv:40,load:99},{n:"Lizard Dance",d:"Corta o inimigo várias vezes",t:"Physical",mp:40,lv:60,load:null}],"ExVeemon":[{n:"Air Blast",d:"Dispara bolas de ar",t:"Magic",mp:20,lv:10,load:35},{n:"Small Heal",d:"Cura um pouco do seu HP",t:"Heal",mp:16,lv:40,load:75},{n:"Antidote",d:"Cura o veneno em você",t:"Heal",mp:8,lv:50,load:99},{n:"Vee Laser",d:"Dispara um laser do peito",t:"Magic",mp:60,lv:60,load:null}],"Gallantmon":[{n:"Speed Up",d:"Aumenta sua speed",t:"Support",mp:48,lv:15,load:35},{n:"Counter Strike",d:"Contra-ataque forte durante a pose",t:"Physical",mp:96,lv:25,load:65},{n:"Snapping Claw",d:"Ataca e rouba itens rápido",t:"Physical",mp:54,lv:50,load:99},{n:"Mega Boost",d:"Aumenta a speed dos aliados",t:"Support",mp:96,lv:75,load:90},{n:"Final Purification",d:"Contra-ataque com raio do escudo",t:"Physical",mp:140,lv:85,load:null}],"GranKuwagamon":[{n:"Venom Stab",d:"Dano de veneno mortal",t:"Physical",mp:36,lv:10,load:20},{n:"Energy Drain",d:"Magic que drena bastante HP",t:"Magic",mp:72,lv:30,load:60},{n:"Confuse Stab",d:"Dano enorme de confusão",t:"Physical",mp:64,lv:50,load:75},{n:"Impact Rush",d:"Dano enorme com golpes rápidos",t:"Physical",mp:60,lv:65,load:85},{n:"Dimension Scissors",d:"Corta pelo espaço e destrói",t:"Physical",mp:200,lv:90,load:null}],"GrapLeomon":[{n:"Lightning Slash",d:"Dano thunder",t:"Physical",mp:18,lv:5,load:15},{n:"Whirl Wind",d:"Dano wind",t:"Physical",mp:18,lv:10,load:30},{n:"Soul Charge",d:"Guarda Chi para fortalecer o próximo golpe",t:"Support",mp:19,lv:25,load:60},{n:"Speed Up",d:"Aumenta sua speed",t:"Support",mp:48,lv:40,load:90},{n:"Cyclone Turbine",d:"Vários chutes giratórios",t:"Physical",mp:80,lv:70,load:null}],"Greymon":[{n:"Flame Ball",d:"Dispara bolas de fogo pequenas",t:"Magic",mp:20,lv:5,load:25},{n:"Triple Fire",d:"Dispara três bolas de fogo",t:"Magic",mp:25,lv:15,load:35},{n:"Double Power",d:"Aumenta seu ataque",t:"Support",mp:42,lv:30,load:75},{n:"Flame Lance",d:"Dispara um feixe de fogo",t:"Magic",mp:48,lv:45,load:99},{n:"Nova Blast",d:"Dispara uma bola de fogo pela boca",t:"Magic",mp:60,lv:60,load:null}],"Grizzmon":[{n:"Lightning Slash",d:"Dano thunder",t:"Physical",mp:18,lv:5,load:15},{n:"Whirlwind",d:"Dano wind",t:"Physical",mp:18,lv:10,load:35},{n:"Hammer Rush",d:"Dano com golpes rápidos",t:"Physical",mp:30,lv:25,load:75},{n:"Spinal Tap",d:"Às vezes paralisa o inimigo",t:"Physical",mp:18,lv:40,load:99},{n:"Maul Attack",d:"Se for atacado primeiro, contra-ataca",t:"Physical",mp:35,lv:60,load:null}],"Growlmon":[{n:"Double Power",d:"Aumenta seu ataque",t:"Support",mp:42,lv:5,load:35},{n:"Double Guard",d:"Aumenta sua defesa",t:"Support",mp:42,lv:10,load:15},{n:"Picking Claw",d:"Ataca e rouba itens",t:"Physical",mp:18,lv:25,load:99},{n:"Counter Alert",d:"Contra-ataque durante a pose",t:"Physical",mp:48,lv:45,load:75},{n:"Plasma Blade",d:"Corte com lâmina eletrificada",t:"Physical",mp:40,lv:60,load:null}],"GuardiAngemon":[{n:"Burn Slash",d:"Corte com lâmina de fogo",t:"Physical",mp:32,lv:15,load:45},{n:"Cold Slash",d:"Corte com lâmina de gelo",t:"Physical",mp:32,lv:30,load:55},{n:"Mega Heal",d:"Cura bastante do seu HP",t:"Heal",mp:74,lv:40,load:65},{n:"Hammer Rush",d:"Dano com golpes rápidos",t:"Physical",mp:30,lv:50,load:75},{n:"Pinpoint Shot",d:"Dano enorme se acertar",t:"Physical",mp:54,lv:70,load:99},{n:"Golden Ripper",d:"Corta os inimigos com espadas",t:"Physical",mp:140,lv:85,load:null}],"Hookmon":[{n:"Wing Buster",d:"Dano enorme vs Digimon Bird",t:"Physical",mp:18,lv:5,load:15},{n:"Bug Buster",d:"Dano enorme vs Digimon Insectoid",t:"Physical",mp:24,lv:10,load:30},{n:"Big Shot",d:"Dano alto se acertar",t:"Physical",mp:20,lv:25,load:99},{n:"Fish Buster",d:"Dano enorme vs Digimon Marine",t:"Physical",mp:30,lv:40,load:75},{n:"Captain Cannon",d:"Dispara o canhão do braço",t:"Physical",mp:38,lv:60,load:null}],"Imperialdramon":[{n:"Mega Heal",d:"Cura bastante do seu HP",t:"Heal",mp:74,lv:5,load:15},{n:"Mechanical Bash",d:"Dano machine forte",t:"Physical",mp:48,lv:25,load:60},{n:"Snowstorm",d:"Espírito de neve causa dano de gelo",t:"Magic",mp:60,lv:50,load:80},{n:"Sylph Storm",d:"Rajada forte de vento",t:"Magic",mp:72,lv:70,load:90},{n:"Mega Crusher",d:"Dispara uma bola enorme",t:"Physical",mp:150,lv:85,load:null}],"Imperialdramon FM":[{n:"Heaven Hit",d:"Dano thunder forte",t:"Physical",mp:32,lv:10,load:30},{n:"Full Heal",d:"Cura quase todo o seu HP",t:"Heal",mp:120,lv:45,load:70},{n:"Counter Strike",d:"Contra-ataque forte durante a pose",t:"Physical",mp:96,lv:60,load:85},{n:"Giga Heal",d:"Cura bastante HP dos aliados",t:"Heal",mp:188,lv:75,load:99},{n:"Giga Crusher",d:"Dispara o canhão laser definitivo",t:"Physical",mp:180,lv:90,load:null}],"Imperialdramon PM":[{n:"Auto Recover",d:"Cura seu HP aos poucos",t:"Heal",mp:82,lv:10,load:40},{n:"Impact Rush",d:"Dano enorme com golpes rápidos",t:"Physical",mp:60,lv:20,load:60},{n:"Erase Magic",d:"Cura todos os status ruins dos aliados",t:"Heal",mp:37,lv:30,load:70},{n:"Soul Plunder",d:"Destrói o inimigo com um spell",t:"Magic",mp:160,lv:50,load:null},{n:"Final Heal",d:"Cura quase todo o HP dos aliados",t:"Heal",mp:240,lv:85,load:null},{n:"Omega Blade",d:"Golpe de espada que destrói Evil",t:"Physical",mp:280,lv:99,load:null}],"Kabuterimon":[{n:"Engergy Leech",d:"Magic que drena HP",t:"Magic",mp:18,lv:5,load:25},{n:"Venom Stab",d:"Dano de veneno mortal",t:"Physical",mp:36,lv:15,load:50},{n:"Hammer Rush",d:"Dano com golpes rápidos",t:"Physical",mp:30,lv:35,load:90},{n:"Energy Drain",d:"Magic que drena bastante HP",t:"Magic",mp:72,lv:60,load:99},{n:"Electro Shocker",d:"Dispara bolas de thunder pela boca",t:"Magic",mp:90,lv:70,load:null}],"Kyubimon":[{n:"Thunder Bolt",d:"Cria uma bola de thunder e dispara",t:"Magic",mp:20,lv:5,load:35},{n:"Ice Blow",d:"Dispara estalactites com dano de gelo",t:"Magic",mp:20,lv:15,load:45},{n:"Thunder Gemini",d:"Cria duas bolas de thunder e dispara",t:"Magic",mp:30,lv:25,load:75},{n:"Ice Shower",d:"Dispara várias estalactites",t:"Magic",mp:48,lv:55,load:99},{n:"Dragon Wheel",d:"Dispara bolas de fogo pelas 9 caudas",t:"Magic",mp:60,lv:60,load:null}],"Kyukimon":[{n:"Heat Cutter",d:"Corte com dano de fogo",t:"Physical",mp:18,lv:5,load:15},{n:"Frost Cutter",d:"Corte com dano de gelo",t:"Physical",mp:18,lv:10,load:30},{n:"Burn Slash",d:"Corte com lâmina de fogo",t:"Physical",mp:32,lv:25,load:50},{n:"Cold Slash",d:"Corte com lâmina de gelo",t:"Physical",mp:32,lv:40,load:80},{n:"Big Shot",d:"Dano alto se acertar",t:"Physical",mp:20,lv:60,load:90},{n:"Blade Twister",d:"Vários cortes com vento",t:"Physical",mp:80,lv:70,load:null}],"MagnaAngemon":[{n:"Air Blast",d:"Dispara bolas de ar",t:"Magic",mp:20,lv:5,load:15},{n:"Small Heal",d:"Cura um pouco do seu HP",t:"Heal",mp:16,lv:10,load:35},{n:"Mega Tornado",d:"Tornado contra um inimigo",t:"Magic",mp:30,lv:25,load:60},{n:"Mega Heal",d:"Cura bastante do seu HP",t:"Heal",mp:74,lv:40,load:80},{n:"Mega Protection",d:"Aumenta a defesa dos aliados",t:"Support",mp:84,lv:50,load:90},{n:"Gate of Destiny",d:"Abre um portal e joga os inimigos fora",t:"Magic",mp:112,lv:70,load:null}],"MaloMyotismon":[{n:"Dark Elemental",d:"Envolve com coluna de fogo maligno",t:"Magic",mp:120,lv:10,load:35},{n:"Crimson Cloud",d:"Dispara vários flashes malignos",t:"Magic",mp:150,lv:20,load:55},{n:"Deadly Poison",d:"Espuma venenosa com magic",t:"Magic",mp:90,lv:30,load:70},{n:"Paralyze Shock",d:"Magic que paralisa por completo",t:"Magic",mp:90,lv:45,load:80},{n:"Dark Field",d:"Fortalece dark, enfraquece thunder",t:"Magic",mp:100,lv:75,load:99},{n:"Melting Blood",d:"Libera energia dark",t:"Magic",mp:210,lv:90,load:null}],"Marsmon":[{n:"Heaven Hit",d:"Dano thunder forte",t:"Physical",mp:32,lv:15,load:45},{n:"Vacuum Cannon",d:"Dano wind forte",t:"Physical",mp:48,lv:25,load:55},{n:"Brain Freeze",d:"Paralisa o inimigo",t:"Physical",mp:52,lv:40,load:80},{n:"Misshukikou",d:"Guarda Chi no máximo para o próximo golpe",t:"Support",mp:49,lv:65,load:99},{n:"Mugenhadou",d:"Onda que tenta nocar o inimigo",t:"Physical",mp:148,lv:85,load:null}],"MegaGargomon":[{n:"Mechanical Bash",d:"Dano machine forte",t:"Physical",mp:48,lv:5,load:25},{n:"Magical Cannon",d:"Dispara mísseis gigantes com magic",t:"Magic",mp:72,lv:20,load:60},{n:"God Bombard",d:"Magic de míssil mais poderosa",t:"Magic",mp:120,lv:50,load:null},{n:"Mega Break",d:"Grande queda na speed do inimigo",t:"Support",mp:82,lv:75,load:null},{n:"Giant Missile",d:"Dispara todos os mísseis do corpo",t:"Physical",mp:200,lv:90,load:null}],"MetalGarurumon":[{n:"Mechanical Bash",d:"Dano machine forte",t:"Physical",mp:48,lv:10,load:25},{n:"Twin Missile",d:"Dispara dois mísseis com magic",t:"Magic",mp:64,lv:15,load:55},{n:"Magical Cannon",d:"Dispara mísseis gigantes com magic",t:"Magic",mp:72,lv:45,load:80},{n:"Metal Field",d:"Fortalece metal, enfraquece dark",t:"Magic",mp:100,lv:70,load:90},{n:"Metal Wolf Claw",d:"Bafo de gelo. Ataque magic.",t:"Magic",mp:150,lv:85,load:null}],"MetalGreymon":[{n:"Flame Ball",d:"Dispara bolas de fogo pequenas",t:"Magic",mp:20,lv:5,load:25},{n:"Triple Fire",d:"Dispara três bolas de fogo",t:"Magic",mp:25,lv:15,load:50},{n:"Magic Missile",d:"Dispara mísseis com magic",t:"Magic",mp:56,lv:35,load:80},{n:"Rising Fire",d:"Coluna de fogo no inimigo",t:"Magic",mp:60,lv:60,load:90},{n:"Giga Destroyer",d:"Lança mísseis orgânicos",t:"Magic",mp:90,lv:70,load:null}],"MetalMamemon":[{n:"Metal Attack",d:"Dano machine",t:"Physical",mp:26,lv:5,load:25},{n:"Magic Missile",d:"Dispara mísseis com magic",t:"Magic",mp:56,lv:15,load:55},{n:"Mechanical Bash",d:"Dano machine forte",t:"Physical",mp:48,lv:35,load:80},{n:"Slow Down",d:"Diminui a speed do inimigo",t:"Support",mp:41,lv:45,load:90},{n:"Twin Missile",d:"Dispara dois mísseis com magic",t:"Magic",mp:64,lv:60,load:99},{n:"Energetic Bomb",d:"Dispara bolas de energia machine",t:"Physical",mp:78,lv:70,load:null}],"Myotismon":[{n:"Dark Fear",d:"Arremessa chama maligna no inimigo",t:"Magic",mp:48,lv:10,load:30},{n:"Black Dart",d:"Dispara vários espinhos malignos",t:"Magic",mp:70,lv:25,load:50},{n:"Armor Off",d:"Grande queda na defesa do inimigo",t:"Support",mp:78,lv:40,load:60},{n:"Confuse Gas",d:"Magic que confunde o inimigo",t:"Magic",mp:40,lv:65,load:90},{n:"Soul Snatcher",d:"Drena a alma com magic",t:"Magic",mp:50,lv:80,load:95},{n:"Grisly Wing",d:"Diminui o ataque do inimigo",t:"Magic",mp:90,lv:85,load:null}],"Omnimon":[{n:"Flame Breath",d:"Envolve o inimigo com bafo de fogo",t:"Magic",mp:72,lv:10,load:25},{n:"Giga Fire",d:"Magic que dispara 3 bolas de fogo",t:"Magic",mp:90,lv:35,load:70},{n:"Inferno",d:"Colunas de fogo contínuas",t:"Magic",mp:200,lv:60,load:85},{n:"T-Sword",d:"Paralisa com Grey Sword",t:"Physical",mp:250,lv:99,load:null}],"Paildramon":[{n:"Metal Attack",d:"Dano machine",t:"Physical",mp:26,lv:5,load:15},{n:"Ice Shower",d:"Dispara várias estalactites",t:"Magic",mp:48,lv:10,load:40},{n:"Mega Tornado",d:"Tornado contra um inimigo",t:"Magic",mp:30,lv:25,load:60},{n:"Speed Up",d:"Aumenta sua speed",t:"Support",mp:48,lv:55,load:90},{n:"Anti-Paralysis",d:"Cura a paralisia em você",t:"Heal",mp:8,lv:65,load:99},{n:"Desperado Blaster",d:"Dispara rápido 2 ondas de energia",t:"Physical",mp:84,lv:70,load:null}],"Phoenixmon":[{n:"Full Heal",d:"Cura quase todo o seu HP",t:"Support",mp:120,lv:10,load:30},{n:"Final Heal",d:"Cura quase todo o HP dos aliados",t:"Support",mp:240,lv:40,load:70},{n:"Erase Magic",d:"Cura todos os status ruins dos aliados",t:"Support",mp:37,lv:65,load:80},{n:"Auto Recovery",d:"Cura seu HP aos poucos",t:"Support",mp:82,lv:75,load:99},{n:"Crimson Flame",d:"Revive todos os aliados com HP máximo",t:"Support",mp:200,lv:90,load:null}],"Rosemon":[{n:"Grand Wave",d:"Onda mágica contra o inimigo",t:"Magic",mp:72,lv:10,load:30},{n:"Erase Poison",d:"Cura todo o veneno dos aliados",t:"Heal",mp:12,lv:20,load:55},{n:"Erase Paralysis",d:"Cura toda a paralisia dos aliados",t:"Heal",mp:12,lv:25,load:60},{n:"Water Field",d:"Fortalece water, enfraquece fire",t:"Magic",mp:100,lv:50,load:80},{n:"Anti-Magic",d:"Cura todos os status ruins em você",t:"Support",mp:20,lv:70,load:90},{n:"Thorn Whipping",d:"Envenena o inimigo com chicote de espinhos",t:"Physical",mp:130,lv:85,load:null}],"Sakuyamon":[{n:"Electro Bolt",d:"Bola grande de thunder no inimigo",t:"Magic",mp:48,lv:5,load:25},{n:"Snowstorm",d:"Espírito de neve causa dano de gelo",t:"Magic",mp:60,lv:15,load:35},{n:"Lighting Bolt",d:"Bola enorme de thunder no inimigo",t:"Magic",mp:72,lv:40,load:80},{n:"Giga Freeze",d:"Envolve o inimigo com gelo enorme",t:"Magic",mp:72,lv:50,load:90},{n:"Ice Field",d:"Fortalece ice, enfraquece wind",t:"Magic",mp:100,lv:65,load:99},{n:"KonguKaimandara",d:"Ataque magic contra ghouls",t:"",mp:150,lv:85,load:null}],"Seraphimon":[{n:"Mega Tornado",d:"Tornado contra um inimigo",t:"Magic",mp:30,lv:5,load:15},{n:"Mega Heal",d:"Cura bastante do seu HP",t:"Heal",mp:74,lv:20,load:45},{n:"Sylph Storm",d:"Rajada forte de vento",t:"Magic",mp:72,lv:35,load:65},{n:"Giga Heal",d:"Cura bastante HP dos aliados",t:"Heal",mp:188,lv:55,load:99},{n:"Wind Field",d:"Fortalece wind, enfraquece water",t:"Magic",mp:100,lv:75,load:95},{n:"Seven Heavens",d:"Dispara 7 bolas contra Digimon Evil",t:"Physical",mp:100,lv:85,load:null}],"SkullGreymon":[{n:"Flame Ball",d:"Dispara bolas de fogo pequenas",t:"Magic",mp:20,lv:5,load:25},{n:"Dark Matter",d:"Bola de fogo maligna com dano dark",t:"Magic",mp:20,lv:15,load:80},{n:"Triple Fire",d:"Dispara três bolas de fogo",t:"Magic",mp:25,lv:35,load:55},{n:"Black Thorn",d:"Dano dark com espinhos malignos",t:"Magic",mp:60,lv:45,load:90}],"Stingmon":[{n:"Poison Bites",d:"Dano de veneno",t:"Physical",mp:18,lv:10,load:25},{n:"Energy Leech",d:"Magic que drena HP",t:"Magic",mp:18,lv:15,load:45},{n:"Panic Bites",d:"Dano de confusão",t:"Physical",mp:18,lv:35,load:75},{n:"Venom Stab",d:"Dano de veneno mortal",t:"Physical",mp:36,lv:55,load:99},{n:"Spiking Strike",d:"Espeta o inimigo com o espinho",t:"Physical",mp:36,lv:60,load:null}],"Taomon":[{n:"Thunder Gemini",d:"Cria duas bolas de thunder e dispara",t:"Magic",mp:30,lv:5,load:15},{n:"Ice Shower",d:"Dispara várias estalactites",t:"Magic",mp:48,lv:10,load:35},{n:"Electro Bolt",d:"Bola grande de thunder no inimigo",t:"Magic",mp:48,lv:25,load:65},{n:"Snow storm",d:"Espírito de neve causa dano de gelo",t:"Magic",mp:60,lv:45,load:80},{n:"Thunder Field",d:"Fortalece thunder, enfraquece metal",t:"Magic",mp:100,lv:55,load:90},{n:"Bonhitsusen",d:"Dano enorme em ghouls",t:"Physical",mp:80,lv:70,load:null}],"WarGreymon":[{n:"Flame Lance",d:"Dispara um feixe de fogo",t:"Magic",mp:48,lv:5,load:25},{n:"Flame Breath",d:"Envolve o inimigo com bafo de fogo",t:"Magic",mp:72,lv:35,load:75},{n:"Rising Fire",d:"Coluna de fogo no inimigo",t:"Magic",mp:60,lv:45,load:65},{n:"Twin Missile",d:"Dispara dois mísseis com magic",t:"Magic",mp:64,lv:60,load:90},{n:"Giga Fire",d:"Magic que dispara 3 bolas de fogo",t:"Magic",mp:90,lv:80,load:99},{n:"Terra Force",d:"Arremessa uma bola enorme de energia",t:"Physical",mp:140,lv:85,load:null}],"WarGrowlmon":[{n:"Picking Claw",d:"Ataca e rouba itens",t:"Physical",mp:18,lv:5,load:15},{n:"Counter Alert",d:"Contra-ataque durante a pose",t:"Physical",mp:48,lv:10,load:35},{n:"Mega Protection",d:"Aumenta a defesa dos aliados",t:"Support",mp:84,lv:25,load:50},{n:"Mega Strength",d:"Aumenta o ataque dos aliados",t:"Support",mp:84,lv:45,load:80},{n:"Speed Up",d:"Aumenta sua speed",t:"Support",mp:48,lv:60,load:90},{n:"Atomic Blaster",d:"Queima o inimigo com laser de fogo",t:"Magic",mp:90,lv:70,load:null}],"Guilmon":[{n:"Pyro Sphere",d:"Dispara bolas de fogo no inimigo",t:"Magic",mp:30,lv:1,load:null}],"Kotemon":[{n:"Hot Head",d:"Corte de espada com ataque de fogo",t:"Physical",mp:20,lv:1,load:null}],"Kumamon":[{n:"Bear Fist",d:"Soca o peito do inimigo",t:"Physical",mp:20,lv:1,load:null}],"Monmon":[{n:"Swing Swing",d:"Mira no ponto fraco com estilingue",t:"Physical",mp:20,lv:1,load:null}],"Patamon":[{n:"Boom Bubble",d:"Solta de uma vez o ar inspirado",t:"Magic",mp:30,lv:1,load:null}],"Renamon":[{n:"Diamond Storm",d:"Cria folhas de gelo e dispara",t:"Magic",mp:30,lv:1,load:null}],"Veemon":[{n:"Vee Headbutt",d:"Cabeçada forte",t:"Physical",mp:22,lv:1,load:null}]};
+const PARTNERS={"Agumon":{"id":"Agumon","label":"Agumon","packs":["Power"],"dna":{"combinedLv":"30–59","dri":"Tyranno Valley (East) — Johann, suba a segunda escada e vire à direita","ultimate":"MetalGreymon","ultimateMap":"Bulk Swamp (South) — do lado de fora de South Station","steps":["Se você escolheu o pacote Power no início, Agumon já está com você. Pode pular a missão DRI.","Depois de vencer o líder Seiryu, vá até Tyranno Valley e fale com Johann.","Deixe a soma dos níveis dos Digimon da equipe entre 30 e 59.","Aceite a missão da DDNA de MetalGreymon.","Derrote MetalGreymon em Bulk Swamp.","Volte até Johann para receber Agumon."],"notes":[]},"digimon":[{"id":"Agumon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["Greymon","MetalGreymon","WarGrowlmon","WarGreymon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"Kabuterimon Lv 20"},{"text":"Intelligence 300","stat":true}],"unlocks":["MagnaAngemon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"MagnaAngemon Lv 30"},{"text":"Dark 250","stat":true}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"WarGreymon Lv 20"}],"unlocks":["Kyukimon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"MetalGreymon Lv 30"},{"text":"Ice 320","stat":true}],"unlocks":["Paildramon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"Agumon Lv 5"}],"unlocks":["Growlmon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"MetalGarurumon Lv 30"},{"text":"Defense 400","stat":true}],"unlocks":["GrapLeomon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"Greymon Lv 20"}],"unlocks":["WarGrowlmon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"WarGrowlmon Lv 30"}],"unlocks":["Armormon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 50"}],"unlocks":["Angemon","GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"MetalGreymon Lv 20"},{"text":"Spirit 300","stat":true}],"unlocks":["Taomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"WarGreymon Lv 30"},{"text":"Speed 260","stat":true}],"unlocks":["Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"MagnaAngemon Lv 20"}],"unlocks":["Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Hookmon Lv 50"}],"unlocks":["Cannondramon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"MetalGarurumon Lv 20"}],"unlocks":[]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 50"}],"unlocks":["Marsmon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Dinohumon Lv 50"}],"unlocks":["GuardiAngemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 50"}],"unlocks":["Devimon","Angewomon","Seraphimon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Agumon Lv 20"}],"unlocks":["ExVeemon","Kyubimon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"WarGreymon Lv 10"}],"unlocks":["MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 40"}],"unlocks":["MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"ExVeemon Lv 5"},{"text":"Stingmon Lv 5"}],"unlocks":["Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 130","stat":true}],"unlocks":["BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 40"}],"unlocks":["Sakuyamon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 40"},{"text":"Agumon Lv 15"}],"unlocks":["Hookmon","Gallantmon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Armormon Lv 99"}],"unlocks":[]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"WarGrowlmon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kyukimon Lv 99"}],"unlocks":[]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Paildramon Lv 50"}],"unlocks":["GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"GrapLeomon Lv 99"}],"unlocks":[]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 40"}],"unlocks":["Grizzmon","Digitamamon","MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 99"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Taomon Lv 99"}],"unlocks":[]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"MagnaAngemon Lv 99"}],"unlocks":[]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"Agumon Lv 40"}],"unlocks":["Dinohumon","Stingmon","MetalMamemon","Omnimon"]}]},"Guilmon":{"id":"Guilmon","label":"Guilmon","packs":["Maniac"],"dna":{"combinedLv":"30–59","dri":"Seiryu City (East) — Jimmy, no extremo nordeste, descendo a escada","ultimate":"WarGrowlmon","ultimateMap":"Ether Jungle (South) — caminho escondido perto de Jungle Shrine","steps":["Se você escolheu o pacote Maniac no início, Guilmon já está com você. Pode pular a missão DRI.","Depois de vencer o líder Seiryu, encontre Jimmy em Seiryu City, descendo a escada no nordeste.","Deixe a soma dos níveis da equipe entre 30 e 59.","Aceite a missão da DDNA de WarGrowlmon.","Derrote WarGrowlmon em Ether Jungle. Ele fica em um caminho escondido perto de Jungle Shrine.","Volte até Jimmy para receber Guilmon."],"notes":[]},"digimon":[{"id":"Guilmon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["Growlmon","WarGrowlmon","Gallantmon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"WarGrowlmon Lv 20"},{"text":"Spirit 180","stat":true}],"unlocks":["MagnaAngemon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"GrapLeomon Lv 20"},{"text":"Dark 160","stat":true}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"MetalGreymon Lv 20"},{"text":"Strength 400","stat":true}],"unlocks":["Hookmon","Kyukimon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"Gallantmon Lv 20"},{"text":"Wind 300","stat":true}],"unlocks":["Paildramon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"Gallantmon Lv 30"},{"text":"Fire 280","stat":true}],"unlocks":["MetalGreymon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"Gallantmon Lv 10"}],"unlocks":["GrapLeomon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"Guilmon Lv 5"}],"unlocks":["Stingmon","MetalMamemon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"Dinohumon Lv 20"}],"unlocks":["Armormon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 40"}],"unlocks":["GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"Angewomon Lv 10"},{"text":"Spirit 200","stat":true}],"unlocks":["Taomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"Growlmon Lv 30"},{"text":"Lightning 80","stat":true}],"unlocks":["Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"WarGrowlmon Lv 40"},{"text":"Water 140","stat":true}],"unlocks":["Kyubimon","Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Hookmon Lv 50"}],"unlocks":["Cannondramon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"WarGrowlmon Lv 30"},{"text":"Dark 120","stat":true}],"unlocks":[]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 50"}],"unlocks":["Devimon","Marsmon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Dinohumon Lv 50"}],"unlocks":["GuardiAngemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 50"}],"unlocks":["Seraphimon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 40"}],"unlocks":["Dinohumon","WarGreymon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 20"},{"text":"Defense 100","stat":true}],"unlocks":["MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 50"}],"unlocks":["MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"ExVeemon Lv 5"},{"text":"Stingmon Lv 5"}],"unlocks":["Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 160","stat":true}],"unlocks":["BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 40"}],"unlocks":["Sakuyamon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Guilmon Lv 20"}],"unlocks":["Angemon","Angewomon","Digitamamon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Armormon Lv 99"}],"unlocks":[]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"Guilmon Lv 40"}],"unlocks":["ExVeemon","Greymon","Grizzmon","Beelzemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kyukimon Lv 99"}],"unlocks":[]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Paildramon Lv 50"}],"unlocks":["GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"GrapLeomon Lv 99"}],"unlocks":[]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 40"},{"text":"Machine 190","stat":true}],"unlocks":["MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 99"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Taomon Lv 99"}],"unlocks":[]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"MagnaAngemon Lv 99"}],"unlocks":[]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"MetalGreymon Lv 99"}],"unlocks":["Omnimon"]}]},"Veemon":{"id":"Veemon","label":"Veemon","packs":[],"dna":{"combinedLv":"1–29 (one Digimon in party)","dri":"Protocol Ruins — Bob, perto de onde Baronmon e o líder Seiryu ficavam","ultimate":"Paildramon","ultimateMap":"Bulk Bridge (South)","steps":["Conquiste a Byakko Badge primeiro. Veemon só pode ser obtido pela missão DRI.","No Digimon Lab, deixe apenas um Digimon abaixo do nível 30 na equipe.","Fale com Bob em Protocol Ruins.","Aceite a missão da DDNA de Paildramon.","Derrote Paildramon em Bulk Bridge.","Volte até Bob para receber Veemon."],"notes":["A equipe precisa ter apenas um Digimon, e ele deve estar abaixo do nível 30."]},"digimon":[{"id":"Veemon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["ExVeemon","Paildramon","Imperialdramon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"Paildramon Lv 45"},{"text":"Intelligence 230","stat":true}],"unlocks":["MagnaAngemon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"Paildramon Lv 25"},{"text":"Dark 160","stat":true}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"Imperialdramon Lv 30"}],"unlocks":["Kyukimon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"Veemon Lv 5"}],"unlocks":["Stingmon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"Paildramon Lv 35"},{"text":"Defense 200","stat":true}],"unlocks":["MetalGreymon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"Imperialdramon Lv 45"},{"text":"Defense 200","stat":true}],"unlocks":["GrapLeomon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"Paildramon Lv 30"},{"text":"Fire 90","stat":true}],"unlocks":["WarGrowlmon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"Imperialdramon Lv 35"},{"text":"Machine 160","stat":true}],"unlocks":["Armormon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 40"}],"unlocks":["GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"Paildramon Lv 40"},{"text":"Ice 200","stat":true}],"unlocks":["Taomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"ExVeemon Lv 30"}],"unlocks":["Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"MagnaAngemon Lv 20"}],"unlocks":["Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Hookmon Lv 50"}],"unlocks":["Cannondramon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"Imperialdramon Lv 20"},{"text":"Intelligence 300","stat":true}],"unlocks":[]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 50"}],"unlocks":["Marsmon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Dinohumon Lv 50"}],"unlocks":["GuardiAngemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 50"}],"unlocks":["Angewomon","Seraphimon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 40"}],"unlocks":["WarGreymon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"Paildramon Lv 20"},{"text":"Machine 100","stat":true}],"unlocks":["MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 40"}],"unlocks":["MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"Veemon Lv 20"},{"text":"Stingmon Lv 5"}],"unlocks":["Angemon","Devimon","Greymon","Growlmon","Kyubimon","MetalMamemon","Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 190","stat":true}],"unlocks":["BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 50"}],"unlocks":["Sakuyamon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 50"}],"unlocks":["Gallantmon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Armormon Lv 99"}],"unlocks":[]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"WarGrowlmon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kyukimon Lv 99"}],"unlocks":[]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Veemon Lv 40"},{"text":"Paildramon Lv 50"}],"unlocks":["Dinohumon","Grizzmon","Hookmon","Digitamamon","GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"GrapLeomon Lv 99"}],"unlocks":[]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 40"},{"text":"Machine 140","stat":true}],"unlocks":["MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 99"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Taomon Lv 99"}],"unlocks":[]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"MagnaAngemon Lv 99"}],"unlocks":[]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"MetalGreymon Lv 99"}],"unlocks":["Omnimon"]}]},"Patamon":{"id":"Patamon","label":"Patamon","packs":["Balanced","Maniac"],"dna":{"combinedLv":"45–74","dri":"Central Park — Kazuki, a oeste do cais, depois da Suzaku Badge","ultimate":"MagnaAngemon","ultimateMap":"South Badlands (West)","steps":["Se você escolheu Balanced ou Maniac no início, Patamon já está com você. Pode pular a missão DRI.","Depois de conquistar a Suzaku Badge, fale com Kazuki perto do cais de Central Park.","Deixe a soma dos níveis da equipe entre 45 e 74.","Aceite a missão da DDNA de MagnaAngemon.","Derrote MagnaAngemon em South Badlands.","Volte até Kazuki para receber Patamon."],"notes":[]},"digimon":[{"id":"Patamon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["Angemon","MagnaAngemon","Rosemon","Seraphimon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"Patamon Lv 5"}],"unlocks":["Angewomon","Digitamamon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"Armormon Lv 30"},{"text":"Dark 300","stat":true}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"Growlmon Lv 20"}],"unlocks":["Kyukimon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"Growlmon Lv 30"},{"text":"Wind 320","stat":true}],"unlocks":["Paildramon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"MagnaAngemon Lv 30"},{"text":"Fire 140","stat":true}],"unlocks":["MetalGreymon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"Growlmon Lv 40"},{"text":"Strength 240","stat":true}],"unlocks":["GrapLeomon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"MetalMamemon Lv 20"}],"unlocks":["Dinohumon","ExVeemon","Grizzmon","WarGrowlmon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"Seraphimon Lv 10"}],"unlocks":["Armormon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 40"}],"unlocks":["GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"Armormon Lv 40"},{"text":"Spirit 300","stat":true}],"unlocks":["Taomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"MagnaAngemon Lv 20"},{"text":"Lightning 100","stat":true}],"unlocks":["Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 30"},{"text":"Intelligence 180","stat":true}],"unlocks":["Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Hookmon Lv 50"}],"unlocks":["Devimon","Kyubimon","MetalMamemon","Cannondramon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 20"},{"text":"Strength 100","stat":true}],"unlocks":[]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 50"}],"unlocks":["Marsmon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Dinohumon Lv 50"}],"unlocks":["GuardiAngemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Patamon Lv 20"}],"unlocks":["Greymon","Stingmon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 40"}],"unlocks":["WarGreymon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"Armormon Lv 20"},{"text":"Machine 140","stat":true}],"unlocks":["Growlmon","MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 50"}],"unlocks":["MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"ExVeemon Lv 5"},{"text":"Stingmon Lv 5"}],"unlocks":["Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 220","stat":true}],"unlocks":["BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 40"}],"unlocks":["Sakuyamon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 50"}],"unlocks":["Gallantmon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Armormon Lv 99"}],"unlocks":[]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"WarGrowlmon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kyukimon Lv 99"}],"unlocks":[]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Paildramon Lv 50"}],"unlocks":["GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"GrapLeomon Lv 99"}],"unlocks":[]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 50"}],"unlocks":["MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 99"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"},{"text":"Patamon Lv 15"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Taomon Lv 99"}],"unlocks":[]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"Patamon Lv 40"}],"unlocks":["Hookmon"]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"MetalGreymon Lv 99"}],"unlocks":["Omnimon"]}]},"Renamon":{"id":"Renamon","label":"Renamon","packs":["Balanced","Power"],"dna":{"combinedLv":"45–74","dri":"Central Park — telhado do Leomon's Gym, depois da líder Suzaku","ultimate":"Taomon","ultimateMap":"North Badlands West (West)","steps":["Se você escolheu Balanced ou Power no início, Renamon já está com você. Pode pular a missão DRI.","Depois de vencer a líder Suzaku, suba até o telhado do Leomon's Gym em Central Park.","Deixe a soma dos níveis da equipe entre 45 e 74.","Aceite a missão da DDNA de Taomon.","Derrote Taomon em North Badlands West.","Volte até o agente DRI no telhado do ginásio para receber Renamon."],"notes":[]},"digimon":[{"id":"Renamon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["Kyubimon","Taomon","WarGrowlmon","Rosemon","Sakuyamon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"Sakuyamon Lv 30"},{"text":"Wind 150","stat":true}],"unlocks":["MagnaAngemon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"Sakuyamon Lv 10"}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"Grizzmon Lv 20"}],"unlocks":["Kyukimon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"Taomon Lv 20"},{"text":"Wind 120","stat":true}],"unlocks":["Paildramon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"Grizzmon Lv 30"},{"text":"Defense 280","stat":true}],"unlocks":["MetalGreymon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"Myotismon Lv 20"},{"text":"Strength 300","stat":true}],"unlocks":["Dinohumon","Greymon","GrapLeomon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"Stingmon Lv 20"},{"text":"Defense 80","stat":true}],"unlocks":["WarGrowlmon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"Kyukimon Lv 20"}],"unlocks":["Armormon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 40"}],"unlocks":["GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"Renamon Lv 5"}],"unlocks":["Stingmon","Angewomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"Kyubimon Lv 20"},{"text":"Strength 80","stat":true}],"unlocks":["Growlmon","Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 30"},{"text":"Spirit 160","stat":true}],"unlocks":["Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Hookmon Lv 50"}],"unlocks":["Cannondramon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"Sakuyamon Lv 20"},{"text":"Intelligence 400","stat":true}],"unlocks":[]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 50"}],"unlocks":["Marsmon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Dinohumon Lv 50"}],"unlocks":["Hookmon","GuardiAngemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 50"}],"unlocks":["Seraphimon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 40"}],"unlocks":["WarGreymon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"Taomon Lv 30"},{"text":"Machine 100","stat":true}],"unlocks":["MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 50"}],"unlocks":["Grizzmon","MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"ExVeemon Lv 5"},{"text":"Stingmon Lv 5"}],"unlocks":["Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 250","stat":true}],"unlocks":["BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Renamon Lv 20"}],"unlocks":["ExVeemon","MetalMamemon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 40"},{"text":"Renamon Lv 25"}],"unlocks":["Gallantmon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Armormon Lv 99"}],"unlocks":[]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"WarGrowlmon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kyukimon Lv 99"}],"unlocks":[]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Paildramon Lv 50"}],"unlocks":["GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"GrapLeomon Lv 99"}],"unlocks":[]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 40"},{"text":"Machine 120","stat":true}],"unlocks":["MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 99"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"},{"text":"Renamon Lv 15"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Renamon Lv 40"}],"unlocks":["Angemon","Devimon","Digitamamon"]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"MagnaAngemon Lv 99"}],"unlocks":[]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"MetalGreymon Lv 99"}],"unlocks":["Omnimon"]}]},"Kotemon":{"id":"Kotemon","label":"Kotemon","packs":["Balanced"],"dna":{"combinedLv":"60–90","dri":"Mobius Desert (West) — Ken, entre os três pilares da primeira tela","ultimate":"Kyukimon","ultimateMap":"Suzaku UG Lake (South)","steps":["Se você escolheu o pacote Balanced no início, Kotemon já está com você. Pode pular a missão DRI.","Fale com Ken entre os pilares de Mobius Desert.","Deixe a soma dos níveis da equipe entre 60 e 90.","Aceite a missão da DDNA de Kyukimon.","Derrote Kyukimon em Suzaku UG Lake.","Volte até Ken para receber Kotemon."],"notes":[]},"digimon":[{"id":"Kotemon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["Dinohumon","Kyukimon","MetalGreymon","GuardiAngemon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"Taomon Lv 30"},{"text":"Wind 200","stat":true}],"unlocks":["MagnaAngemon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"Digitamamon Lv 20"}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"Kotemon Lv 5"}],"unlocks":["Greymon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"Greymon Lv 10"}],"unlocks":["Paildramon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"Dinohumon Lv 20"}],"unlocks":["ExVeemon","MetalGreymon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"Growlmon Lv 30"},{"text":"Speed 280","stat":true}],"unlocks":["GrapLeomon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"Taomon Lv 50"},{"text":"Fire 200","stat":true}],"unlocks":["Grizzmon","Hookmon","WarGrowlmon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"Growlmon Lv 20"}],"unlocks":["Armormon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 40"}],"unlocks":["GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"GuardiAngemon Lv 20"}],"unlocks":["Taomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"GuardiAngemon Lv 10"}],"unlocks":["Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"Taomon Lv 20"},{"text":"Water 360","stat":true}],"unlocks":["Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Hookmon Lv 50"}],"unlocks":["Cannondramon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"Taomon Lv 40"},{"text":"Intelligence 280","stat":true}],"unlocks":["Devimon"]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 50"}],"unlocks":["Marsmon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Kotemon Lv 20"}],"unlocks":["MetalMamemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 50"}],"unlocks":["Seraphimon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 40"},{"text":"Kotemon Lv 15"}],"unlocks":["WarGreymon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"Kyukimon Lv 20"},{"text":"Machine 140","stat":true}],"unlocks":["MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 40"}],"unlocks":["MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"ExVeemon Lv 5"},{"text":"Stingmon Lv 5"}],"unlocks":["Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 140","stat":true}],"unlocks":["BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 40"}],"unlocks":["Angemon","Growlmon","Angewomon","Digitamamon","Sakuyamon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 50"}],"unlocks":["Gallantmon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Armormon Lv 99"}],"unlocks":[]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"WarGrowlmon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kotemon Lv 40"}],"unlocks":["Kyubimon","Stingmon"]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Paildramon Lv 50"}],"unlocks":["GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"GrapLeomon Lv 99"}],"unlocks":[]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 40"},{"text":"Machine 200","stat":true}],"unlocks":["MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 90"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Taomon Lv 99"}],"unlocks":[]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"MagnaAngemon Lv 99"}],"unlocks":[]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"MetalGreymon Lv 99"}],"unlocks":["Omnimon"]}]},"Kumamon":{"id":"Kumamon","label":"Kumamon","packs":["Maniac"],"dna":{"combinedLv":"60–90","dri":"Mobius Desert — Yuji, uma tela a oeste e depois ao sul da entrada","ultimate":"GrapLeomon","ultimateMap":"Sul de Ether Jungle — mergulhe com Submarimon a partir de Phoenix Bay","steps":["Se você escolheu o pacote Maniac no início, Kumamon já está com você. Pode pular a missão DRI.","Encontre Yuji em Mobius Desert: siga para oeste e depois para o sul a partir da entrada.","Deixe a soma dos níveis da equipe entre 60 e 90.","Aceite a missão da DDNA de GrapLeomon.","Use Submarimon para mergulhar em Phoenix Bay, saia no sul de Ether Jungle e derrote GrapLeomon.","Volte até Yuji para receber Kumamon."],"notes":["Você precisa de Submarimon para chegar até GrapLeomon pelo caminho subaquático."]},"digimon":[{"id":"Kumamon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["Grizzmon","GrapLeomon","Taomon","Marsmon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"Myotismon Lv 20"},{"text":"Wind 280","stat":true}],"unlocks":["Angewomon","MagnaAngemon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"Marsmon Lv 10"}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"MetalGreymon Lv 30"}],"unlocks":["Kyukimon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"Kyubimon Lv 10"}],"unlocks":["Paildramon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"WarGrowlmon Lv 20"},{"text":"Fire 200","stat":true}],"unlocks":["MetalGreymon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"Kumamon Lv 5"}],"unlocks":["Kyubimon","Digitamamon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"Marsmon Lv 20"},{"text":"Strength 480","stat":true}],"unlocks":["WarGrowlmon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"Kabuterimon Lv 20"}],"unlocks":["Armormon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 50"}],"unlocks":["Hookmon","GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"Grizzmon Lv 20"},{"text":"Spirit 80","stat":true}],"unlocks":["ExVeemon","Taomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"Marsmon Lv 30"},{"text":"Speed 400","stat":true}],"unlocks":["Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 20"},{"text":"Water 280","stat":true}],"unlocks":["Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Hookmon Lv 50"}],"unlocks":["Cannondramon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 30"},{"text":"Intelligence 80","stat":true}],"unlocks":[]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Kumamon Lv 20"}],"unlocks":["MetalMamemon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Dinohumon Lv 50"}],"unlocks":["GuardiAngemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 50"}],"unlocks":["Seraphimon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 40"}],"unlocks":["Dinohumon","WarGreymon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"GrapLeomon Lv 20"},{"text":"Machine 150","stat":true}],"unlocks":["MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 50"}],"unlocks":["Angemon","MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"ExVeemon Lv 5"},{"text":"Stingmon Lv 5"}],"unlocks":["Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 160","stat":true}],"unlocks":["BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 40"},{"text":"Kumamon Lv 15"}],"unlocks":["Sakuyamon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 50"}],"unlocks":["Greymon","Gallantmon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Armormon Lv 99"}],"unlocks":[]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"WarGrowlmon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kyukimon Lv 99"}],"unlocks":[]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Paildramon Lv 50"}],"unlocks":["GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"Kumamon Lv 40"}],"unlocks":["Devimon","Growlmon","Stingmon"]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 40"},{"text":"Machine 200","stat":true}],"unlocks":["MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 99"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Taomon Lv 99"}],"unlocks":[]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"MagnaAngemon Lv 99"}],"unlocks":[]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"MetalGreymon Lv 99"}],"unlocks":["Omnimon"]}]},"Monmon":{"id":"Monmon","label":"Monmon","packs":["Power"],"dna":{"combinedLv":"60–90","dri":"Mobius Desert — três telas ao sul e uma a leste","ultimate":"Armormon","ultimateMap":"Duel Island (East) — pela passagem subaquática de Divermon Lake","steps":["Se você escolheu o pacote Power no início, Monmon já está com você. Pode pular a missão DRI.","Encontre o agente DRI de Monmon em Mobius Desert: siga três telas para o sul e uma para o leste.","Deixe a soma dos níveis da equipe entre 60 e 90.","Aceite a missão da DDNA de Armormon.","Mergulhe em Divermon Lake, siga até Duel Island e derrote Armormon.","Volte até o agente DRI para receber Monmon."],"notes":["Para chegar a Duel Island, use a passagem subaquática de Divermon Lake."]},"digimon":[{"id":"Monmon","tier":"Rookie","reqs":[{"text":"Raiz do partner"}],"unlocks":["Hookmon","Armormon","Cannondramon"]},{"id":"Angemon","tier":"Champion","reqs":[{"text":"Armormon Lv 40"},{"text":"Wind 120","stat":true}],"unlocks":["MagnaAngemon"]},{"id":"Devimon","tier":"Champion","reqs":[{"text":"SkullGreymon Lv 20"},{"text":"Spirit 300","stat":true}],"unlocks":["Myotismon"]},{"id":"Dinohumon","tier":"Champion","reqs":[{"text":"MetalGreymon Lv 20"},{"text":"Strength 250","stat":true}],"unlocks":["Kyukimon"]},{"id":"ExVeemon","tier":"Champion","reqs":[{"text":"Hookmon Lv 20"}],"unlocks":["Paildramon"]},{"id":"Greymon","tier":"Champion","reqs":[{"text":"Cannondramon Lv 10"}],"unlocks":["MetalGreymon","SkullGreymon"]},{"id":"Grizzmon","tier":"Champion","reqs":[{"text":"Growlmon Lv 20"},{"text":"Defense 460","stat":true}],"unlocks":["GrapLeomon"]},{"id":"Growlmon","tier":"Champion","reqs":[{"text":"Kyukimon Lv 20"},{"text":"Speed 320","stat":true}],"unlocks":["Grizzmon","WarGrowlmon"]},{"id":"Hookmon","tier":"Champion","reqs":[{"text":"Monmon Lv 5"}],"unlocks":["ExVeemon"]},{"id":"Kabuterimon","tier":"Champion","reqs":[{"text":"Stingmon Lv 50"}],"unlocks":["GranKuwagamon"]},{"id":"Kyubimon","tier":"Champion","reqs":[{"text":"Angewomon Lv 10"},{"text":"Spirit 200","stat":true}],"unlocks":["Taomon"]},{"id":"Stingmon","tier":"Champion","reqs":[{"text":"MetalGreymon Lv 30"},{"text":"Lightning 200","stat":true}],"unlocks":["Kabuterimon","Paildramon"]},{"id":"Angewomon","tier":"Ultimate","reqs":[{"text":"MagnaAngemon Lv 30"},{"text":"Water 110","stat":true}],"unlocks":["Kyubimon","Rosemon"]},{"id":"Armormon","tier":"Ultimate","reqs":[{"text":"Monmon Lv 20"}],"unlocks":["Angemon","Digitamamon","MetalMamemon"]},{"id":"Digitamamon","tier":"Ultimate","reqs":[{"text":"Armormon Lv 30"},{"text":"Strength 160","stat":true}],"unlocks":[]},{"id":"GrapLeomon","tier":"Ultimate","reqs":[{"text":"Grizzmon Lv 50"}],"unlocks":["Marsmon"]},{"id":"Kyukimon","tier":"Ultimate","reqs":[{"text":"Dinohumon Lv 50"}],"unlocks":["Growlmon","GuardiAngemon"]},{"id":"MagnaAngemon","tier":"Ultimate","reqs":[{"text":"Angemon Lv 50"}],"unlocks":["Angewomon","Seraphimon"]},{"id":"MetalGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 40"}],"unlocks":["Dinohumon","Stingmon","WarGreymon"]},{"id":"MetalMamemon","tier":"Ultimate","reqs":[{"text":"Armormon Lv 20"},{"text":"Machine 180","stat":true}],"unlocks":["MetalGarurumon"]},{"id":"Myotismon","tier":"Ultimate","reqs":[{"text":"Devimon Lv 50"}],"unlocks":["MaloMyotismon"]},{"id":"Paildramon","tier":"Ultimate","reqs":[{"text":"ExVeemon Lv 5"},{"text":"Stingmon Lv 5"}],"unlocks":["Imperialdramon"]},{"id":"SkullGreymon","tier":"Ultimate","reqs":[{"text":"Greymon Lv 50"},{"text":"Dark 300","stat":true}],"unlocks":["Devimon","BlackWarGreymon"]},{"id":"Taomon","tier":"Ultimate","reqs":[{"text":"Kyubimon Lv 40"}],"unlocks":["Sakuyamon"]},{"id":"WarGrowlmon","tier":"Ultimate","reqs":[{"text":"Growlmon Lv 50"}],"unlocks":["Gallantmon"]},{"id":"Beelzemon","tier":"Mega","reqs":[{"text":"MaloMyotismon Lv 40"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"BlackWarGreymon","tier":"Mega","reqs":[{"text":"SkullGreymon Lv 99"}],"unlocks":["Diaboromon"]},{"id":"Cannondramon","tier":"Mega","reqs":[{"text":"Monmon Lv 40"}],"unlocks":["Greymon"]},{"id":"Diaboromon","tier":"Mega","reqs":[{"text":"GranKuwagamon Lv 99"},{"text":"BlackWarGreymon Lv 99"}],"unlocks":[]},{"id":"Gallantmon","tier":"Mega","reqs":[{"text":"WarGrowlmon Lv 99"}],"unlocks":["Beelzemon","GuardiAngemon"]},{"id":"GranKuwagamon","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 40"},{"text":"Kabuterimon Lv 40"}],"unlocks":["Diaboromon"]},{"id":"GuardiAngemon","tier":"Mega","reqs":[{"text":"Kyukimon Lv 99"},{"text":"Gallantmon Lv 40"}],"unlocks":[]},{"id":"Imperialdramon","tier":"Mega","reqs":[{"text":"Paildramon Lv 50"}],"unlocks":["GranKuwagamon","Imperialdramon FM"]},{"id":"Imperialdramon FM","tier":"Mega","reqs":[{"text":"Imperialdramon Lv 99"}],"unlocks":["Imperialdramon PM"]},{"id":"Imperialdramon PM","tier":"Mega","reqs":[{"text":"Imperialdramon FM Lv 40"},{"text":"Omnimon Lv 40"}],"unlocks":[]},{"id":"MaloMyotismon","tier":"Mega","reqs":[{"text":"Myotismon Lv 99"}],"unlocks":["Beelzemon"]},{"id":"Marsmon","tier":"Mega","reqs":[{"text":"GrapLeomon Lv 99"}],"unlocks":[]},{"id":"MegaGargomon","tier":"Mega","reqs":[{"text":"MetalGarurumon Lv 99"}],"unlocks":[]},{"id":"MetalGarurumon","tier":"Mega","reqs":[{"text":"MetalMamemon Lv 40"},{"text":"Machine 240","stat":true}],"unlocks":["MegaGargomon","Omnimon"]},{"id":"Omnimon","tier":"Mega","reqs":[{"text":"WarGreymon Lv 40"},{"text":"MetalGarurumon Lv 40"}],"unlocks":["Imperialdramon PM"]},{"id":"Phoenixmon","tier":"Mega","reqs":[{"text":"Rosemon Lv 99"}],"unlocks":[]},{"id":"Rosemon","tier":"Mega","reqs":[{"text":"Angewomon Lv 40"}],"unlocks":["Phoenixmon"]},{"id":"Sakuyamon","tier":"Mega","reqs":[{"text":"Taomon Lv 99"}],"unlocks":[]},{"id":"Seraphimon","tier":"Mega","reqs":[{"text":"MagnaAngemon Lv 99"}],"unlocks":[]},{"id":"WarGreymon","tier":"Mega","reqs":[{"text":"MetalGreymon Lv 99"}],"unlocks":["Omnimon"]}]}};
+const PARTNER_ORDER=["Agumon", "Guilmon", "Veemon", "Patamon", "Renamon", "Kotemon", "Kumamon", "Monmon"];
+const tiers=["Rookie","Champion","Ultimate","Mega"];
+const PARTNER_KEY="dw3-active-partner-v1";
+let activePartner=loadActivePartner();
+let digimon=PARTNERS[activePartner].digimon;
+let byId=Object.fromEntries(digimon.map(d=>[d.id,d]));
+let activeId=activePartner;
+let filter="all";
+let owned=loadOwned();
+
+function ownedKey(partner){return `dw3-${partner.toLowerCase()}-owned-v1`;}
+
+function loadActivePartner(){
+  try{
+    const p=localStorage.getItem(PARTNER_KEY);
+    if(p&&PARTNERS[p])return p;
+  }catch{}
+  return"Agumon";
+}
+
+function saveActivePartner(){
+  localStorage.setItem(PARTNER_KEY,activePartner);
+}
+
+function loadOwned(){
+  try{
+    const raw=localStorage.getItem(ownedKey(activePartner));
+    if(!raw)return new Set();
+    const list=JSON.parse(raw);
+    if(!Array.isArray(list))return new Set();
+    return new Set(list.filter(id=>byId[id]));
+  }catch{
+    return new Set();
+  }
+}
+
+function saveOwned(){
+  localStorage.setItem(ownedKey(activePartner),JSON.stringify([...owned]));
+}
+
+function isOwned(id){return owned.has(id);}
+
+function toggleOwned(id){
+  if(!byId[id])return;
+  if(owned.has(id))owned.delete(id);
+  else owned.add(id);
+  saveOwned();
+  refreshAll();
+}
+
+function clearOwned(){
+  owned.clear();
+  saveOwned();
+  refreshAll();
+}
+
+function setPartner(id){
+  if(!PARTNERS[id]||id===activePartner)return;
+  activePartner=id;
+  saveActivePartner();
+  digimon=PARTNERS[activePartner].digimon;
+  byId=Object.fromEntries(digimon.map(d=>[d.id,d]));
+  activeId=activePartner;
+  filter="all";
+  owned=loadOwned();
+  document.querySelectorAll("#filters button").forEach(b=>b.classList.toggle("active",b.dataset.filter==="all"));
+  renderPartnerTabs();
+  refreshAll();
+}
+
+function refreshAll(){
+  renderOwnedBar();
+  renderBranch();
+  renderTechs();
+  renderDna();
+  renderTree();
+  renderAttrList();
+}
+
+function renderPartnerTabs(){
+  const tabs=document.getElementById("partnerTabs");
+  tabs.innerHTML=PARTNER_ORDER.map(id=>`
+    <button type="button" role="tab" data-partner="${id}" class="${id===activePartner?"active":""}" aria-selected="${id===activePartner}">${id}</button>
+  `).join("");
+  tabs.querySelectorAll("button[data-partner]").forEach(btn=>{
+    btn.addEventListener("click",()=>setPartner(btn.dataset.partner));
+  });
+}
+
+function renderDna(){
+  const panel=document.getElementById("dnaPanel");
+  const p=PARTNERS[activePartner];
+  const d=p.dna;
+  const packText=p.packs.length?`Starter pack: ${p.packs.join(" / ")}`:"Só DRI — não vem em starter pack";
+  panel.innerHTML=`
+    <div class="label">How to obtain</div>
+    <h2 class="dna-title">${p.id}</h2>
+    <div class="dna-meta">
+      <div><strong>Pack</strong>${packText}</div>
+      <div><strong>Combined party level</strong>${d.combinedLv}</div>
+      <div><strong>DRI Agent</strong>${d.dri}</div>
+      <div><strong>DDNA target</strong>${d.ultimate}<br>${d.ultimateMap}</div>
+    </div>
+    <div class="dna-sub">Steps</div>
+    <ol class="dna-steps">${d.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+    ${d.notes && d.notes.length ? `
+    <div class="dna-sub">Notes</div>
+    <ul class="dna-notes">${d.notes.map(n=>`<li>${n}</li>`).join("")}</ul>` : ""}
+  `;
+}
+
+function renderTechs(){
+  const panel=document.getElementById("techPanel");
+  const root=byId[activeId];
+  const list=TECHS[activeId]||[];
+  if(!root){panel.innerHTML="";return;}
+  if(!list.length){
+    panel.innerHTML=`<div class="label">Techniques</div><p class="tech-empty">Sem dados de technique para ${root.id}.</p>`;
+    return;
+  }
+  panel.innerHTML=`
+    <div class="label">Techniques · ${root.id}</div>
+    <p class="hint">Learn = quando esta forma libera a technique · Load = quando outras formas podem equipar</p>
+    <div class="tech-list">
+      ${list.map(tech=>`
+        <div class="tech-item">
+          <span class="tech-name">${tech.n}</span>
+          <div class="tech-levels">
+            <span class="pill learn">Learn Lv ${tech.lv}</span>
+            <span class="pill load">${tech.load==null?"Load —":"Load Lv "+tech.load}</span>
+            <span class="pill mp">MP ${tech.mp}</span>
+          </div>
+          <span class="tech-meta">${tech.t} · ${tech.d}</span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function attrCatalog(){
+  const rows=[];
+  digimon.forEach(d=>{
+    d.reqs.forEach(r=>{
+      if(!r.stat)return;
+      const m=r.text.match(/^(.+?)\s+(\d+)$/);
+      rows.push({
+        key:r.text,
+        attr:m?m[1]:r.text,
+        value:m?Number(m[2]):0,
+        digimon:d.id,
+        tier:d.tier
+      });
+    });
+  });
+  return rows.sort((a,b)=>a.attr.localeCompare(b.attr)||a.value-b.value||a.digimon.localeCompare(b.digimon));
+}
+
+function shortReq(d){return d.reqs.map(r=>r.text).join(" · ");}
+
+function renderOwnedBar(){
+  const bar=document.getElementById("ownedBar");
+  bar.innerHTML=`
+    <span>${activePartner} desbloqueados: <strong>${owned.size}</strong> / ${digimon.length}</span>
+    <span>Clique duas vezes numa forma para marcar</span>
+    ${owned.size?`<button type="button" id="clearOwned">Clear all</button>`:""}
+  `;
+  const clearBtn=document.getElementById("clearOwned");
+  if(clearBtn)clearBtn.addEventListener("click",()=>clearOwned());
+}
+
+function renderAttrList(){
+  const list=document.getElementById("attrList");
+  const catalog=attrCatalog();
+  if(!catalog.length){
+    list.innerHTML=`<p class="hint">Esta árvore não tem gate de status.</p>`;
+    return;
+  }
+  list.innerHTML=catalog.map(a=>`
+    <button type="button" data-goto="${a.digimon}" class="${activeId===a.digimon?"active":""} ${isOwned(a.digimon)?"owned":""}">
+      <span class="stat-name">${a.attr} ${a.value}</span>
+      <span class="stat-meta">${a.digimon} · ${a.tier}${isOwned(a.digimon)?" · desbloqueado":""}</span>
+    </button>
+  `).join("");
+  list.querySelectorAll("button[data-goto]").forEach(btn=>{
+    btn.addEventListener("click",()=>select(btn.dataset.goto));
+    btn.addEventListener("dblclick",e=>{e.preventDefault();toggleOwned(btn.dataset.goto);});
+  });
+}
+
+function getBranch(rootId){
+  const rows=[];
+  const visited=new Set([rootId]);
+  const queue=[{id:rootId,depth:0}];
+  while(queue.length){
+    const cur=queue.shift();
+    const node=byId[cur.id];
+    if(!node)continue;
+    (node.unlocks||[]).forEach(uid=>{
+      if(visited.has(uid))return;
+      visited.add(uid);
+      rows.push({id:uid,depth:cur.depth+1,from:cur.id});
+      queue.push({id:uid,depth:cur.depth+1});
+    });
+  }
+  return rows;
+}
+
+function levelReqText(d){return d.reqs.map(r=>r.text).join(" · ");}
+
+function renderBranch(){
+  const panel=document.getElementById("branchPanel");
+  const root=byId[activeId];
+  if(!root){panel.innerHTML="";return;}
+  const branch=getBranch(activeId);
+  if(!branch.length){
+    panel.innerHTML=`
+      <div class="branch-head">
+        <h2 class="branch-title">Branch from ${root.id}</h2>
+        <span class="branch-count">0 digivolutions</span>
+      </div>
+      <p class="branch-empty">Nenhuma Digivolution permanente a mais sai desta forma.</p>
+    `;
+    return;
+  }
+  const maxDepth=Math.max(...branch.map(b=>b.depth));
+  let depthsHtml="";
+  for(let depth=1;depth<=maxDepth;depth++){
+    const items=branch.filter(b=>b.depth===depth);
+    const label=depth===1?"Direct unlocks":`Step ${depth}`;
+    depthsHtml+=`
+      <div class="branch-depth">
+        <div class="depth-label">${label} <span>· ${items.length}</span></div>
+        <div class="branch-nodes">
+          ${items.map(b=>{
+            const d=byId[b.id];
+            return `
+              <button type="button" data-goto="${b.id}" class="${isOwned(b.id)?"owned":""}">
+                <span class="bn-name">${b.id}</span>
+                <span class="bn-level">${levelReqText(d)}</span>
+                <span class="bn-meta">${d.tier} · <span class="bn-from">de ${b.from}</span>${isOwned(b.id)?" · desbloqueado":""}</span>
+              </button>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  }
+  panel.innerHTML=`
+    <div class="branch-head">
+      <h2 class="branch-title">Branch from ${root.id}</h2>
+      <span class="branch-count">${branch.length} digivolution${branch.length===1?"":"s"} · ${branch.filter(b=>isOwned(b.id)).length} desbloqueados</span>
+    </div>
+    ${depthsHtml}
+  `;
+  panel.querySelectorAll("[data-goto]").forEach(btn=>{
+    btn.addEventListener("click",()=>select(btn.dataset.goto));
+    btn.addEventListener("dblclick",e=>{e.preventDefault();toggleOwned(btn.dataset.goto);});
+  });
+}
+
+function renderTree(){
+  const tree=document.getElementById("tree");
+  const descendants=new Set(getBranch(activeId).map(b=>b.id));
+  tree.innerHTML=tiers.map(tier=>{
+    const nodes=digimon.filter(d=>d.tier===tier);
+    if(!nodes.length)return"";
+    return `
+      <div class="tier ${tier.toLowerCase()}">
+        <div class="tier-label">${tier}</div>
+        <div class="nodes">
+          ${nodes.map(d=>`
+            <button type="button" class="node ${d.id===activeId?"active":""} ${descendants.has(d.id)?"descendant":""} ${isOwned(d.id)?"owned":""} ${filter!=="all"&&d.tier!==filter?"hidden":""}" data-id="${d.id}">
+              <span class="name">${d.id}</span>
+              <span class="req">${shortReq(d)}</span>
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }).join("");
+  tree.querySelectorAll(".node").forEach(btn=>{
+    btn.addEventListener("click",()=>select(btn.dataset.id));
+    btn.addEventListener("dblclick",e=>{e.preventDefault();toggleOwned(btn.dataset.id);});
+  });
+  highlightRelated();
+}
+
+function highlightRelated(){
+  const d=byId[activeId];
+  if(!d)return;
+  const parents=digimon.filter(x=>x.unlocks.includes(activeId)).map(x=>x.id);
+  const related=new Set([...(d.unlocks||[]),...parents]);
+  const descendants=new Set(getBranch(activeId).map(b=>b.id));
+  document.querySelectorAll(".node").forEach(btn=>{
+    const id=btn.dataset.id;
+    btn.classList.toggle("active",id===activeId);
+    btn.classList.toggle("descendant",descendants.has(id));
+    btn.classList.toggle("owned",isOwned(id));
+    btn.classList.toggle("related",related.has(id)&&id!==activeId&&!descendants.has(id));
+  });
+}
+
+function select(id){
+  activeId=id;
+  refreshAll();
+}
+
+document.getElementById("filters").addEventListener("click",e=>{
+  const btn=e.target.closest("button[data-filter]");
+  if(!btn)return;
+  filter=btn.dataset.filter;
+  document.querySelectorAll("#filters button").forEach(b=>b.classList.toggle("active",b===btn));
+  renderTree();
+});
+
+renderPartnerTabs();
+refreshAll();
+</script>
+</body>
+</html>

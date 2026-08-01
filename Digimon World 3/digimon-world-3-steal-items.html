@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digimon World 3 — Steal Items</title>
+<style>
+:root {
+  --bg: #0c1017;
+  --panel: #151c27;
+  --panel2: #1c2635;
+  --text: #edf2f7;
+  --muted: #8fa0b5;
+  --asuka: #4db6ff;
+  --amaterasu: #f0a020;
+  --special: #b388ff;
+  --border: #2a3648;
+  --accent: #3ecf8e;
+}
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+body { -webkit-font-smoothing: antialiased; }
+button, input { font: inherit; }
+button:focus-visible, input:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+}
+button { user-select: none; -webkit-tap-highlight-color: transparent; }
+.doc-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+.doc-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 999px;
+  padding: 0.32rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
+.doc-nav a.current {
+  color: var(--text);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
+}
+.panel-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #3a4a60 transparent;
+}
+.panel-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: #3a4a60;
+  border-radius: 999px;
+}
+.panel-scroll::-webkit-scrollbar-track { background: transparent; }
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse 70% 40% at 0% 0%, rgba(77,182,255,0.1), transparent),
+    radial-gradient(ellipse 50% 35% at 100% 0%, rgba(240,160,32,0.08), transparent),
+    var(--bg);
+  color: var(--text);
+  line-height: 1.45;
+}
+header {
+  padding: 1.25rem 1.5rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
+}
+header h1 {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52rem; line-height: 1.5; }
+.wrap {
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem 2.5rem;
+  display: grid;
+  grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) minmax(200px, 250px);
+  gap: 0.75rem;
+  align-items: start;
+}
+.main-col { min-width: 0; }
+.side-panel {
+  position: sticky;
+  top: 0.75rem;
+  max-height: calc(100vh - 1.5rem);
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.65rem;
+}
+.side-panel .label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0 0 0.45rem;
+}
+.side-panel input {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 7px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.8rem;
+  transition: border-color 0.12s ease;
+}
+.side-panel input:hover,
+.side-panel input:focus { border-color: #4a5d75; }
+.side-panel .list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+.side-panel .type-group {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 700;
+  margin: 0.45rem 0 0.15rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid var(--border);
+}
+.side-panel .type-group:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.side-panel button {
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 7px;
+  padding: 0.38rem 0.45rem;
+  cursor: pointer;
+  font-size: 0.76rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  line-height: 1.2;
+  position: relative;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.side-panel button .name { flex: 1; }
+.side-panel button .count {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+.side-panel button:hover { border-color: #4a5d75; }
+.side-panel button.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.item-index button.owned {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel2));
+}
+.item-index button.owned .name::after {
+  content: " ✓";
+  color: var(--accent);
+}
+.item-index .owned-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.55rem;
+  align-items: center;
+  margin: 0 0 0.5rem;
+  padding: 0.4rem 0.45rem;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.item-index .owned-bar strong { color: var(--accent); }
+.item-index .owned-bar button {
+  margin-left: auto;
+  display: inline-flex;
+  width: auto;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.item-index .owned-bar button:hover { color: var(--text); border-color: #4a5d75; }
+.item-detail h2.owned-item .title-row::after {
+  content: " ✓ obtido";
+  margin-left: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: var(--accent);
+  letter-spacing: 0;
+}
+.side-panel button .tip {
+  display: none;
+  position: absolute;
+  z-index: 40;
+  width: max-content;
+  max-width: 220px;
+  padding: 0.45rem 0.55rem;
+  background: #0a0e14;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  pointer-events: none;
+  white-space: normal;
+}
+.item-index button .tip {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.item-index button .tip::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: var(--border);
+}
+.digimon-index button .tip {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.digimon-index button .tip::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-right-color: var(--border);
+}
+.side-panel button:hover .tip,
+.side-panel button:focus-visible .tip {
+  display: block;
+}
+.item-detail .table-wrap,
+.map-card .table-wrap,
+.item-detail > table,
+.map-card > table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.item-detail table,
+.map-card table { min-width: 560px; }
+.item-detail {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.item-detail h2 {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  font-size: 1.05rem;
+  background: var(--panel2);
+  border-bottom: 1px solid var(--border);
+}
+.item-detail h2 .title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.item-detail h2 .meta {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+.loc { color: #c5d8ea; font-size: 0.86rem; line-height: 1.35; }
+.loc .maps { display: inline; }
+.world-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.12rem 0.35rem;
+  border-radius: 4px;
+  margin-right: 0.35rem;
+}
+.world-tag.asuka { background: color-mix(in srgb, var(--asuka) 22%, transparent); color: var(--asuka); }
+.world-tag.amaterasu { background: color-mix(in srgb, var(--amaterasu) 22%, transparent); color: var(--amaterasu); }
+.world-tag.special { background: color-mix(in srgb, var(--special) 22%, transparent); color: var(--special); }
+.map-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+.map-nav .label {
+  grid-column: 1 / -1;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-top: 0.15rem;
+}
+.map-nav button {
+  text-align: left;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.42rem 0.55rem;
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  min-height: 2.7rem;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.map-nav button .xp {
+  display: block;
+  color: var(--muted);
+  font-size: 0.68rem;
+  margin-top: 0.12rem;
+}
+.map-nav button:hover { border-color: #4a5d75; }
+.map-nav button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+}
+.map-nav button.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--panel));
+}
+.map-card {
+  display: none;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.map-card.visible { display: block; }
+.map-card h2 {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  font-size: 1.05rem;
+  background: var(--panel2);
+  border-bottom: 1px solid var(--border);
+}
+.map-card h2 .meta {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { padding: 0.48rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border); }
+th {
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(0,0,0,0.15);
+}
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+.exp { width: 4.2rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.digimon { font-weight: 650; }
+.item-cell { display: flex; align-items: center; gap: 0.55rem; }
+.item { color: #c5d8ea; white-space: nowrap; }
+.desc { color: var(--muted); font-size: 0.84rem; }
+.type-icon {
+  flex: 0 0 auto;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 7px;
+  display: inline-grid;
+  place-items: center;
+  font-size: 0.78rem;
+  line-height: 1;
+  border: 1px solid transparent;
+}
+.type-icon.consumable { background: color-mix(in srgb, #ff8a65 22%, var(--panel2)); border-color: #ff8a65; color: #ffb39a; }
+.type-icon.accessory { background: color-mix(in srgb, #4fc3f7 22%, var(--panel2)); border-color: #4fc3f7; color: #9adcfb; }
+.type-icon.weapon { background: color-mix(in srgb, #ef5350 22%, var(--panel2)); border-color: #ef5350; color: #ff8a80; }
+.type-icon.chip { background: color-mix(in srgb, #81c784 22%, var(--panel2)); border-color: #81c784; color: #a5d6a7; }
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.85rem;
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.legend span { display: inline-flex; align-items: center; gap: 0.35rem; }
+.note { color: var(--muted); font-size: 0.8rem; margin-top: 0.85rem; }
+@media (max-width: 1280px) {
+  .wrap { grid-template-columns: minmax(180px, 210px) minmax(0, 1fr) minmax(180px, 220px); }
+}
+@media (max-width: 1200px) {
+  .map-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1100px) {
+  .wrap { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+  .main-col { grid-column: 1 / -1; order: 1; }
+  .digimon-index { order: 2; position: static; max-height: 280px; }
+  .item-index { order: 3; position: static; max-height: 280px; }
+  .side-panel button .tip { display: none !important; }
+}
+@media (max-width: 900px) {
+  .map-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  header { padding: 1rem 0.9rem 0.8rem; }
+}
+@media (max-width: 700px) {
+  .wrap { grid-template-columns: 1fr; padding: 0.75rem 0.75rem 2rem; }
+  .map-nav { grid-template-columns: 1fr; }
+  .desc { font-size: 0.78rem; }
+  .digimon-index, .item-index { max-height: 240px; }
+}
+@media (max-width: 520px) {
+  header h1 { font-size: 1.15rem; }
+}
+
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+  margin-bottom: 0.75rem; padding: 0.55rem 0.7rem;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+}
+.chip-row { display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center; }
+.chip-row .lbl {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted); font-weight: 700; margin-right: 0.1rem;
+}
+.chip {
+  border: 1px solid var(--border); background: var(--panel2); color: var(--text);
+  border-radius: 999px; padding: 0.26rem 0.65rem; font-size: 0.74rem; font-weight: 600; cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.chip:hover { border-color: #4a5d75; }
+.chip.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel2));
+}
+.selection-bar {
+  display: none; align-items: center; gap: 0.55rem; flex-wrap: wrap;
+  margin-bottom: 0.75rem; padding: 0.5rem 0.7rem;
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 10px; font-size: 0.82rem;
+}
+.selection-bar.visible { display: flex; }
+.selection-bar .sel-label { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700; }
+.selection-bar .sel-value { font-weight: 650; flex: 1; min-width: 0; }
+.selection-bar .clear-btn {
+  border: 1px solid var(--border); background: var(--panel2); color: var(--text);
+  border-radius: 999px; padding: 0.28rem 0.7rem; font-size: 0.74rem; font-weight: 600; cursor: pointer;
+}
+.selection-bar .clear-btn:hover { border-color: #4a5d75; }
+.boosters-link {
+  display: inline-flex; align-items: center; gap: 0.35rem; margin-left: auto;
+  color: var(--asuka); text-decoration: none; font-weight: 650; font-size: 0.8rem;
+}
+.boosters-link:hover { text-decoration: underline; }
+
+</style>
+</head>
+<body>
+<header>
+  <h1>Steal Items</h1>
+  <p>Filtre pelo nível do Digimon e abra um Digimon ou item nas laterais. Clique duas vezes no item para marcar que já pegou. Os chips de tipo filtram a lista; packs de carta ficam em Boosters.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
+    <a class="current" href="digimon-world-3-steal-items.html">Steal Items</a>
+    <a href="digimon-world-3-boosters.html">Boosters</a>
+    <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a>
+    <a href="digimon-world-3-monster-stats.html">Monster Stats</a>
+    <a href="digimon-world-3-level-exp.html">Level EXP</a>
+    <a href="digimon-world-3-walkthrough.html">Walkthrough</a>
+    <a href="digimon-world-3-routes.html">Routes</a>
+    <a href="digimon-world-3-balance-gdd.html">Balance GDD</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <aside class="side-panel panel-scroll digimon-index" id="digimonIndex">
+    <div class="label">Digimon</div>
+    <input type="search" id="digimonSearch" placeholder="Search Digimon..." autocomplete="off">
+    <div class="list" id="digimonList"></div>
+  </aside>
+  <div class="main-col">
+    <div class="toolbar">
+      <div class="chip-row" id="typeFilters" role="group" aria-label="Item type">
+        <span class="lbl">Items</span>
+        <button type="button" class="chip active" data-type="all">All</button>
+        <button type="button" class="chip" data-type="consumable">🧪 Consumable</button>
+        <button type="button" class="chip" data-type="accessory">💍 Accessory</button>
+        <button type="button" class="chip" data-type="weapon">⚔️ Weapon</button>
+        <button type="button" class="chip" data-type="chip">💎 Chip</button>
+      </div>
+      <a class="boosters-link" href="digimon-world-3-boosters.html">Boosters →</a>
+    </div>
+    <div class="selection-bar" id="selectionBar">
+      <span class="sel-label" id="selLabel">Selected</span>
+      <span class="sel-value" id="selValue"></span>
+      <button type="button" class="clear-btn" id="clearSelection">Clear</button>
+    </div>
+    <nav class="map-nav" id="expNav"></nav>
+    <section id="mapContent"></section>
+  </div>
+  <aside class="side-panel panel-scroll item-index" id="itemIndex">
+    <div class="label">Items</div>
+    <div class="owned-bar" id="ownedBar"></div>
+    <input type="search" id="itemSearch" placeholder="Search items..." autocomplete="off">
+    <div class="list" id="itemList"></div>
+  </aside>
+</div>
+
+<script>
+const TYPES = {
+  consumable: { label: "Consumable", icon: "🧪" },
+  accessory: { label: "Accessory", icon: "💍" },
+  weapon: { label: "Weapon", icon: "⚔️" },
+  chip: { label: "Chip", icon: "💎" }
+};
+
+function getItemType(item) {
+  const n = item.toLowerCase();
+  if (/charge|chaos wave|charm gas|crimson cable|cursed puppet|spider web|tnt ball/.test(n)) return "consumable";
+  if (/chip|tp chip/.test(n)) return "chip";
+  if (/chain saw|drill horn|ghost fang|machine gun|magician|naginata|pulse guard/.test(n)) return "weapon";
+  return "accessory";
+}
+
+function typeBadge(item) {
+  const key = getItemType(item);
+  const t = TYPES[key];
+  return `<span class="type-icon ${key}" title="${t.label}">${t.icon}</span>`;
+}
+
+const ITEM_DESC = {
+  "Bolt Power 1": "Adiciona thunder fraco aos ataques",
+  "Bolt Power 2": "Adiciona thunder aos ataques",
+  "Bolt Power S": "Adiciona thunder forte aos ataques",
+  "Dark Power 1": "Adiciona dark fraco aos ataques",
+  "Dark Power 2": "Adiciona dark aos ataques",
+  "Dark Power S": "Adiciona dark forte aos ataques",
+  "Fire Power 1": "Adiciona fire fraco aos ataques",
+  "Fire Power 2": "Adiciona fire aos ataques",
+  "Fire Power S": "Adiciona fire forte aos ataques",
+  "Ice Power 1": "Adiciona ice fraco aos ataques",
+  "Ice Power 2": "Adiciona ice aos ataques",
+  "Ice Power S": "Adiciona ice forte aos ataques",
+  "Metal Power 1": "Adiciona metal fraco aos ataques",
+  "Metal Power 2": "Adiciona metal aos ataques",
+  "Metal Power S": "Adiciona metal forte aos ataques",
+  "Water Power 1": "Adiciona water fraco aos ataques",
+  "Water Power 2": "Adiciona water aos ataques",
+  "Water Power S": "Adiciona water forte aos ataques",
+  "Wind Power 1": "Adiciona wind fraco aos ataques",
+  "Wind Power 2": "Adiciona wind aos ataques",
+  "Wind Power S": "Adiciona wind forte aos ataques",
+  "Binder Crest": "Inimigos fogem com menos frequência",
+  "Counter Crest": "Contra-ataca automaticamente",
+  "Multi Crest": "Permite acertar 3 vezes seguidas",
+  "Recovery Crest": "Cura aos poucos uma parte pequena de HP em batalha",
+  "Search Crest": "Aumenta a chance de crítico",
+  "Max Charge": "Cura o HP ao máximo",
+  "Power Charge": "Cura 500 de HP",
+  "Super Charge": "Cura 2000 de HP",
+  "Ultra Charge": "Cura 5000 de HP",
+  "Chaos Wave": "Às vezes confunde um aliado",
+  "Charm Gas": "Baixa a defense do inimigo e sobe strength",
+  "Crimson Cable": "Absorve HP do inimigo",
+  "Cursed Puppet": "Baixa defense e strength do inimigo",
+  "Spider Web": "Dificulta o movimento",
+  "TNT Ball": "Dano de fire por pólvora",
+  "HP Proxy": "Reduz um pouco o dano recebido",
+  "HP Mega Proxy": "Reduz o dano recebido",
+  "MP Proxy": "Gasta um pouco menos de MP em tech",
+  "MP Mega Proxy": "Gasta menos MP em tech",
+  "Training Book": "Treino fica um pouco mais fácil",
+  "Power Brace": "Treino fica bem mais fácil",
+  "HP Chip": "Aumenta o HP máximo",
+  "MP Chip": "Aumenta o MP máximo",
+  "Power Chip": "Aumenta Strength",
+  "Armor Chip": "Aumenta Defense",
+  "Mind Chip": "Aumenta Spirit",
+  "Wisdom Chip": "Aumenta Wisdom",
+  "Boost Chip": "Aumenta Speed",
+  "Charisma Chip": "Aumenta Charisma",
+  "Fire Chip": "Aumenta tolerância a Fire",
+  "Water Chip": "Aumenta tolerância a Water",
+  "Ice Chip": "Aumenta tolerância a Ice",
+  "Wind Chip": "Aumenta tolerância a Wind",
+  "Thunder Chip": "Aumenta tolerância a Lightning",
+  "Metal Chip": "Aumenta tolerância a Machine",
+  "Devil Chip": "Aumenta tolerância a Dark",
+  "TP Chip 1": "Aumenta TP em 1",
+  "TP Chip 2": "Aumenta TP em 2",
+  "TP Chip 5": "Aumenta TP em 5",
+  "Chain Saw": "Segura com as duas mãos e corta",
+  "Drill Horn": "Reforçado em formato de broca",
+  "Ghost Fang": "Arma feita de presa de ogre",
+  "Machine Gun": "Arma automática de uma mão",
+  "Magician's Rod": "Cajado de mago",
+  "Naginata": "Arma comum de duas mãos",
+  "Pulse Guard": "Arma defensiva para atacar",
+  "Bit Adapter": "Ganha mais BIT na batalha",
+  "Dance Feather": "Esquiva um pouco melhor",
+  "Dance Wing": "Esquiva melhor",
+  "Exp Adapter": "Ganha mais EXP na batalha",
+  "Glasses": "A mira fica um pouco melhor",
+  "Goggles": "A mira fica melhor",
+  "Hack Sticker": "Steal fica um pouco mais fácil",
+  "Hack System": "Steal fica mais fácil",
+  "OverClocked": "Fica um pouco mais fácil encher a Blast Gauge",
+  "OverLoad": "Fica mais fácil encher a Blast Gauge",
+  "Runner Sandal": "Fuga fica um pouco mais fácil",
+  "Runner Shoes": "Fuga fica mais fácil"
+};
+
+function itemDesc(item) {
+  return ITEM_DESC[item] || "—";
+}
+
+const maps = [
+  { world: "asuka", id: "as-shell-beach", order: 1, name: "Shell Beach", digimon: [
+    { exp: 10, name: "Betamon", item: "Power Charge" },
+    { exp: 40, name: "Coelamon (fishing)", item: "Water Chip" },
+    { exp: 91, name: "Shellmon", item: "Water Chip" }
+  ]},
+  { world: "asuka", id: "as-plug-cape", order: 2, name: "Plug Cape", digimon: [
+    { exp: 10, name: "Betamon", item: "Power Charge" },
+    { exp: 30, name: "Triceramon", item: "TNT Ball" },
+    { exp: 40, name: "Coelamon", item: "Water Chip" },
+    { exp: 40, name: "Coelamon (fishing)", item: "Water Chip" },
+    { exp: 91, name: "Shellmon", item: "Water Chip" },
+    { exp: 112, name: "Tuskmon", item: "Counter Crest" }
+  ]},
+  { world: "asuka", id: "as-central-park", order: 3, name: "Central Park / Wire Forest Entrance", digimon: [
+    { exp: 40, name: "Coelamon (fishing)", item: "Water Chip" },
+    { exp: 150, name: "Green Kuwagamon", item: "Chain Saw" }
+  ]},
+  { world: "asuka", id: "as-wire-forest", order: 4, name: "Wire Forest (West / East)", digimon: [
+    { exp: 10, name: "Betamon", item: "Power Charge" },
+    { exp: 40, name: "Coelamon (fishing)", item: "Water Chip" },
+    { exp: 150, name: "Green Kuwagamon", item: "Chain Saw" }
+  ]},
+  { world: "asuka", id: "as-divermon", order: 5, name: "Divermon's Lake", digimon: [
+    { exp: 10, name: "Betamon", item: "Power Charge" },
+    { exp: 58, name: "Seadramon", item: "Water Power 1" }
+  ]},
+  { world: "asuka", id: "as-kicking-forest", order: 6, name: "Kicking Forest", digimon: [
+    { exp: 58, name: "Seadramon (fishing)", item: "Water Power 1" }
+  ]},
+  { world: "asuka", id: "as-wind-prairie", order: 7, name: "Wind Prairie", digimon: [
+    { exp: 40, name: "Coelamon (fishing)", item: "Water Chip" }
+  ]},
+  { world: "asuka", id: "as-south-cape", order: 8, name: "South Cape", digimon: [
+    { exp: 91, name: "Shellmon", item: "Water Chip" },
+    { exp: 91, name: "Shellmon (fishing)", item: "Water Chip" }
+  ]},
+  { world: "asuka", id: "as-swamps", order: 9, name: "South Swamps (Bulk / Tranquil / Bios / Bulk Bridge)", digimon: [
+    { exp: 40, name: "Coelamon", item: "Water Chip" },
+    { exp: 41, name: "Gekomon", item: "Ice Power 1" },
+    { exp: 58, name: "Seadramon (Bios Swamp)", item: "Water Power 1" },
+    { exp: 58, name: "Seadramon (fishing)", item: "Water Power 1" }
+  ]},
+  { world: "asuka", id: "as-phoenix-ether", order: 10, name: "Phoenix Bay / Ether Jungle", digimon: [
+    { exp: 50, name: "Apemon", item: "Wind Power 1" },
+    { exp: 58, name: "Seadramon (fishing)", item: "Water Power 1" }
+  ]},
+  { world: "asuka", id: "as-jungle-grave", order: 11, name: "Jungle Grave", digimon: [
+    { exp: 39, name: "DemiDevimon", item: "Dark Power 1" },
+    { exp: 40, name: "Coelamon", item: "Water Chip" },
+    { exp: 41, name: "Gekomon", item: "Ice Power 1" },
+    { exp: 58, name: "Seadramon (fishing)", item: "Water Power 1" },
+    { exp: 154, name: "Red Phantomon", item: "Ghost Fang" },
+    { exp: 155, name: "Musyamon", item: "MP Chip" }
+  ]},
+  { world: "asuka", id: "as-jungle-shrine", order: 12, name: "Jungle Shrine", digimon: [
+    { exp: 222, name: "Blue Numemon", item: "Dance Feather" }
+  ]},
+  { world: "asuka", id: "as-suzaku-ug", order: 13, name: "Suzaku UG Lake", digimon: [
+    { exp: 101, name: "ShogunGekomon", item: "Chaos Wave" }
+  ]},
+  { world: "asuka", id: "as-seabed", order: 14, name: "City Seabed", digimon: [
+    { exp: 136, name: "Gesomon", item: "Runner Sandal" }
+  ]},
+  { world: "asuka", id: "as-city-sewers", order: 15, name: "Asuka City Sewers", digimon: [
+    { exp: 134, name: "Cyclonemon", item: "Wisdom Chip" },
+    { exp: 135, name: "Raremon", item: "Armor Chip" },
+    { exp: 340, name: "Datamon (boss)", item: "Recovery Crest" }
+  ]},
+  { world: "asuka", id: "as-tyranno-valley", order: 16, name: "Tyranno Valley", digimon: [
+    { exp: 29, name: "Airdramon", item: "Fire Chip" },
+    { exp: 30, name: "Triceramon", item: "TNT Ball" },
+    { exp: 31, name: "Tyrannomon", item: "Fire Power 1" }
+  ]},
+  { world: "asuka", id: "as-protocol-forest", order: 17, name: "Protocol Forest", digimon: [
+    { exp: 21, name: "Dokugumon", item: "Spider Web" }
+  ]},
+  { world: "asuka", id: "as-catacombs", order: 18, name: "Catacombs", digimon: [
+    { exp: 155, name: "Musyamon", item: "MP Chip" }
+  ]},
+  { world: "asuka", id: "as-bullet-valley", order: 19, name: "Bullet Valley / North Badland W", digimon: [
+    { exp: 112, name: "Red Goburimon", item: "Naginata" },
+    { exp: 112, name: "Tuskmon", item: "Counter Crest" },
+    { exp: 116, name: "Mammothmon", item: "HP Proxy" }
+  ]},
+  { world: "asuka", id: "as-badlands-e", order: 20, name: "South Badland / North Badland E", digimon: [
+    { exp: 100, name: "Etemon", item: "Super Charge" },
+    { exp: 102, name: "Ogremon", item: "Power Chip" }
+  ]},
+  { world: "asuka", id: "as-noise-desert", order: 21, name: "Noise Desert / S Noise / Pelche Oasis", digimon: [
+    { exp: 104, name: "Gold Airdramon", item: "Magician's Rod" },
+    { exp: 105, name: "Brown Dokugumon", item: "Spider Web" },
+    { exp: 109, name: "Vademon", item: "Bolt Power 1" },
+    { exp: 158, name: "Brown Kokatorimon", item: "OverClocked" }
+  ]},
+  { world: "asuka", id: "as-mobius", order: 22, name: "Mobius Desert / Mirage Tower", digimon: [
+    { exp: 109, name: "Vademon", item: "Bolt Power 1" },
+    { exp: 110, name: "Maildramon", item: "Thunder Chip" },
+    { exp: 158, name: "Brown Kokatorimon", item: "OverClocked" }
+  ]},
+  { world: "asuka", id: "as-dum-dum", order: 23, name: "Dum Dum Factory", digimon: [
+    { exp: 115, name: "Thundermon", item: "Pulse Guard" },
+    { exp: 117, name: "Hagurumon", item: "Metal Power 1" },
+    { exp: 120, name: "Andromon", item: "Machine Gun" },
+    { exp: 123, name: "Clockmon", item: "Multi Crest" },
+    { exp: 125, name: "Mamemon", item: "Search Crest" }
+  ]},
+  { world: "asuka", id: "as-dum-sewers", order: 24, name: "Dum Dum Factory Sewers", digimon: [
+    { exp: 124, name: "Green Numemon", item: "Binder Crest" },
+    { exp: 129, name: "Sukamon", item: "Wisdom Chip" }
+  ]},
+  { world: "asuka", id: "as-boot-mountain", order: 25, name: "Boot Mountain", digimon: [
+    { exp: 204, name: "Flarerizamon", item: "Fire Power 2" }
+  ]},
+  { world: "asuka", id: "as-fire-dungeon", order: 26, name: "Fire Dungeon", digimon: [
+    { exp: 204, name: "Flarerizamon", item: "Fire Power 2" },
+    { exp: 366, name: "Red Numemon", item: "OverLoad" }
+  ]},
+  { world: "asuka", id: "as-kulon-mine", order: 27, name: "Kulon Mine / Kulon Pit", digimon: [
+    { exp: 205, name: "Blue Drimogemon", item: "Drill Horn" }
+  ]},
+  { world: "asuka", id: "as-snow-freeze", order: 28, name: "Snow Mountain / Freeze Mountain", digimon: [
+    { exp: 206, name: "Frigimon", item: "Ice Chip" }
+  ]},
+  { world: "asuka", id: "as-lake-ice", order: 29, name: "Lake of Ice", digimon: [
+    { exp: 215, name: "Icemon", item: "Ice Power 2" },
+    { exp: 221, name: "Blue MegaSeadramon (fishing)", item: "Water Power S" }
+  ]},
+  { world: "asuka", id: "as-dark-dungeon", order: 30, name: "Dark Dungeon", digimon: [
+    { exp: 223, name: "Kimeramon", item: "Devil Chip" }
+  ]},
+
+  { world: "amaterasu", id: "am-central", order: 1, name: "Central Park / Shell Beach", digimon: [
+    { exp: 220, name: "Antylamon", item: "Wind Chip" },
+    { exp: 221, name: "Blue MegaSeadramon", item: "Water Power S" },
+    { exp: 240, name: "Pink Ebidramon (fishing)", item: "TP Chip 2" }
+  ]},
+  { world: "amaterasu", id: "am-plug-cape", order: 2, name: "Plug Cape", digimon: [
+    { exp: 221, name: "Blue MegaSeadramon", item: "Water Power S" },
+    { exp: 225, name: "Arukenimon", item: "Charm Gas" },
+    { exp: 240, name: "Pink Ebidramon (fishing)", item: "TP Chip 2" }
+  ]},
+  { world: "amaterasu", id: "am-wire-entrance", order: 3, name: "Wire Forest Entrance", digimon: [
+    { exp: 240, name: "Pink Ebidramon (fishing)", item: "TP Chip 2" }
+  ]},
+  { world: "amaterasu", id: "am-wire-west", order: 4, name: "Wire Forest West", digimon: [
+    { exp: 189, name: "Green Cherrymon", item: "Recovery Crest" },
+    { exp: 240, name: "Pink Ebidramon (fishing)", item: "TP Chip 2" }
+  ]},
+  { world: "amaterasu", id: "am-wire-east", order: 5, name: "Wire Forest East / Wind Prairie", digimon: [
+    { exp: 165, name: "Pink Flymon", item: "Glasses" },
+    { exp: 183, name: "MetalTyrannomon (Wind Prairie)", item: "Metal Chip" }
+  ]},
+  { world: "amaterasu", id: "am-divermon", order: 6, name: "Divermon's Lake", digimon: [
+    { exp: 165, name: "Pink Flymon", item: "Glasses" },
+    { exp: 170, name: "Red Ebidramon", item: "Water Power 2" }
+  ]},
+  { world: "amaterasu", id: "am-kicking", order: 7, name: "Kicking Forest", digimon: [
+    { exp: 170, name: "Red Ebidramon", item: "Water Power 2" },
+    { exp: 170, name: "Red Ebidramon (fishing)", item: "Water Power 2" },
+    { exp: 179, name: "Deltamon (Cliff)", item: "Wind Power 2" },
+    { exp: 183, name: "MetalTyrannomon (Cliff)", item: "Metal Chip" },
+    { exp: 203, name: "Red Cherrymon (kicking trees)", item: "TP Chip 1" }
+  ]},
+  { world: "amaterasu", id: "am-south-cape", order: 8, name: "South Cape", digimon: [
+    { exp: 170, name: "Red Ebidramon (fishing)", item: "Water Power 2" },
+    { exp: 189, name: "Green Cherrymon", item: "Recovery Crest" },
+    { exp: 240, name: "Pink Ebidramon (fishing)", item: "TP Chip 2" }
+  ]},
+  { world: "amaterasu", id: "am-swamps", order: 9, name: "South Swamps (Bulk / Bios / Tranquil / Bulk Bridge)", digimon: [
+    { exp: 170, name: "Red Ebidramon (fishing)", item: "Water Power 2" },
+    { exp: 174, name: "MegaSeadramon", item: "Thunder Chip" },
+    { exp: 203, name: "Red Cherrymon (kicking trees)", item: "TP Chip 1" }
+  ]},
+  { world: "amaterasu", id: "am-phoenix-ether", order: 10, name: "Phoenix Bay / Ether Jungle", digimon: [
+    { exp: 170, name: "Red Ebidramon (fishing)", item: "Water Power 2" },
+    { exp: 180, name: "Brachiomon", item: "Ultra Charge" },
+    { exp: 189, name: "Green Cherrymon", item: "Recovery Crest" },
+    { exp: 203, name: "Red Cherrymon (kicking trees)", item: "TP Chip 1" }
+  ]},
+  { world: "amaterasu", id: "am-jungle-grave", order: 11, name: "Jungle Grave", digimon: [
+    { exp: 170, name: "Red Ebidramon (fishing)", item: "Water Power 2" },
+    { exp: 174, name: "MegaSeadramon", item: "Thunder Chip" },
+    { exp: 180, name: "Vilemon", item: "Devil Chip" },
+    { exp: 186, name: "Blue Phantomon", item: "HP Chip" },
+    { exp: 203, name: "Red Cherrymon (kicking trees)", item: "TP Chip 1" }
+  ]},
+  { world: "amaterasu", id: "am-jungle-shrine", order: 12, name: "Jungle Shrine", digimon: [
+    { exp: 299, name: "Brown Numemon", item: "Training Book" }
+  ]},
+  { world: "amaterasu", id: "am-zhu-que", order: 13, name: "Zhu Que UG Lake", digimon: [
+    { exp: 184, name: "Blue ShogunGekomon", item: "Chaos Wave" }
+  ]},
+  { world: "amaterasu", id: "am-seabed", order: 14, name: "City Seabed", digimon: [
+    { exp: 235, name: "White Whamon", item: "HP Mega Proxy" }
+  ]},
+  { world: "amaterasu", id: "am-city-sewers", order: 15, name: "Amaterasu City Sewers / Water Tunnel", digimon: [
+    { exp: 221, name: "Blue MegaSeadramon", item: "Water Power S" }
+  ]},
+  { world: "amaterasu", id: "am-protocol", order: 16, name: "Protocol Forest / Protocol Ruins", digimon: [
+    { exp: 175, name: "Mummymon (Ruins)", item: "Mind Chip" },
+    { exp: 176, name: "Gargoylemon", item: "Dark Power 2" }
+  ]},
+  { world: "amaterasu", id: "am-tyranno", order: 17, name: "Tyranno Valley", digimon: [
+    { exp: 179, name: "Deltamon", item: "Wind Power 2" },
+    { exp: 183, name: "MetalTyrannomon", item: "Metal Chip" }
+  ]},
+  { world: "amaterasu", id: "am-bullet", order: 18, name: "North Badland W / Bullet Valley", digimon: [
+    { exp: 224, name: "LadyDevimon", item: "Charm Gas" },
+    { exp: 225, name: "Arukenimon", item: "Charm Gas" },
+    { exp: 225, name: "Valkyrimon", item: "Dance Wing" }
+  ]},
+  { world: "amaterasu", id: "am-badlands", order: 19, name: "North Badland E / South Badland", digimon: [
+    { exp: 222, name: "MetalEtemon", item: "Max Charge" },
+    { exp: 226, name: "KingEtemon", item: "Charisma Chip" },
+    { exp: 240, name: "Pink Ebidramon (fishing)", item: "TP Chip 2" },
+    { exp: 399, name: "Light Blue Numemon", item: "Boost Chip" }
+  ]},
+  { world: "amaterasu", id: "am-noise", order: 20, name: "Noise Desert / Pelche Oasis", digimon: [
+    { exp: 227, name: "Gryphonmon", item: "Wind Power S" },
+    { exp: 227, name: "Yellow Tankmon", item: "Runner Shoes" },
+    { exp: 240, name: "Pink Ebidramon (fishing · Pelche)", item: "TP Chip 2" }
+  ]},
+  { world: "amaterasu", id: "am-mobius", order: 21, name: "Mobius Desert", digimon: [
+    { exp: 232, name: "Red Vademon", item: "Cursed Puppet" }
+  ]},
+  { world: "amaterasu", id: "am-dum-dum", order: 22, name: "Dum Dum Factory", digimon: [
+    { exp: 235, name: "Machinedramon", item: "Metal Power S" }
+  ]},
+  { world: "amaterasu", id: "am-dum-sewers", order: 23, name: "Dum Dum Factory Sewers", digimon: [
+    { exp: 235, name: "Garbagemon", item: "Goggles" },
+    { exp: 570, name: "BK KingNumemon (boss)", item: "Bit Adapter" }
+  ]},
+  { world: "amaterasu", id: "am-catacombs", order: 24, name: "Catacombs", digimon: [
+    { exp: 196, name: "SkullSatamon", item: "Hack Sticker" }
+  ]},
+  { world: "amaterasu", id: "am-boot-fire", order: 25, name: "Boot Mountain / Fire Dungeon", digimon: [
+    { exp: 243, name: "Blue Meramon", item: "MP Mega Proxy" },
+    { exp: 244, name: "Lynxmon (Fire Dungeon)", item: "Fire Power S" }
+  ]},
+  { world: "amaterasu", id: "am-kulon", order: 26, name: "Kulon Mine / Kulon Pit", digimon: [
+    { exp: 242, name: "Black Maildramon", item: "Bolt Power S" },
+    { exp: 243, name: "Boltmon", item: "Power Brace" }
+  ]},
+  { world: "amaterasu", id: "am-ice-dungeon", order: 27, name: "Ice Dungeon", digimon: [
+    { exp: 245, name: "White Antylamon", item: "Ice Power S" }
+  ]},
+  { world: "amaterasu", id: "am-lake-ice", order: 28, name: "Lake of Ice", digimon: [
+    { exp: 235, name: "White Whamon (seabed)", item: "HP Mega Proxy" },
+    { exp: 272, name: "Black Scorpiomon (fishing)", item: "TP Chip 5" }
+  ]},
+  { world: "amaterasu", id: "am-dark", order: 29, name: "Dark Dungeon", digimon: [
+    { exp: 239, name: "Purple Vilemon", item: "Hack System" },
+    { exp: 246, name: "Ghoulmon", item: "Dark Power S" }
+  ]},
+
+  { world: "special", id: "sp-circuit", order: 1, name: "Circuit Board", digimon: [
+    { exp: 201, name: "Pink Raremon", item: "Bolt Power 2" },
+    { exp: 205, name: "Blue Drimogemon", item: "Drill Horn" }
+  ]},
+  { world: "special", id: "sp-magasta", order: 2, name: "Magasta Undersea Base", digimon: [
+    { exp: 215, name: "Tylomon", item: "Crimson Cable" },
+    { exp: 216, name: "Brown Scorpiomon", item: "Crimson Cable" },
+    { exp: 221, name: "Pukumon", item: "Crimson Cable" },
+    { exp: 223, name: "Gold MetalSeadramon", item: "Crimson Cable" },
+    { exp: 225, name: "Blue Whamon", item: "Crimson Cable" }
+  ]},
+  { world: "special", id: "sp-bug-maze", order: 3, name: "Bug Maze (Optical Network)", digimon: [
+    { exp: 160, name: "Green Musyamon", item: "MP Proxy" },
+    { exp: 167, name: "Light Green Minotarumon", item: "Metal Power 2" },
+    { exp: 222, name: "Blue Numemon", item: "Dance Feather" },
+    { exp: 225, name: "Blue Kurisarimon", item: "Drill Horn" }
+  ]}
+];
+
+const LEVEL_BY_NAME = {"airdramon": 6, "airdramon (gold colored)": 21, "airdramon 2* (gold colored)": 21, "andromon": 24, "antylamon": 44, "antylamon (white coloured)": 49, "antylamon 2* (white coloured)": 49, "apemon": 10, "apokarimon": 56, "armageddemon": 56, "armormon (boss)": 28, "arukenimon": 45, "bakemon": 9, "baronmon": 16, "betamon": 2, "bk kingnumemon (boss)": 57, "bk megagargomon (boss)": 45, "bk seraphimon (boss)": 47, "bk wargreymon (boss)": 53, "bk wargrowlmon (boss)": 55, "blossomon": 34, "blossomon (pink colored)": 36, "blossomon 2* (pink colored)": 36, "bluemeramon": 48, "boltmon": 48, "brachiomon": 36, "bulbmon (boss)": 43, "cherrymon": 38, "cherrymon (red colored)": 41, "cherrymon 2* (red colored)": 41, "clockmon": 24, "coelamon": 8, "crabmon": 3, "creepymon": 55, "cyclonemon": 27, "cyclonemon (red colored)": 43, "cyclonemon 2* (red colored)": 43, "datamon (boss)": 34, "deltamon": 36, "demidevimon": 8, "devidramon": 43, "divermon": 24, "dokugumon": 4, "dokugumon (brown colored)": 21, "dokugumon 2* (brown colored)": 21, "dolphmon": 20, "dragomon": 44, "drimogemon": 41, "drimogemon (gray colored)": 44, "drimogemon 2* (gray colored)": 44, "ebidramon": 34, "ebidramon (pink colored)": 48, "ebidramon 2* (pink colored)": 48, "etemon": 20, "flarerizamon": 41, "flymon": 13, "flymon (red color)": 33, "flymon 2* (red color)": 33, "frigimon": 41, "fugamon": 42, "galacticmon (body)": 65, "galacticmon (head)": 65, "galacticmon (tail)": 65, "garbagemon": 47, "gargoylemon": 35, "gekomon": 8, "gesomon": 27, "ghoulmon": 49, "giromon": 46, "gizamon": 4, "goburimon": 4, "goburimon (red colored)": 22, "goburimon 2* (red colored)": 22, "grapleomon (boss)": 28, "gryphonmon": 45, "guardromon": 46, "guardromon 1 & 3": 29, "guardromon 1 & 3*": 29, "guardromon 2*": 46, "h-kabuterimon": 44, "hagurumon": 23, "hiandromon": 32, "icemon": 43, "infermon": 55, "kimeramon": 44, "kingetemon": 45, "kiwimon": 3, "knightmon": 53, "kokatorimon": 13, "kokatorimon (brown colored)": 22, "kokatorimon 2* (brown colored)": 22, "kunemon": 1, "kurisarimon": 36, "kurisarimon (red colored)": 40, "kurisarimon 2* (red colored)": 40, "kuwagamon": 2, "kuwagamon (green colored)": 30, "kuwagamon 2* (green colored)": 30, "kyukimon (boss)": 28, "ladydevimon": 45, "lynxmon": 49, "machinedramon": 47, "magnaangemon (boss)": 28, "maildramon": 22, "maildramon (black colored)": 48, "maildramon 2* (black colored)": 48, "mamemon": 25, "mammothmon": 23, "mammothmon (white colored)": 47, "mammothmon 2* (white colored)": 47, "marinedevimon": 37, "mastertyrannomon (boss)": 14, "megadramon": 46, "megadramon (no color change)": 46, "megadramon 2* (no color change)": 46, "megaseadramon": 35, "megaseadramon (blue colored)": 44, "megaseadramon 2* (blue colored)": 44, "meramon": 41, "metaletemon": 44, "metaletemon (no color change)": 44, "metaletemon 2* (no color change)": 44, "metalseadramon": 44, "metalseadramon (gray colored)": 54, "metalseadramon 2* (gray colored)": 54, "metaltyrannomon": 36, "minotarumon": 5, "minotarumon (green colored)": 33, "minotarumon 2* (green colored)": 33, "mojyamon": 41, "monzaemon": 29, "mummymon": 35, "musyamon": 31, "musyamon (green colored)": 32, "musyamon 2* (green colored)": 32, "nanimon": 29, "numemon": 43, "numemon (green colored)": 43, "numemon (purple colored)": 43, "numemon 2* (purple colored)": 43, "numemon 3* (brown color)": 39, "numemon 4*": 43, "numemon 4* (sky blue colored)": 43, "numemon 5*": 43, "numemon 5* (red colored)": 43, "numemon 6*": 43, "numemon 6* (mint colored)": 43, "octomon": 40, "ogremon": 20, "okuwamon": 34, "paildramon (boss)": 19, "persiamon": 38, "phantomon": 31, "phantomon (blue color)": 37, "phantomon 2* (blue color)": 37, "pharaohmon (boss)": 12, "piedmon": 56, "pukumon": 44, "puppetmon": 54, "quetzalmon": 45, "raidenmon": 60, "raijinmon": 57, "raremon": 27, "raremon (pink color)": 40, "raremon 2* (pink color)": 40, "redvegimon": 9, "roachmon": 47, "rockmon": 44, "scorpiomon": 43, "scorpiomon (black colored)": 54, "scorpiomon 2* (black colored)": 54, "seadramon": 12, "seadramon (white colored)": 35, "seadramon 2* (white colored)": 35, "shadramon": 47, "shellmon": 18, "shogungekomon": 20, "shogungekomon (blue colored)": 37, "shogungekomon 2* (blue colored)": 37, "skullmammothmon": 49, "skullmeramon": 43, "skullsatamon": 39, "snimon": 43, "snimon (orange colored)": 48, "snimon 2* (orange colored)": 48, "suijinmon": 57, "sukamon": 26, "tankmon": 30, "tankmon (blue colored)": 45, "tankmon 2* (blue colored)": 45, "taomon (boss)": 29, "tapirmon": 1, "thundermon": 23, "tortomon": 29, "tortomon (purple colored)": 36, "tortomon 2* (purple colored)": 36, "triceramon": 6, "triceramon (red colored)": 41, "triceramon 2* (red colored)": 41, "tuskmon": 22, "tylomon": 43, "tyrannomon": 6, "vademon": 22, "vademon (red colored)": 46, "vademon 2* (red colored)": 46, "valkrymon": 45, "vegiemon": 4, "vemmon (boss)": 28, "venommyotismon": 55, "vikemon": 47, "vikemon (red colored)": 43, "vikemon 2* (red colored)": 43, "vilemon": 36, "vilemon (purple colored)": 48, "vilemon 2* (purple colored)": 48, "warumonzaemon": 32, "whamon": 45, "whamon (white colored)": 47, "whamon 2* (white colored)": 47, "woodmon": 5, "woodmon (green color)": 19, "woodmon 2* (green color)": 19, "yanmamon": 3, "yanmamon (yellow colored)": 3, "yanmamon 2* (yellow colored)": 3};
+
+function digimonLevel(name) {
+  if (!name) return null;
+  const aliases = {
+    "valkyrimon": "valkrymon",
+    "valkyriemon": "valkrymon",
+    "chimeramon": "kimeramon",
+    "pink ebidramon": "ebidramon (pink colored)",
+    "red cherrymon": "cherrymon (red colored)",
+    "white antylamon": "antylamon (white coloured)",
+    "black scorpiomon": "scorpiomon (black colored)",
+    "blue numemon": "numemon (sky blue colored)",
+    "green kuwagamon": "kuwagamon (green colored)",
+    "green musyamon": "musyamon (green colored)",
+    "green minotarumon": "minotarumon (green colored)",
+    "light green minotarumon": "minotarumon (green colored)",
+    "red phantomon": "phantomon",
+    "blue phantomon": "phantomon (blue color)",
+    "purple vilemon": "vilemon (purple colored)",
+    "blue whamon": "whamon",
+    "white whamon": "whamon (white colored)",
+    "gold metalseadramon": "metalseadramon (gray colored)",
+    "brown scorpiomon": "scorpiomon",
+    "blue drimogemon": "drimogemon (gray colored)",
+    "pink raremon": "raremon (pink color)",
+    "blue kurisarimon": "kurisarimon",
+    "red vegiemon": "redvegimon"
+  };
+  let raw = name.toLowerCase().trim();
+  const withBoss = /\(boss\)/i.test(raw);
+  // strip location / fishing notes in parentheses (keep handled via aliases / boss retry)
+  raw = raw.replace(/\s*\([^)]*\)\s*/g, " ").replace(/\s+/g, " ").trim();
+  const tryKeys = [raw, aliases[raw]].filter(Boolean);
+  if (withBoss) {
+    tryKeys.push(raw + " (boss)", (aliases[raw] || raw) + " (boss)");
+  }
+  for (const key of tryKeys) {
+    if (LEVEL_BY_NAME[key] != null) return LEVEL_BY_NAME[key];
+  }
+  // "Pink Ebidramon" after strip → try alias then colored forms / trailing token
+  const parts = raw.split(" ");
+  for (let i = 0; i < parts.length; i++) {
+    const slice = parts.slice(i).join(" ");
+    const mapped = aliases[slice] || slice;
+    if (LEVEL_BY_NAME[mapped] != null) return LEVEL_BY_NAME[mapped];
+    if (LEVEL_BY_NAME[slice] != null) return LEVEL_BY_NAME[slice];
+  }
+  // adjective + base → "base (adjective colored)"
+  if (parts.length >= 2) {
+    const adj = parts[0];
+    const base = parts.slice(1).join(" ");
+    for (const suf of [`${base} (${adj} colored)`, `${base} (${adj} coloured)`, `${base} (${adj} color)`]) {
+      if (LEVEL_BY_NAME[suf] != null) return LEVEL_BY_NAME[suf];
+    }
+  }
+  return null;
+}
+
+function withLevel(d) {
+  return { ...d, level: d.level != null ? d.level : digimonLevel(d.name) };
+}
+
+function levelSort(a, b) {
+  const al = a.level == null ? 99999 : a.level;
+  const bl = b.level == null ? 99999 : b.level;
+  if (al !== bl) return al - bl;
+  const ae = a.exp == null ? 99999 : a.exp;
+  const be = b.exp == null ? 99999 : b.exp;
+  return ae - be;
+}
+
+maps.forEach(m => {
+  const seen = new Set();
+  m.digimon = m.digimon
+    .map(withLevel)
+    .sort((a, b) => levelSort(a, b) || a.name.localeCompare(b.name))
+    .filter(d => {
+      const key = d.name + "|" + d.item;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+});
+
+maps.sort((a, b) => {
+  const worldOrder = { asuka: 0, amaterasu: 1, special: 2 };
+  if (worldOrder[a.world] !== worldOrder[b.world]) return worldOrder[a.world] - worldOrder[b.world];
+  return a.order - b.order;
+});
+
+function itemFamily(item) {
+  const m = item.match(/^(.* Power) [12S]$/i);
+  return m ? m[1] : item;
+}
+
+function worldLabel(world) {
+  if (world === "asuka") return "Asuka";
+  if (world === "amaterasu") return "Amaterasu";
+  return "Special";
+}
+
+const dropIndex = [];
+maps.forEach(m => {
+  m.digimon.forEach(d => {
+    dropIndex.push({
+      exp: d.exp,
+      level: d.level != null ? d.level : digimonLevel(d.name),
+      digimon: d.name,
+      item: d.item,
+      family: itemFamily(d.item),
+      mapId: m.id,
+      mapName: m.name,
+      world: m.world
+    });
+  });
+});
+
+const TYPE_ORDER = ["consumable", "accessory", "weapon", "chip"];
+
+const itemCatalog = [];
+const familyMap = new Map();
+dropIndex.forEach(d => {
+  if (!familyMap.has(d.family)) familyMap.set(d.family, []);
+  familyMap.get(d.family).push(d);
+});
+[...familyMap.keys()].forEach(family => {
+  const drops = familyMap.get(family);
+  const sampleItem = drops.find(x => x.item === family)?.item || drops[0].item;
+  itemCatalog.push({
+    key: family,
+    label: family,
+    sampleItem,
+    type: getItemType(sampleItem),
+    count: drops.length,
+    drops: drops.sort((a, b) => levelSort(a, b) || a.digimon.localeCompare(b.digimon) || a.mapName.localeCompare(b.mapName))
+  });
+});
+itemCatalog.sort((a, b) => {
+  const ta = TYPE_ORDER.indexOf(a.type);
+  const tb = TYPE_ORDER.indexOf(b.type);
+  if (ta !== tb) return ta - tb;
+  return a.label.localeCompare(b.label);
+});
+
+const LEVEL_RANGES = [
+  { id: "all", min: 1, max: 9999, label: "All levels" },
+  { id: "r1", min: 1, max: 10, label: "Lv 1 – 10" },
+  { id: "r2", min: 11, max: 20, label: "Lv 11 – 20" },
+  { id: "r3", min: 21, max: 30, label: "Lv 21 – 30" },
+  { id: "r4", min: 31, max: 40, label: "Lv 31 – 40" },
+  { id: "r5", min: 41, max: 50, label: "Lv 41 – 50" },
+  { id: "r6", min: 51, max: 9999, label: "Lv 51+" }
+];
+
+let currentRangeId = "all";
+let selectedItemKey = null;
+let selectedDigimonKey = null;
+let itemFilter = "";
+let digimonFilter = "";
+let itemTypeFilter = "all";
+
+const OWNED_KEY = "dw3-steal-items-owned-v1";
+const itemKeySet = new Set(itemCatalog.map(i => i.key));
+let owned = loadOwned();
+
+function loadOwned() {
+  try {
+    const raw = localStorage.getItem(OWNED_KEY);
+    if (!raw) return new Set();
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return new Set();
+    return new Set(list.filter(k => itemKeySet.has(k)));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveOwned() {
+  localStorage.setItem(OWNED_KEY, JSON.stringify([...owned]));
+}
+
+function isOwned(key) {
+  return owned.has(key);
+}
+
+function toggleOwned(key) {
+  if (!itemKeySet.has(key)) return;
+  if (owned.has(key)) owned.delete(key);
+  else owned.add(key);
+  saveOwned();
+  renderOwnedBar();
+  renderItemIndex();
+  if (selectedItemKey === key) render();
+}
+
+function clearOwned() {
+  owned.clear();
+  saveOwned();
+  renderOwnedBar();
+  renderItemIndex();
+  if (selectedItemKey) render();
+}
+
+function renderOwnedBar() {
+  const bar = document.getElementById("ownedBar");
+  if (!bar) return;
+  bar.innerHTML = `
+    <span>Obtidos <strong>${owned.size}</strong> / ${itemCatalog.length}</span>
+    ${owned.size ? `<button type="button" id="clearOwned">Clear all</button>` : ""}
+  `;
+  const clearBtn = document.getElementById("clearOwned");
+  if (clearBtn) clearBtn.addEventListener("click", clearOwned);
+}
+
+const digimonCatalog = (() => {
+  const map = new Map();
+  dropIndex.forEach(d => {
+    const key = digimonKey(d.digimon);
+    if (!map.has(key)) {
+      map.set(key, { key, name: key, exp: d.exp, level: d.level != null ? d.level : digimonLevel(d.digimon || key), drops: [] });
+    }
+    const entry = map.get(key);
+    const dLevel = d.level != null ? d.level : digimonLevel(d.digimon);
+    if ((dLevel == null ? 99999 : dLevel) < (entry.level == null ? 99999 : entry.level)) {
+      entry.level = dLevel;
+      entry.exp = d.exp;
+    }
+    entry.drops.push(d);
+  });
+  return [...map.values()]
+    .map(e => {
+      const seen = new Set();
+      const uniqueDrops = e.drops
+        .sort((a, b) => levelSort(a, b) || a.item.localeCompare(b.item) || a.mapName.localeCompare(b.mapName))
+        .filter(d => {
+          const k = d.item + "|" + d.mapName + "|" + d.world;
+          if (seen.has(k)) return false;
+          seen.add(k);
+          return true;
+        });
+      return { ...e, drops: uniqueDrops, itemCount: new Set(uniqueDrops.map(d => d.item)).size };
+    })
+    .sort((a, b) => levelSort(a, b) || a.name.localeCompare(b.name));
+})();
+
+function selectItem(key) {
+  selectedItemKey = key;
+  selectedDigimonKey = null;
+  render();
+}
+
+function selectDigimon(key) {
+  selectedDigimonKey = key;
+  selectedItemKey = null;
+  render();
+}
+
+function selectRange(id) {
+  selectedItemKey = null;
+  selectedDigimonKey = null;
+  currentRangeId = id;
+  render();
+}
+
+function clearSelection() {
+  selectedItemKey = null;
+  selectedDigimonKey = null;
+  render();
+}
+
+function digimonKey(name) {
+  return name.replace(/\s*\([^)]*\)\s*/g, " ").replace(/\s+/g, " ").trim();
+}
+
+/** Same Digimon + item + server + level → one row; maps joined with ", ". */
+function mergeDropsByLocation(drops, { byDigimon = true } = {}) {
+  const groups = new Map();
+  drops.forEach(d => {
+    const digi = byDigimon ? digimonKey(d.digimon) : d.digimon;
+    const key = `${digi}|${d.item}|${d.world}|${d.level == null ? "—" : d.level}`;
+    if (!groups.has(key)) {
+      groups.set(key, {
+        exp: d.exp,
+        level: d.level,
+        digimon: digi,
+        item: d.item,
+        world: d.world,
+        maps: []
+      });
+    }
+    const g = groups.get(key);
+    if (!g.maps.includes(d.mapName)) g.maps.push(d.mapName);
+    if ((d.level == null ? 99999 : d.level) < (g.level == null ? 99999 : g.level)) {
+      g.level = d.level;
+      g.exp = d.exp;
+    }
+  });
+  return [...groups.values()]
+    .map(g => ({
+      ...g,
+      mapName: g.maps.join(", "),
+      locHtml: `<span class="world-tag ${g.world}">${worldLabel(g.world)}</span><span class="maps">${g.maps.join(", ")}</span>`
+    }))
+    .sort((a, b) => levelSort(a, b) || a.digimon.localeCompare(b.digimon) || a.item.localeCompare(b.item) || a.world.localeCompare(b.world));
+}
+
+function dropsInRange(range) {
+  const rows = dropIndex.filter(d => {
+    const lv = d.level == null ? digimonLevel(d.digimon || d.name) : d.level;
+    return lv != null && lv >= range.min && lv <= range.max;
+  });
+  const byDigimon = new Map();
+  rows.forEach(d => {
+    const key = digimonKey(d.digimon);
+    const dLevel = d.level == null ? digimonLevel(d.digimon) : d.level;
+    if (!byDigimon.has(key)) {
+      byDigimon.set(key, {
+        exp: d.exp,
+        level: dLevel,
+        digimon: key,
+        items: new Set([d.item]),
+        maps: new Set([d.mapName]),
+        worlds: new Set([d.world])
+      });
+      return;
+    }
+    const entry = byDigimon.get(key);
+    if ((dLevel == null ? 99999 : dLevel) < (entry.level == null ? 99999 : entry.level)) {
+      entry.level = dLevel;
+      entry.exp = d.exp;
+    }
+    entry.items.add(d.item);
+    entry.maps.add(d.mapName);
+    entry.worlds.add(d.world);
+  });
+  return [...byDigimon.values()]
+    .map(e => ({
+      exp: e.exp,
+      level: e.level,
+      digimon: e.digimon,
+      item: [...e.items].join(" · "),
+      mapName: [...e.maps].join(", "),
+      worlds: [...e.worlds]
+    }))
+    .sort((a, b) => levelSort(a, b) || a.digimon.localeCompare(b.digimon));
+}
+
+function renderItemIndex() {
+  const list = document.getElementById("itemList");
+  const filtered = itemCatalog.filter(i => {
+    if (itemTypeFilter !== "all" && i.type !== itemTypeFilter) return false;
+    if (itemFilter && !i.label.toLowerCase().includes(itemFilter.toLowerCase())) return false;
+    return true;
+  });
+  let html = "";
+  TYPE_ORDER.forEach(type => {
+    const group = filtered.filter(i => i.type === type);
+    if (!group.length) return;
+    html += `<div class="type-group">${TYPES[type].icon} ${TYPES[type].label}</div>`;
+    html += group.map(i => `
+      <button type="button" data-item="${i.key}" class="${selectedItemKey === i.key ? "active" : ""} ${isOwned(i.key) ? "owned" : ""}" title="Clique duas vezes para marcar">
+        ${typeBadge(i.sampleItem)}
+        <span class="name">${i.label}</span>
+        <span class="count">${i.count}</span>
+        <span class="tip">${itemDesc(i.sampleItem)}</span>
+      </button>
+    `).join("");
+  });
+  list.innerHTML = html;
+  list.querySelectorAll("button[data-item]").forEach(btn => {
+    btn.addEventListener("click", () => selectItem(btn.dataset.item));
+    btn.addEventListener("dblclick", e => {
+      e.preventDefault();
+      toggleOwned(btn.dataset.item);
+    });
+  });
+}
+
+function renderItemDetail(entry) {
+  const variants = [...new Set(entry.drops.map(d => d.item))].join(" · ");
+  const rows = mergeDropsByLocation(entry.drops);
+  const got = isOwned(entry.key);
+  return `
+    <article class="item-detail">
+      <h2 class="${got ? "owned-item" : ""}">
+        <div class="title-row">${typeBadge(entry.sampleItem)} ${entry.label}</div>
+        <span class="meta">${itemDesc(entry.sampleItem)} · ${variants} · ${rows.length} fonte${rows.length === 1 ? "" : "s"} de drop${got ? " · obtido" : ""} · clique duas vezes na lista para alternar</span>
+      </h2>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Lv</th><th>Digimon</th><th>Item</th><th>Location</th></tr></thead>
+        <tbody>
+          ${rows.map(d => `
+            <tr>
+              <td class="exp">${d.level == null ? "—" : d.level}</td>
+              <td class="digimon">${d.digimon}</td>
+              <td class="item">${d.item}</td>
+              <td class="loc">${d.locHtml}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+      </div>
+    </article>
+  `;
+}
+
+function renderDigimonIndex() {
+  const list = document.getElementById("digimonList");
+  const filtered = digimonCatalog.filter(d => !digimonFilter || d.name.toLowerCase().includes(digimonFilter.toLowerCase()));
+  list.innerHTML = filtered.map(d => `
+    <button type="button" data-digimon="${d.key}" class="${selectedDigimonKey === d.key ? "active" : ""}">
+      <span class="name">${d.name}</span>
+      <span class="count">Lv ${d.level == null ? "—" : d.level}</span>
+      <span class="tip">${d.itemCount} item${d.itemCount === 1 ? "" : "s"} · a partir do Lv ${d.level == null ? "—" : d.level}</span>
+    </button>
+  `).join("");
+  list.querySelectorAll("button[data-digimon]").forEach(btn => {
+    btn.addEventListener("click", () => selectDigimon(btn.dataset.digimon));
+  });
+}
+
+function renderDigimonDetail(entry) {
+  const rows = mergeDropsByLocation(entry.drops, { byDigimon: true });
+  return `
+    <article class="item-detail">
+      <h2>
+        <div class="title-row">${entry.name}</div>
+        <span class="meta">${entry.itemCount} item${entry.itemCount === 1 ? "" : "s"} · drops por nível</span>
+      </h2>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Lv</th><th>Item</th><th>Description</th><th>Location</th></tr></thead>
+        <tbody>
+          ${rows.map(d => `
+            <tr>
+              <td class="exp">${d.level == null ? "—" : d.level}</td>
+              <td><div class="item-cell">${typeBadge(d.item)}<span class="item">${d.item}</span></div></td>
+              <td class="desc">${itemDesc(d.item)}</td>
+              <td class="loc">${d.locHtml}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+      </div>
+    </article>
+  `;
+}
+
+function renderRangeDetail(range, rows) {
+  return `
+    <article class="map-card visible">
+      <h2>
+        ${range.label}
+        <span class="meta">${rows.length} Digimon · únicos · ordenados por nível</span>
+      </h2>
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Lv</th><th>Digimon</th><th>Item</th><th>Description</th><th>Map</th><th>Server</th></tr></thead>
+        <tbody>
+          ${rows.map(d => `
+            <tr>
+              <td class="exp">${d.level == null ? "—" : d.level}</td>
+              <td class="digimon">${d.digimon}</td>
+              <td><div class="item-cell">${typeBadge(d.item.split(" · ")[0])}<span class="item">${d.item}</span></div></td>
+              <td class="desc">${itemDesc(d.item.split(" · ")[0])}</td>
+              <td class="loc">${d.mapName}</td>
+              <td>${d.worlds.map(w => `<span class="world-tag ${w}">${worldLabel(w)}</span>`).join(" ")}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+      </div>
+    </article>
+  `;
+}
+
+function render() {
+  const nav = document.getElementById("expNav");
+  const content = document.getElementById("mapContent");
+  const selBar = document.getElementById("selectionBar");
+  const selLabel = document.getElementById("selLabel");
+  const selValue = document.getElementById("selValue");
+
+  const rangeIdle = !selectedItemKey && !selectedDigimonKey;
+  nav.innerHTML = `<div class="label">Level ranges</div>` + LEVEL_RANGES.map(r => {
+    const count = dropsInRange(r).length;
+    return `
+      <button type="button" data-range="${r.id}" class="${rangeIdle && currentRangeId === r.id ? "active" : ""}">
+        ${r.label}
+        <span class="xp">${count} Digimon</span>
+      </button>
+    `;
+  }).join("");
+
+  if (selectedDigimonKey) {
+    const entry = digimonCatalog.find(d => d.key === selectedDigimonKey);
+    content.innerHTML = entry ? renderDigimonDetail(entry) : "";
+    selBar.classList.add("visible");
+    selLabel.textContent = "Digimon";
+    selValue.textContent = entry ? entry.name : selectedDigimonKey;
+  } else if (selectedItemKey) {
+    const entry = itemCatalog.find(i => i.key === selectedItemKey);
+    content.innerHTML = entry ? renderItemDetail(entry) : "";
+    selBar.classList.add("visible");
+    selLabel.textContent = "Item";
+    selValue.textContent = entry ? entry.label : selectedItemKey;
+  } else {
+    const range = LEVEL_RANGES.find(r => r.id === currentRangeId);
+    content.innerHTML = renderRangeDetail(range, dropsInRange(range));
+    selBar.classList.remove("visible");
+  }
+
+  nav.querySelectorAll("button[data-range]").forEach(btn => {
+    btn.addEventListener("click", () => selectRange(btn.dataset.range));
+  });
+  renderOwnedBar();
+  renderItemIndex();
+  renderDigimonIndex();
+}
+
+document.getElementById("itemSearch").addEventListener("input", e => {
+  itemFilter = e.target.value.trim();
+  renderItemIndex();
+});
+
+document.getElementById("digimonSearch").addEventListener("input", e => {
+  digimonFilter = e.target.value.trim();
+  renderDigimonIndex();
+});
+
+document.getElementById("typeFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-type]");
+  if (!btn) return;
+  itemTypeFilter = btn.dataset.type;
+  document.querySelectorAll("#typeFilters .chip").forEach(c => c.classList.toggle("active", c === btn));
+  if (selectedItemKey) {
+    const entry = itemCatalog.find(i => i.key === selectedItemKey);
+    if (entry && itemTypeFilter !== "all" && entry.type !== itemTypeFilter) {
+      selectedItemKey = null;
+    }
+  }
+  render();
+});
+
+document.getElementById("clearSelection").addEventListener("click", clearSelection);
+
+render();
+</script>
+</body>
+</html>

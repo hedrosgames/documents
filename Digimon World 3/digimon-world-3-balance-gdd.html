@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digimon World 3 — GDD de Balanceamento</title>
+<style>
+:root {
+  --bg: #0c1017;
+  --panel: #121820;
+  --text: #e8eef5;
+  --muted: #8b9aab;
+  --line: #243041;
+  --accent: #3ecf8e;
+  --link: #6eb6ff;
+  --open: #e0a045;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--link); }
+.doc-nav {
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+  margin-top: 0.85rem;
+}
+.doc-nav a {
+  text-decoration: none; color: var(--muted);
+  border-bottom: 1px solid transparent;
+  padding: 0.15rem 0; margin-right: 0.85rem;
+  font-size: 0.8rem; font-weight: 600;
+}
+.doc-nav a:hover { color: var(--text); }
+.doc-nav a.current {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+header {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+header h1 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  max-width: 40rem;
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0.5rem 1.25rem 3.5rem;
+}
+
+.toc {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 1rem;
+  padding: 0.85rem 0 1rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0.5rem;
+  font-size: 0.78rem;
+}
+.toc a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.toc a:hover { color: var(--text); }
+
+section {
+  padding: 1.35rem 0 1.15rem;
+  border-bottom: 1px solid var(--line);
+}
+section:last-child { border-bottom: none; }
+section h2 {
+  margin: 0 0 0.65rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+section h3 {
+  margin: 1.15rem 0 0.35rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--text);
+}
+section p {
+  margin: 0.45rem 0;
+  color: #c9d4e0;
+  font-size: 0.92rem;
+}
+section ul, section ol {
+  margin: 0.4rem 0 0.55rem;
+  padding-left: 1.2rem;
+  color: #c9d4e0;
+  font-size: 0.9rem;
+}
+section li { margin: 0.28rem 0; }
+code {
+  font-size: 0.84em;
+  color: var(--accent);
+}
+
+.status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-left: 0.4rem;
+}
+
+.flow {
+  margin: 0.75rem 0;
+  padding: 0.65rem 0.75rem;
+  background: var(--panel);
+  border-left: 2px solid var(--line);
+  font-size: 0.86rem;
+  color: #b8c5d4;
+  line-height: 1.6;
+}
+.flow b { color: var(--text); font-weight: 650; }
+.flow .gap { color: var(--open); font-weight: 650; }
+
+.open {
+  margin-top: 0.85rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--open);
+}
+.open .tag {
+  display: block;
+  color: var(--open);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25rem;
+}
+.open ul { margin: 0; }
+
+.tracks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+.tracks div {
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--line);
+}
+.tracks h4 {
+  margin: 0 0 0.25rem;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+.tracks p {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.files {
+  margin: 0.55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.files li {
+  display: grid;
+  grid-template-columns: minmax(10rem, 14rem) 1fr;
+  gap: 0.65rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  font-size: 0.86rem;
+}
+.files li:last-child { border-bottom: none; }
+.files span { color: var(--muted); }
+
+.prio {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+  margin: 0.55rem 0 0;
+}
+.prio li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 1.4rem 1fr;
+  gap: 0.5rem;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+  color: #c9d4e0;
+}
+.prio li::before {
+  content: counter(step);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 640px) {
+  .tracks { grid-template-columns: 1fr; }
+  .files li { grid-template-columns: 1fr; gap: 0.15rem; }
+  header, .wrap { padding-left: 1rem; padding-right: 1rem; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>GDD de Balanceamento</h1>
+  <p>Aqui você cruza mapa, monstro e Digivolution com o que já está em <code>data/</code>. Número que não tem fonte vira Ponto em Aberto.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
+    <a href="digimon-world-3-steal-items.html">Steal Items</a>
+    <a href="digimon-world-3-boosters.html">Boosters</a>
+    <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a>
+    <a href="digimon-world-3-monster-stats.html">Monster Stats</a>
+    <a href="digimon-world-3-level-exp.html">Level EXP</a>
+    <a href="digimon-world-3-walkthrough.html">Walkthrough</a>
+    <a href="digimon-world-3-routes.html">Routes</a>
+    <a class="current" href="digimon-world-3-balance-gdd.html">Balance GDD</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Sumário">
+    <a href="#para-que">Para que serve</a>
+    <a href="#loop">Core Loop</a>
+    <a href="#pilares">Pilares</a>
+    <a href="#combate">Combate</a>
+    <a href="#xp">Duas barras de XP</a>
+    <a href="#mapa">Review de mapa</a>
+    <a href="#dados">Dados</a>
+    <a href="#prioridade">Ordem de gaps</a>
+  </nav>
+
+  <section id="para-que">
+    <h2>Para que serve</h2>
+    <p>Você usa este doc para decidir se um mapa do Server está duro demais, se um Power resolve a zona, ou se o grind de Digivolution está lento. Cruza o que o monstro aguenta com o que o partner ganha.</p>
+    <p>Hoje dá para comparar zonas relativamente: nível, HP, soft elemental, EXP/Bits por kill. Ainda não dá turns-to-kill absolutos — falta fórmula de dano e growth do partner.</p>
+  </section>
+
+  <section id="loop">
+    <h2>Core Loop</h2>
+    <p>Você prepara a party na cidade (cura, loja, Digi-Beetle), entra no mapa do Server, luta, leva recompensa e decide: Digivolve, troca equip, avança a história ou farm.</p>
+    <div class="flow" aria-label="Fluxo do core loop">
+      <b>Cidade / Digi-Beetle</b> → mapa do Server → combate → EXP · Bits · steal · DV → Digivolve / equip / loja → história ou farm
+    </div>
+    <div class="open">
+      <b class="tag">Ponto em Aberto</b>
+      <ul>
+        <li>Qual a duração alvo de uma sessão neste projeto?</li>
+        <li>O que é obrigatório fechar numa sessão vs grind livre?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="pilares">
+    <h2>Pilares</h2>
+    <p>Cada um responde uma pergunta. Se a pergunta não fecha, o balance fica no escuro.</p>
+
+    <h3>Sessão <span class="status">parcial</span></h3>
+    <p>O que você faz e o que sobra depois? Loop cidade → Server → luta → recompensa → Digivolve.</p>
+
+    <h3>Combate <span class="status">gap</span></h3>
+    <p>Como você vence o turno? Locked: stats e resists dos monstros. Falta fórmula, acerto, crítico, Speed.</p>
+
+    <h3>Progressão <span class="status">parcial</span></h3>
+    <p>O que sobe entre lutas? Locked: EXP 1–99, DV tiers, unlocks ~5 / 20 / 40. Falta growth de stats e DV base por inimigo.</p>
+
+    <h3>Economia <span class="status">parcial</span></h3>
+    <p>Como Bits e itens entram e saem? Locked: Bits + steal por mapa. Falta preços de loja, taxa de steal, % dos Powers.</p>
+
+    <h3>Pacing de mapa <span class="status">parcial</span></h3>
+    <p>Quando a zona fica justa? Locked: nível + tip de Power. Falta spawn, tamanho de encontro, gates, bosses.</p>
+
+    <h3>Tech / Equip <span class="status">gap</span></h3>
+    <p>Como você monta poder além do nível? Locked: techs com Lv/MP na árvore. Falta power numérico, Load, tabela de gear.</p>
+  </section>
+
+  <section id="combate">
+    <h2>Pipeline de combate</h2>
+    <p>Você escolhe ataque ou tech. O jogo cruza seu poder com a resist do monstro. Sem a caixa do meio, os JSONs não viram turns-to-kill.</p>
+    <div class="flow" aria-label="Pipeline de combate">
+      Stats do partner → tech / básico → elemento + Power → resist do alvo → <span class="gap">fórmula de dano</span> → HP do alvo
+    </div>
+    <div class="open">
+      <b class="tag">Ponto em Aberto</b>
+      <ul>
+        <li>Qual a fórmula de dano físico e mágico?</li>
+        <li>Como Water 60 (ou qualquer resist) vira multiplicador?</li>
+        <li>Como funcionam acerto, crítico e ordem de turno (Speed)?</li>
+        <li>Qual a taxa base de status vs a resist do monstro?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="xp">
+    <h2>Duas barras de XP</h2>
+    <p>Você sobe o Rookie numa barra e a Digivolution em outra. Agumon Lv 40 com Greymon baixo é cenário normal se você pouco Digivolveu em luta.</p>
+    <div class="tracks">
+      <div>
+        <h4>EXP do partner</h4>
+        <p>Curva 1–99 por Rookie em <code>partner-level-exp.json</code>. Decide stats base e unlocks Champion / Ultimate / Mega.</p>
+      </div>
+      <div>
+        <h4>DV EXP da Digivolution</h4>
+        <p>Custo por tier em <code>dvTiers</code> (10 ou 50 por nível). Ganho por luta depende do Rookie vs o inimigo — base DV por monstro ainda aberta.</p>
+      </div>
+    </div>
+    <div class="open">
+      <b class="tag">Ponto em Aberto</b>
+      <ul>
+        <li>Quanto de cada stat o partner ganha por nível?</li>
+        <li>Stats base e growth de cada Digivolution?</li>
+        <li>Qual o base DV de cada inimigo na fórmula de ganho?</li>
+        <li>Como Training Points / ginásio alteram o growth?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="mapa">
+    <h2>Como revisar um mapa</h2>
+    <p>Você lista os Digimon por nível, olha soft elemental, soma EXP/Bits por kill e só então pergunta se o partner aguenta — quando o growth existir.</p>
+    <div class="flow" aria-label="Review de mapa">
+      Listar Digimon do mapa (nível) → resists + tip de Power → EXP / Bits por kill → <span class="gap">comparar com growth</span> → ajustar spawn · drop · HP · soft elemental
+    </div>
+    <div class="open">
+      <b class="tag">Ponto em Aberto</b>
+      <ul>
+        <li>Composição de encontro (1–3) e taxa de spawn por mapa?</li>
+        <li>Nível / Digivolution / item mínimos recomendados por área?</li>
+        <li>Bosses: fases, scripts e moveset além de HP?</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="dados">
+    <h2>Dados locked</h2>
+    <p>Fonte canônica para bots: pasta <code>data/</code>. HTML das guias é visual; o número mora no JSON.</p>
+    <ul class="files">
+      <li><code>monsters.json</code><span>Level, EXP, Bits, HP/MP, combate, resists, status, drop</span></li>
+      <li><code>elemental-resistances.json</code><span>Tolerâncias + mapIds</span></li>
+      <li><code>partner-level-exp.json</code><span>EXP 1–99 + dvTiers (custo)</span></li>
+      <li><code>steal-drops.json</code><span>Steal por mapa com level</span></li>
+      <li><code>digimon-level-by-name.json</code><span>Lookup nome → level</span></li>
+      <li><code>boosters.json</code><span>Packs A / B / R e setores</span></li>
+      <li><code>balance-gdd.json</code><span>Este framework (pilares, fluxos, perguntas)</span></li>
+    </ul>
+  </section>
+
+  <section id="prioridade">
+    <h2>Ordem para fechar gaps</h2>
+    <p>Feche nesta ordem. Cada passo destrava simulação que o anterior não consegue sozinho.</p>
+    <ol class="prio">
+      <li>Fórmulas de dano + conversão de resistência</li>
+      <li>Growth de partner + Digivolutions</li>
+      <li>Tech list com power numérico</li>
+      <li>Equip / multiplicadores Power 1 · 2 · S</li>
+      <li>DV base por inimigo + encontros</li>
+      <li>Economia Bits + gates por mapa</li>
+    </ol>
+  </section>
+</div>
+</body>
+</html>

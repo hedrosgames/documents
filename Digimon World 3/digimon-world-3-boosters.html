@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digimon World 3 — Boosters</title>
+<style>
+:root {
+  --bg: #0c1017;
+  --panel: #151c27;
+  --panel2: #1c2635;
+  --text: #edf2f7;
+  --muted: #8fa0b5;
+  --asuka: #4db6ff;
+  --amaterasu: #f0a020;
+  --special: #b388ff;
+  --border: #2a3648;
+  --accent: #3ecf8e;
+  --kind-a: #ff8a65;
+  --kind-b: #4fc3f7;
+  --kind-r: #ce93d8;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; -webkit-font-smoothing: antialiased; font-family: "Segoe UI", system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse 70% 40% at 0% 0%, rgba(255,138,101,0.08), transparent),
+    radial-gradient(ellipse 50% 35% at 100% 0%, rgba(79,195,247,0.08), transparent),
+    var(--bg);
+  color: var(--text); line-height: 1.45; }
+button, input { font: inherit; }
+button:focus-visible, input:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
+  outline-offset: 2px;
+}
+button { user-select: none; -webkit-tap-highlight-color: transparent; cursor: pointer; }
+.doc-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+.doc-nav a {
+  display: inline-flex; align-items: center; gap: 0.35rem; text-decoration: none;
+  color: var(--muted); border: 1px solid var(--border); background: var(--panel);
+  border-radius: 999px; padding: 0.32rem 0.75rem; font-size: 0.78rem; font-weight: 600;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+.doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
+.doc-nav a.current {
+  color: var(--text); border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
+}
+.panel-scroll { scrollbar-width: thin; scrollbar-color: #3a4a60 transparent; }
+.panel-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.panel-scroll::-webkit-scrollbar-thumb { background: #3a4a60; border-radius: 999px; }
+header {
+  padding: 1.25rem 1.5rem 0.9rem; border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel) 55%, transparent);
+}
+header h1 { margin: 0 0 0.25rem; font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 700; letter-spacing: -0.02em; }
+header p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52rem; line-height: 1.5; }
+.wrap {
+  max-width: 1280px; margin: 0 auto; padding: 0.85rem 1.25rem 2.5rem;
+}
+.columns {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 0.85rem; align-items: start; margin-bottom: 0.85rem;
+}
+.columns > * { min-width: 0; }
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 0.55rem; align-items: center;
+  margin-bottom: 0.85rem;
+  padding: 0.65rem 0.75rem; background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+}
+.chip-row { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+.chip-row .lbl {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 700; margin-right: 0.15rem;
+}
+.chip {
+  border: 1px solid var(--border); background: var(--panel2); color: var(--text);
+  border-radius: 999px; padding: 0.28rem 0.7rem; font-size: 0.76rem; font-weight: 600;
+  transition: border-color 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.chip:hover { border-color: #4a5d75; }
+.chip.active { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--panel2)); }
+.chip.kind-a.active { border-color: var(--kind-a); background: color-mix(in srgb, var(--kind-a) 18%, var(--panel2)); color: #ffb39a; }
+.chip.kind-b.active { border-color: var(--kind-b); background: color-mix(in srgb, var(--kind-b) 18%, var(--panel2)); color: #9adcfb; }
+.chip.kind-r.active { border-color: var(--kind-r); background: color-mix(in srgb, var(--kind-r) 18%, var(--panel2)); color: #e1bee7; }
+.search {
+  margin-left: auto; min-width: 180px; flex: 1 1 180px; max-width: 280px;
+  border: 1px solid var(--border); background: var(--panel2); color: var(--text);
+  border-radius: 999px; padding: 0.38rem 0.85rem; font-size: 0.82rem;
+}
+.search:hover, .search:focus { border-color: #4a5d75; }
+.meta-bar {
+  color: var(--muted); font-size: 0.8rem; margin-bottom: 0.6rem;
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center;
+}
+.meta-bar strong { color: var(--text); font-weight: 650; }
+.pack-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 0.5rem;
+}
+.pack {
+  text-align: left; border: 1px solid var(--border); background: var(--panel); color: var(--text);
+  border-radius: 12px; padding: 0.7rem 0.75rem; position: relative; overflow: hidden;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.12s ease;
+}
+.pack::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--kind-b);
+}
+.pack.kind-a::before { background: var(--kind-a); }
+.pack.kind-b::before { background: var(--kind-b); }
+.pack.kind-r::before,
+.pack.kind-s::before { background: var(--kind-r); }
+.pack:hover { border-color: #4a5d75; transform: translateY(-1px); }
+.pack.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--panel));
+}
+.pack .id { font-size: 1.05rem; font-weight: 750; letter-spacing: -0.02em; }
+.pack .kind-tag {
+  display: inline-block; margin-top: 0.35rem; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em; padding: 0.1rem 0.35rem; border-radius: 4px;
+}
+.pack.kind-a .kind-tag { background: color-mix(in srgb, var(--kind-a) 22%, transparent); color: #ffb39a; }
+.pack.kind-b .kind-tag { background: color-mix(in srgb, var(--kind-b) 22%, transparent); color: #9adcfb; }
+.pack.kind-r .kind-tag,
+.pack.kind-s .kind-tag { background: color-mix(in srgb, var(--kind-r) 22%, transparent); color: #e1bee7; }
+.pack .tip {
+  display: block; margin-top: 0.4rem; color: var(--muted); font-size: 0.72rem; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.detail-panel {
+  position: sticky; top: 0.75rem; max-height: calc(100vh - 1.5rem); overflow: auto;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+}
+.detail-empty {
+  padding: 1.5rem 1.1rem; color: var(--muted); font-size: 0.88rem; line-height: 1.5;
+}
+.detail-empty h2 { margin: 0 0 0.45rem; color: var(--text); font-size: 1.05rem; }
+.detail-head {
+  padding: 0.85rem 1rem; background: var(--panel2); border-bottom: 1px solid var(--border);
+}
+.detail-head h2 { margin: 0; font-size: 1.15rem; }
+.detail-head .meta { margin-top: 0.3rem; color: var(--muted); font-size: 0.78rem; }
+.source-list { display: flex; flex-direction: column; gap: 0.65rem; padding: 0.85rem; }
+.source-card {
+  border: 1px solid var(--border); background: var(--panel2); border-radius: 10px; padding: 0.7rem 0.8rem;
+  border-left: 3px solid var(--kind-b);
+}
+.source-card.kind-a { border-left-color: var(--kind-a); }
+.source-card.kind-b { border-left-color: var(--kind-b); }
+.source-card.kind-r,
+.source-card.kind-s { border-left-color: var(--kind-r); }
+.source-card .top { display: flex; align-items: center; gap: 0.45rem; }
+.source-card .kind {
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 0.1rem 0.35rem; border-radius: 4px;
+}
+.source-card.kind-a .kind { background: color-mix(in srgb, var(--kind-a) 22%, transparent); color: #ffb39a; }
+.source-card.kind-b .kind { background: color-mix(in srgb, var(--kind-b) 22%, transparent); color: #9adcfb; }
+.source-card.kind-r .kind,
+.source-card.kind-s .kind { background: color-mix(in srgb, var(--kind-r) 22%, transparent); color: #e1bee7; }
+.source-card .title { font-weight: 650; font-size: 0.9rem; }
+.source-card .maps-label {
+  margin-top: 0.4rem;
+  font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; margin-bottom: 0.2rem;
+}
+.source-card .map { color: #c5d8ea; font-size: 0.82rem; line-height: 1.35; margin-bottom: 0.15rem; }
+.source-card .map.map-booster { margin-bottom: 0.7rem; }
+.source-card .map.map-booster:last-child { margin-bottom: 0; }
+.secret-intro {
+  margin: 0 0.85rem 0.75rem; padding: 0.7rem 0.8rem;
+  background: var(--panel2); border: 1px solid var(--border); border-radius: 10px;
+  color: var(--muted); font-size: 0.8rem; line-height: 1.45;
+}
+.secret-intro p { margin: 0 0 0.45rem; }
+.secret-intro p:last-child { margin-bottom: 0; }
+.secret-intro strong { color: var(--text); font-weight: 650; }
+.source-card .method-tag {
+  display: inline-block; margin: 0.35rem 0 0.25rem;
+  font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+  color: #e1bee7;
+}
+.source-card .steps {
+  margin: 0.35rem 0 0; padding-left: 1.1rem; color: #c5d8ea;
+  font-size: 0.8rem; line-height: 1.4;
+}
+.source-card .steps li { margin: 0 0 0.28rem; }
+.source-card .steps li:last-child { margin-bottom: 0; }
+.pack-cards {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 0.55rem 0.7rem 0.65rem; margin: 0 0 0.85rem;
+}
+.pack-cards .card-head {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.75rem; align-items: baseline;
+  margin-bottom: 0.45rem;
+}
+.pack-cards h3 {
+  margin: 0; font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--muted);
+}
+.pack-cards .hint { margin: 0; font-size: 0.72rem; color: var(--muted); }
+.pack-cards .empty { margin: 0; color: var(--muted); font-size: 0.82rem; }
+.card-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 0.22rem;
+}
+.card-list button {
+  text-align: left; border: 1px solid var(--border); background: var(--panel2);
+  color: var(--text); border-radius: 5px; padding: 0.18rem 0.35rem;
+  cursor: pointer; display: flex; align-items: center; gap: 0.28rem;
+  font-size: 0.72rem; line-height: 1.15; min-width: 0;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.card-list button:hover { border-color: #4a5d75; }
+.card-list button.owned {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel2));
+}
+.card-list .num {
+  flex: 0 0 auto; color: var(--muted);
+  font-variant-numeric: tabular-nums; font-size: 0.66rem; font-weight: 650;
+}
+.card-list .cname {
+  flex: 1; font-weight: 600; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-list button.owned .cname::after {
+  content: " ✓"; color: var(--accent); font-weight: 700;
+}
+.owned-bar {
+  display: flex; flex-wrap: wrap; gap: 0.5rem 0.85rem; align-items: center;
+  margin: 0 0 0.65rem; padding: 0.5rem 0.7rem;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  font-size: 0.8rem; color: var(--muted);
+}
+.owned-bar strong { color: var(--accent); }
+.owned-bar button {
+  margin-left: auto; border: 1px solid var(--border); background: var(--panel2);
+  color: var(--muted); border-radius: 999px; padding: 0.22rem 0.65rem;
+  font-size: 0.72rem; font-weight: 600; cursor: pointer;
+}
+.owned-bar button:hover { color: var(--text); border-color: #4a5d75; }
+.pack .have {
+  display: block; margin-top: 0.3rem; font-size: 0.68rem; color: var(--muted);
+}
+.pack .have.done { color: var(--accent); font-weight: 650; }
+.view-pack-only.hidden,
+.view-card-only.hidden { display: none !important; }
+.card-catalog {
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.4rem;
+}
+.card-catalog button {
+  text-align: left; border: 1px solid var(--border); background: var(--panel);
+  color: var(--text); border-radius: 9px; padding: 0.45rem 0.55rem;
+  cursor: pointer; display: flex; flex-direction: column; gap: 0.18rem;
+  font-size: 0.8rem; line-height: 1.25;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+.card-catalog button:hover { border-color: #4a5d75; }
+.card-catalog button.owned {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel));
+}
+.card-catalog .row {
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.card-catalog .num {
+  flex: 0 0 auto; min-width: 2.2rem; color: var(--muted);
+  font-variant-numeric: tabular-nums; font-size: 0.72rem; font-weight: 650;
+}
+.card-catalog .cname {
+  flex: 1; font-weight: 650; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-catalog button.owned .cname::after {
+  content: " ✓"; color: var(--accent); font-weight: 700;
+}
+.card-catalog .packs {
+  color: var(--muted); font-size: 0.68rem; padding-left: 2.6rem;
+  word-break: break-word;
+}
+.card-catalog .packs .secret { color: #ce93d8; font-weight: 650; }
+.card-catalog button.secret:not(.owned) {
+  border-color: color-mix(in srgb, var(--kind-r) 45%, var(--border));
+}
+
+@media (max-width: 1100px) {
+  .card-catalog { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .columns { grid-template-columns: 1fr; }
+  .detail-panel { position: static; max-height: none; order: -1; }
+  .search { margin-left: 0; max-width: none; }
+  .card-catalog { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .card-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  header { padding: 1rem 0.9rem 0.8rem; }
+  .wrap { padding: 0.75rem 0.75rem 2rem; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Boosters</h1>
+  <p>Aqui você vê onde cada pack cai. A vem de duelo de cartas, B de Cardmon em árvore ou pesca, e R entra no lugar do B num drop raro. Steal fica em outra página.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="digimon-world-3-agumon-tree.html">Partner Digivolution</a>
+    <a href="digimon-world-3-steal-items.html">Steal Items</a>
+    <a class="current" href="digimon-world-3-boosters.html">Boosters</a>
+    <a href="digimon-world-3-elemental-weakness.html">Elemental Weaknesses</a>
+    <a href="digimon-world-3-monster-stats.html">Monster Stats</a>
+    <a href="digimon-world-3-level-exp.html">Level EXP</a>
+    <a href="digimon-world-3-walkthrough.html">Walkthrough</a>
+    <a href="digimon-world-3-routes.html">Routes</a>
+    <a href="digimon-world-3-balance-gdd.html">Balance GDD</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="chip-row" id="viewFilters" role="group" aria-label="View">
+      <span class="lbl">View</span>
+      <button type="button" class="chip active" data-view="packs">Packs</button>
+      <button type="button" class="chip" data-view="cards">Cards · #</button>
+    </div>
+    <div class="chip-row view-pack-only" id="kindFilters" role="group" aria-label="Pack type">
+      <span class="lbl">Type</span>
+      <button type="button" class="chip active" data-kind="all">All</button>
+      <button type="button" class="chip kind-a" data-kind="A">A · Challengers</button>
+      <button type="button" class="chip kind-b" data-kind="B">B · Cardmon</button>
+      <button type="button" class="chip kind-r" data-kind="R">R · Rare</button>
+    </div>
+    <div class="chip-row view-pack-only" id="methodFilters" role="group" aria-label="Method">
+      <span class="lbl">Method</span>
+      <button type="button" class="chip active" data-method="all">All</button>
+      <button type="button" class="chip" data-method="trees">Kick trees</button>
+      <button type="button" class="chip" data-method="fish">Fishing</button>
+      <button type="button" class="chip" data-method="cards">Card battles</button>
+    </div>
+    <div class="chip-row view-card-only hidden" id="cardStatusFilters" role="group" aria-label="Card status">
+      <span class="lbl">Status</span>
+      <button type="button" class="chip active" data-card-status="all">All</button>
+      <button type="button" class="chip" data-card-status="owned">Owned</button>
+      <button type="button" class="chip" data-card-status="missing">Missing</button>
+      <button type="button" class="chip" data-card-status="secret">Secret</button>
+    </div>
+    <input class="search" type="search" id="search" placeholder="Search pack, map, tip…" autocomplete="off">
+  </div>
+
+  <div class="meta-bar" id="metaBar"></div>
+  <div class="owned-bar" id="ownedBar"></div>
+
+  <div class="columns view-pack-only" id="packView">
+    <div class="pack-grid" id="packGrid"></div>
+    <aside class="detail-panel panel-scroll" id="detail" aria-live="polite"></aside>
+  </div>
+
+  <div class="pack-cards view-pack-only" id="packCards" aria-live="polite"></div>
+
+  <div class="view-card-only hidden" id="cardView">
+    <div class="card-catalog" id="cardCatalog"></div>
+  </div>
+</div>
+
+<script>
+const DATA = {"game":"Digimon World 3","dataset":"boosters","description":"Booster pack sources and card contents: A (card battles), B (Cardmon trees/fishing), R (rare replaces).","trees":{"central":"Central Park, Plug Cape, Shell Beach, Wire Forest Entrance","eastNoKick":"West Wire Forest, East Wire Forest, Divermon's Lake, Wind Prairie","kicking":"Kicking Forest","south":"Bulk Swamp, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle","west":"N Badland West, Bullet Valley","north":"Boot Mountain, Kulon Mine, Lake of Ice, Snow Mountain"},"fish":{"central":"Central Park, Plug Cape, Shell Beach, Wire Forest Entrance","east":"West Wire Forest, Divermon's Lake, Kicking Forest","south":"Bulk Bridge, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle, South Cape","west":"N Badland East, Pelche Oasis, S Badland","north":"Lake of Ice (north platform near Legendary Gym)"},"boosters":[{"id":"1a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":57,"name":"Berserk Energy"},{"id":58,"name":"Disturb Gear"},{"id":99,"name":"Elecmon"},{"id":101,"name":"Wormmon"},{"id":103,"name":"Salamon"},{"id":138,"name":"Gekomon"},{"id":139,"name":"Monmon"},{"id":144,"name":"Otamamon"},{"id":146,"name":"Syakkomon"},{"id":184,"name":"Tentomon"},{"id":186,"name":"Betamon"},{"id":189,"name":"Mushroomon"},{"id":225,"name":"Agumon"},{"id":230,"name":"Goburimon"},{"id":232,"name":"Penguinmon"},{"id":271,"name":"Tsukaimon"},{"id":272,"name":"ModokiBetamon"},{"id":275,"name":"Muchomon"},{"id":311,"name":"ClearAgumon"},{"id":312,"name":"ToyAgumon"}]},{"id":"2a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":53,"name":"Green Remove"},{"id":59,"name":"Protect Armor"},{"id":100,"name":"Patamon"},{"id":102,"name":"Kunemon"},{"id":141,"name":"Gomamon"},{"id":142,"name":"SnowAgumon"},{"id":143,"name":"Gizamon"},{"id":145,"name":"Crabmon"},{"id":182,"name":"Kumamon"},{"id":187,"name":"Kokuwamon"},{"id":188,"name":"Floramon"},{"id":227,"name":"Guilmon"},{"id":228,"name":"Hawkmon"},{"id":231,"name":"Sharmamon"},{"id":266,"name":"Bakemon"},{"id":268,"name":"DemiDevimon"},{"id":270,"name":"Aruraumon"},{"id":273,"name":"Tapirmon"},{"id":274,"name":"Candlemon"},{"id":313,"name":"Gotsumon"},{"id":314,"name":"Hagurumon"}]},{"id":"3a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":55,"name":"Black Remove"},{"id":59,"name":"Protect Armor"},{"id":60,"name":"Assault Armor"},{"id":93,"name":"Tortomon"},{"id":95,"name":"Yanmamon"},{"id":96,"name":"Kotemon"},{"id":97,"name":"Armadillomon"},{"id":98,"name":"Psychemon"},{"id":136,"name":"Coelamon"},{"id":138,"name":"Gekomon"},{"id":140,"name":"Renamon"},{"id":178,"name":"Dokugumon"},{"id":181,"name":"Vegiemon"},{"id":185,"name":"Palmon"},{"id":223,"name":"Akatorimon"},{"id":224,"name":"SandYanmamon"},{"id":226,"name":"Veemon"},{"id":229,"name":"Biyomon"},{"id":254,"name":"Raremon"},{"id":264,"name":"Gesomon"},{"id":265,"name":"Soulmon"},{"id":269,"name":"Gazimon"},{"id":295,"name":"Cyclonemon"}]},{"id":"4a","group":"A — Challengers","tip":"Duelo · Tamer Mitch","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"},{"kind":"A","title":"Tamer Mitch","detail":"Pack obtido em duelo (missão lendária · Wield Aura).","maps":"Asuka East · Wire Forest"}],"cards":[{"id":24,"name":"Summon Goburimon"},{"id":47,"name":"Break Launcher"},{"id":51,"name":"White Remove"},{"id":52,"name":"Blue Remove"},{"id":56,"name":"Summon Cancel"},{"id":83,"name":"Gatomon"},{"id":87,"name":"Snimon"},{"id":91,"name":"Ankylomon"},{"id":94,"name":"Zassomon"},{"id":129,"name":"Ikkakumon"},{"id":130,"name":"Frigimon"},{"id":137,"name":"Dolphmon"},{"id":173,"name":"Kuwagamon"},{"id":179,"name":"Kiwimon"},{"id":180,"name":"Woodmon"},{"id":220,"name":"Birdramon"},{"id":222,"name":"RedVegiemon"},{"id":259,"name":"Devidramon"},{"id":299,"name":"Tankmon"},{"id":300,"name":"Clockmon"}]},{"id":"5a","group":"A — Challengers","tip":"Duelo · Tamer Bob","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"},{"kind":"A","title":"Tamer Bob","detail":"Pack obtido em duelo (missão lendária · Tidal Wave).","maps":"Asuka East · Kicking Forest"}],"cards":[{"id":12,"name":"Summon Gomamon"},{"id":18,"name":"Summon Palmon"},{"id":30,"name":"Summon Devimon"},{"id":44,"name":"Program Charge"},{"id":54,"name":"Red Remove"},{"id":81,"name":"Angemon"},{"id":85,"name":"Apemon"},{"id":126,"name":"Hookmon"},{"id":134,"name":"Ninjamon"},{"id":174,"name":"J-Mojyamon"},{"id":175,"name":"Togemon"},{"id":216,"name":"Fugamon"},{"id":218,"name":"Aquilamon"},{"id":221,"name":"Flarerizamon"},{"id":257,"name":"Wizardmon"},{"id":266,"name":"Bakemon"},{"id":267,"name":"Roachmon"},{"id":308,"name":"Kokatorimon"},{"id":309,"name":"Numemon"},{"id":310,"name":"ShellNumemon"}]},{"id":"6a","group":"A — Challengers","tip":"Duelo · Tamer Jessica","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"},{"kind":"A","title":"Tamer Jessica","detail":"Pack obtido em duelo (missão lendária · Volcanic Cannon).","maps":"Asuka South · Tranquil Swamp"}],"cards":[{"id":6,"name":"Summon Patamon"},{"id":10,"name":"Eclipse Undo"},{"id":11,"name":"Blue Power"},{"id":17,"name":"Green Power"},{"id":43,"name":"Digimon Charge"},{"id":50,"name":"Summon Hagurumon"},{"id":80,"name":"Dinohumon"},{"id":84,"name":"Piddomon"},{"id":86,"name":"Centarumon"},{"id":92,"name":"Gururumon"},{"id":125,"name":"Kyubimon"},{"id":168,"name":"Kabuterimon"},{"id":210,"name":"Growlmon"},{"id":212,"name":"Veedramon"},{"id":215,"name":"Minotarumon"},{"id":219,"name":"Meramon"},{"id":258,"name":"DarkTyrannomon"},{"id":263,"name":"Octomon"},{"id":306,"name":"Sukamon"},{"id":307,"name":"Geremon"}]},{"id":"7a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":15,"name":"Green Force"},{"id":23,"name":"Red Power"},{"id":29,"name":"Black Power"},{"id":42,"name":"Charge Terminal"},{"id":48,"name":"Cancel Wheel"},{"id":49,"name":"Rusty Dust"},{"id":82,"name":"Stingmon"},{"id":128,"name":"Shellmon"},{"id":135,"name":"Starmon"},{"id":167,"name":"Grizzmon"},{"id":170,"name":"Tuskmon"},{"id":177,"name":"Saberdramon"},{"id":209,"name":"Greymon"},{"id":214,"name":"Ogremon"},{"id":252,"name":"Devimon"},{"id":253,"name":"Kurisarimon"},{"id":262,"name":"Darkrizamon"},{"id":298,"name":"Guardromon"},{"id":303,"name":"BomberNanimon"},{"id":305,"name":"NiseDrimogemon"}]},{"id":"8a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":3,"name":"Gold Aura"},{"id":5,"name":"White Power"},{"id":16,"name":"Beast Energy"},{"id":22,"name":"Fire Cannon"},{"id":38,"name":"Security Hall"},{"id":46,"name":"Illegal Access"},{"id":88,"name":"Thundermon"},{"id":90,"name":"ShimaUnimon"},{"id":122,"name":"Divermon"},{"id":124,"name":"Seadramon"},{"id":132,"name":"Icemon"},{"id":169,"name":"Garurumon"},{"id":208,"name":"Mammothmon"},{"id":211,"name":"ExVeemon"},{"id":213,"name":"Airdramon"},{"id":254,"name":"Raremon"},{"id":261,"name":"Hyogamon"},{"id":295,"name":"Cyclonemon"},{"id":302,"name":"PlatinumSukamon"},{"id":304,"name":"Drimogemon"}]},{"id":"9a","group":"A — Challengers","tip":"Duelo · Tamer Nakano","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"},{"kind":"A","title":"Tamer Nakano","detail":"Pack obtido em duelo (missão lendária · Sacred Spear).","maps":"Asuka West · Mirage Tower (Mobius Desert)"}],"cards":[{"id":21,"name":"Flame Gatlin"},{"id":27,"name":"Chaos Virus"},{"id":28,"name":"Vicious Hacking"},{"id":41,"name":"Power Super Metal"},{"id":45,"name":"Trade Charge"},{"id":75,"name":"Silphymon"},{"id":79,"name":"Piximon"},{"id":89,"name":"Unimon"},{"id":121,"name":"WaruSeadramon"},{"id":133,"name":"Mojyamon"},{"id":164,"name":"Blossomon"},{"id":171,"name":"Monochromon"},{"id":172,"name":"MoriShellmon"},{"id":176,"name":"Flymon"},{"id":202,"name":"Garudamon"},{"id":217,"name":"Tyrannomon"},{"id":260,"name":"Vilemon"},{"id":293,"name":"Garbagemon"},{"id":294,"name":"Meteormon"},{"id":301,"name":"MudFrigimon"}]},{"id":"10a","group":"A — Challengers","tip":"Duelo · Tamer Mitaka","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"},{"kind":"A","title":"Tamer Mitaka","detail":"Pack obtido em duelo (missão lendária · Darkness Gale).","maps":"Asuka North · Kulon Pit"}],"cards":[{"id":4,"name":"Protect Aura"},{"id":9,"name":"Freeze Bug"},{"id":14,"name":"Ecoly Cycle"},{"id":74,"name":"Panjyamon"},{"id":78,"name":"Mamemon"},{"id":113,"name":"Zudomon"},{"id":127,"name":"IceDevimon"},{"id":131,"name":"Ebidramon"},{"id":158,"name":"GrapLeomon"},{"id":160,"name":"Lillymon"},{"id":165,"name":"Deramon"},{"id":203,"name":"Kimeramon"},{"id":206,"name":"Megadramon"},{"id":249,"name":"LadyDevimon"},{"id":250,"name":"SkullMeramon"},{"id":255,"name":"MarineDevimon"},{"id":256,"name":"Musyamon"},{"id":287,"name":"Giromon"},{"id":296,"name":"Rockmon"},{"id":297,"name":"Deltamon"}]},{"id":"11a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":2,"name":"Summon Angemon"},{"id":26,"name":"Deceive Cloak"},{"id":36,"name":"Revival Charge"},{"id":67,"name":"Valkrymon"},{"id":73,"name":"Kyukimon"},{"id":77,"name":"MetalMamemon"},{"id":110,"name":"Preciomon"},{"id":115,"name":"Taomon"},{"id":120,"name":"Brachiomon"},{"id":123,"name":"Whamon"},{"id":152,"name":"RosemonI"},{"id":154,"name":"MetalEtemon"},{"id":157,"name":"WereGarurumon"},{"id":161,"name":"Etemon"},{"id":166,"name":"Leomon"},{"id":204,"name":"MasterTyrannomon"},{"id":205,"name":"Gigadramon"},{"id":207,"name":"MetalTyrannomon"},{"id":251,"name":"WaruMonzaemon"},{"id":290,"name":"Monzaemon"}]},{"id":"12a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":20,"name":"Blazing Chaos"},{"id":37,"name":"Chrono Balance"},{"id":71,"name":"MagnaAngemon"},{"id":72,"name":"Angewomon"},{"id":76,"name":"Knightmon"},{"id":111,"name":"Babamon"},{"id":116,"name":"Armormon"},{"id":117,"name":"BlueMeramon"},{"id":118,"name":"ShogunGekomon"},{"id":153,"name":"KingEtemon"},{"id":162,"name":"Triceramon"},{"id":163,"name":"Cherrymon"},{"id":199,"name":"Paildramon I"},{"id":201,"name":"WarGrowlmon"},{"id":247,"name":"Mummymon"},{"id":284,"name":"Puppetmon"},{"id":286,"name":"Andromon"},{"id":289,"name":"ExTyrannomon"},{"id":291,"name":"Digitamamon"}]},{"id":"13a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":40,"name":"Scramble Up"},{"id":70,"name":"PaildramonII"},{"id":109,"name":"SuperStarmon"},{"id":114,"name":"MegaSeadramon"},{"id":119,"name":"Scorpiomon"},{"id":148,"name":"Marsmon"},{"id":156,"name":"MegaKabuterimon"},{"id":159,"name":"Okuwamon"},{"id":191,"name":"Gallantmon"},{"id":193,"name":"Imperialdramon I"},{"id":200,"name":"MetalGreymon"},{"id":242,"name":"Myotismon"},{"id":243,"name":"Infermon"},{"id":246,"name":"SkullGreymon"},{"id":248,"name":"Arukenimon"},{"id":280,"name":"BK WarGrowlmon"},{"id":281,"name":"BK KingNumemon"},{"id":282,"name":"HiAndromon"},{"id":285,"name":"Shakkoumon"},{"id":288,"name":"Datamon"}]},{"id":"14a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":39,"name":"Absolute Barrier"},{"id":63,"name":"WarGreymon"},{"id":64,"name":"ImperialdramonII"},{"id":66,"name":"Magnadramon"},{"id":68,"name":"PrinceMamemon"},{"id":105,"name":"Sakuyamon"},{"id":106,"name":"Vikemon"},{"id":108,"name":"Pukumon"},{"id":147,"name":"Omnimon II"},{"id":148,"name":"Marsmon"},{"id":149,"name":"MetalGarurumon"},{"id":150,"name":"H-Kabuterimon"},{"id":192,"name":"Imperialdramon-F"},{"id":194,"name":"MegaGargomon"},{"id":196,"name":"Phoenixmon"},{"id":239,"name":"Ghoulmon"},{"id":240,"name":"Piedmon"},{"id":244,"name":"Dragomon"},{"id":245,"name":"SkullSatamon"},{"id":279,"name":"BK Seraphimon"},{"id":283,"name":"Boltmon"},{"id":292,"name":"Vademon"}]},{"id":"15a","group":"A — Challengers","tip":"Pack de duelos","sources":[{"kind":"A","title":"Card battles","detail":"Pack obtido em duelos.","maps":""},{"kind":"A","title":"Legendary Gym","detail":"Pack obtido em duelos.","maps":"Amaterasu North · Legendary Gym (Lake of Ice platform)"}],"cards":[{"id":61,"name":"Imperialdramon-P"},{"id":62,"name":"GuardiAngemon"},{"id":65,"name":"Seraphimon"},{"id":104,"name":"Cannondramon"},{"id":107,"name":"MetalSeadramon"},{"id":151,"name":"GranKuwagamon"},{"id":190,"name":"Omnimon I"},{"id":195,"name":"Machinedramon"},{"id":197,"name":"SkullMammothmon"},{"id":233,"name":"Armageddemon"},{"id":234,"name":"VenomMyotismon"},{"id":235,"name":"Diaboromon"},{"id":236,"name":"MaloMyotismon"},{"id":237,"name":"Beelzemon"},{"id":238,"name":"Apokarimon"},{"id":276,"name":"BK WarGreymon"},{"id":277,"name":"BK Imperialdramon"},{"id":278,"name":"BK MegaGargomon"}]},{"id":"1b","group":"B — Cardmon","tip":"Árvores ou pesca","sources":[{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Asuka Central · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; Asuka East · West Wire Forest, East Wire Forest, Divermon's Lake, Wind Prairie"},{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Asuka Central · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; Asuka East · West Wire Forest, Divermon's Lake, Kicking Forest"}],"cards":[{"id":57,"name":"Berserk Energy"},{"id":59,"name":"Protect Armor"},{"id":97,"name":"Armadillomon"},{"id":100,"name":"Patamon"},{"id":101,"name":"Wormmon"},{"id":102,"name":"Kunemon"},{"id":103,"name":"Salamon"},{"id":136,"name":"Coelamon"},{"id":138,"name":"Gekomon"},{"id":139,"name":"Monmon"},{"id":140,"name":"Renamon"},{"id":143,"name":"Gizamon"},{"id":145,"name":"Crabmon"},{"id":146,"name":"Syakkomon"},{"id":186,"name":"Betamon"},{"id":188,"name":"Floramon"},{"id":189,"name":"Mushroomon"},{"id":225,"name":"Agumon"},{"id":227,"name":"Guilmon"},{"id":228,"name":"Hawkmon"},{"id":264,"name":"Gesomon"},{"id":268,"name":"DemiDevimon"},{"id":274,"name":"Candlemon"},{"id":275,"name":"Muchomon"},{"id":311,"name":"ClearAgumon"},{"id":312,"name":"ToyAgumon"}]},{"id":"2b","group":"B — Cardmon","tip":"Só pesca","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Asuka South · Bulk Bridge, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle, South Cape"}],"cards":[{"id":11,"name":"Blue Power"},{"id":12,"name":"Summon Gomamon"},{"id":30,"name":"Summon Devimon"},{"id":43,"name":"Digimon Charge"},{"id":44,"name":"Program Charge"},{"id":53,"name":"Green Remove"},{"id":56,"name":"Summon Cancel"},{"id":84,"name":"Piddomon"},{"id":91,"name":"Ankylomon"},{"id":125,"name":"Kyubimon"},{"id":126,"name":"Hookmon"},{"id":129,"name":"Ikkakumon"},{"id":130,"name":"Frigimon"},{"id":134,"name":"Ninjamon"},{"id":137,"name":"Dolphmon"},{"id":144,"name":"Otamamon"},{"id":258,"name":"DarkTyrannomon"},{"id":259,"name":"Devidramon"},{"id":263,"name":"Octomon"},{"id":270,"name":"Aruraumon"},{"id":271,"name":"Tsukaimon"},{"id":307,"name":"Geremon"},{"id":314,"name":"Hagurumon"}]},{"id":"3b","group":"B — Cardmon","tip":"Só árvores","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Asuka East · Kicking Forest"}],"cards":[{"id":24,"name":"Summon Goburimon"},{"id":55,"name":"Black Remove"},{"id":58,"name":"Disturb Gear"},{"id":60,"name":"Assault Armor"},{"id":93,"name":"Tortomon"},{"id":95,"name":"Yanmamon"},{"id":96,"name":"Kotemon"},{"id":99,"name":"Elecmon"},{"id":178,"name":"Dokugumon"},{"id":181,"name":"Vegiemon"},{"id":182,"name":"Kumamon"},{"id":183,"name":"Gabumon"},{"id":184,"name":"Tentomon"},{"id":185,"name":"Palmon"},{"id":187,"name":"Kokuwamon"},{"id":223,"name":"Akatorimon"},{"id":226,"name":"Veemon"},{"id":229,"name":"Biyomon"},{"id":230,"name":"Goburimon"},{"id":232,"name":"Penguinmon"},{"id":265,"name":"Soulmon"},{"id":269,"name":"Gazimon"},{"id":272,"name":"ModokiBetamon"},{"id":313,"name":"Gotsumon"}]},{"id":"4b","group":"B — Cardmon","tip":"Só árvores","sources":[{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Asuka South · Bulk Swamp, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle"},{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Asuka West · N Badland West, Bullet Valley"}],"cards":[{"id":17,"name":"Green Power"},{"id":18,"name":"Summon Palmon"},{"id":23,"name":"Red Power"},{"id":29,"name":"Black Power"},{"id":47,"name":"Break Launcher"},{"id":48,"name":"Cancel Wheel"},{"id":50,"name":"Summon Hagurumon"},{"id":87,"name":"Snimon"},{"id":92,"name":"Gururumon"},{"id":98,"name":"Psychemon"},{"id":168,"name":"Kabuterimon"},{"id":173,"name":"Kuwagamon"},{"id":175,"name":"Togemon"},{"id":179,"name":"Kiwimon"},{"id":183,"name":"Gabumon"},{"id":210,"name":"Growlmon"},{"id":212,"name":"Veedramon"},{"id":214,"name":"Ogremon"},{"id":218,"name":"Aquilamon"},{"id":220,"name":"Birdramon"},{"id":222,"name":"RedVegiemon"},{"id":224,"name":"SandYanmamon"},{"id":231,"name":"Sharmamon"},{"id":257,"name":"Wizardmon"},{"id":267,"name":"Roachmon"},{"id":273,"name":"Tapirmon"},{"id":298,"name":"Guardromon"},{"id":299,"name":"Tankmon"}]},{"id":"5b","group":"B — Cardmon","tip":"Só pesca","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Asuka West · N Badland East, Pelche Oasis, S Badland"}],"cards":[{"id":6,"name":"Summon Patamon"},{"id":10,"name":"Eclipse Undo"},{"id":15,"name":"Green Force"},{"id":42,"name":"Charge Terminal"},{"id":49,"name":"Rusty Dust"},{"id":51,"name":"White Remove"},{"id":52,"name":"Blue Remove"},{"id":54,"name":"Red Remove"},{"id":80,"name":"Dinohumon"},{"id":81,"name":"Angemon"},{"id":82,"name":"Stingmon"},{"id":85,"name":"Apemon"},{"id":128,"name":"Shellmon"},{"id":135,"name":"Starmon"},{"id":174,"name":"J-Mojyamon"},{"id":184,"name":"Tentomon"},{"id":209,"name":"Greymon"},{"id":216,"name":"Fugamon"},{"id":229,"name":"Biyomon"},{"id":252,"name":"Devimon"},{"id":253,"name":"Kurisarimon"},{"id":300,"name":"Clockmon"},{"id":303,"name":"BomberNanimon"},{"id":306,"name":"Sukamon"},{"id":309,"name":"Numemon"},{"id":310,"name":"ShellNumemon"}]},{"id":"6b","group":"B — Cardmon","tip":"Só árvores","sources":[{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Amaterasu Central · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; Amaterasu East · West Wire Forest, East Wire Forest, Divermon's Lake, Wind Prairie"}],"cards":[{"id":3,"name":"Gold Aura"},{"id":16,"name":"Beast Energy"},{"id":22,"name":"Fire Cannon"},{"id":86,"name":"Centarumon"},{"id":88,"name":"Thundermon"},{"id":94,"name":"Zassomon"},{"id":96,"name":"Kotemon"},{"id":160,"name":"Lillymon"},{"id":164,"name":"Blossomon"},{"id":169,"name":"Garurumon"},{"id":170,"name":"Tuskmon"},{"id":177,"name":"Saberdramon"},{"id":180,"name":"Woodmon"},{"id":182,"name":"Kumamon"},{"id":208,"name":"Mammothmon"},{"id":213,"name":"Airdramon"},{"id":215,"name":"Minotarumon"},{"id":219,"name":"Meramon"},{"id":221,"name":"Flarerizamon"},{"id":226,"name":"Veemon"},{"id":293,"name":"Garbagemon"},{"id":294,"name":"Meteormon"},{"id":295,"name":"Cyclonemon"},{"id":304,"name":"Drimogemon"}]},{"id":"7b","group":"B — Cardmon","tip":"Só pesca","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Amaterasu Central · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; Amaterasu East · West Wire Forest, Divermon's Lake, Kicking Forest"}],"cards":[{"id":5,"name":"White Power"},{"id":9,"name":"Freeze Bug"},{"id":27,"name":"Chaos Virus"},{"id":38,"name":"Security Hall"},{"id":46,"name":"Illegal Access"},{"id":75,"name":"Silphymon"},{"id":79,"name":"Piximon"},{"id":113,"name":"Zudomon"},{"id":121,"name":"WaruSeadramon"},{"id":122,"name":"Divermon"},{"id":124,"name":"Seadramon"},{"id":132,"name":"Icemon"},{"id":133,"name":"Mojyamon"},{"id":185,"name":"Palmon"},{"id":249,"name":"LadyDevimon"},{"id":254,"name":"Raremon"},{"id":260,"name":"Vilemon"},{"id":261,"name":"Hyogamon"},{"id":262,"name":"Darkrizamon"},{"id":266,"name":"Bakemon"},{"id":305,"name":"NiseDrimogemon"},{"id":308,"name":"Kokatorimon"}]},{"id":"8b","group":"B — Cardmon","tip":"Só pesca","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Amaterasu South · Bulk Bridge, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle, South Cape"}],"cards":[{"id":2,"name":"Summon Angemon"},{"id":8,"name":"Control Parts"},{"id":20,"name":"Blazing Chaos"},{"id":36,"name":"Revival Charge"},{"id":37,"name":"Chrono Balance"},{"id":71,"name":"MagnaAngemon"},{"id":72,"name":"Angewomon"},{"id":78,"name":"Mamemon"},{"id":110,"name":"Preciomon"},{"id":111,"name":"Babamon"},{"id":115,"name":"Taomon"},{"id":116,"name":"Armormon"},{"id":120,"name":"Brachiomon"},{"id":123,"name":"Whamon"},{"id":127,"name":"IceDevimon"},{"id":131,"name":"Ebidramon"},{"id":205,"name":"Gigadramon"},{"id":255,"name":"MarineDevimon"},{"id":290,"name":"Monzaemon"}]},{"id":"9b","group":"B — Cardmon","tip":"Só árvores","sources":[{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Amaterasu East · Kicking Forest"}],"cards":[{"id":4,"name":"Protect Aura"},{"id":21,"name":"Flame Gatlin"},{"id":28,"name":"Vicious Hacking"},{"id":41,"name":"Power Super Metal"},{"id":74,"name":"Panjyamon"},{"id":89,"name":"Unimon"},{"id":90,"name":"ShimaUnimon"},{"id":158,"name":"GrapLeomon"},{"id":171,"name":"Monochromon"},{"id":172,"name":"MoriShellmon"},{"id":176,"name":"Flymon"},{"id":202,"name":"Garudamon"},{"id":203,"name":"Kimeramon"},{"id":217,"name":"Tyrannomon"},{"id":250,"name":"SkullMeramon"},{"id":287,"name":"Giromon"},{"id":301,"name":"MudFrigimon"},{"id":302,"name":"PlatinumSukamon"}]},{"id":"10b","group":"B — Cardmon","tip":"Só árvores","sources":[{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Amaterasu South · Bulk Swamp, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle"}],"cards":[{"id":26,"name":"Deceive Cloak"},{"id":73,"name":"Kyukimon"},{"id":152,"name":"RosemonI"},{"id":153,"name":"KingEtemon"},{"id":154,"name":"MetalEtemon"},{"id":157,"name":"WereGarurumon"},{"id":161,"name":"Etemon"},{"id":165,"name":"Deramon"},{"id":166,"name":"Leomon"},{"id":199,"name":"Paildramon I"},{"id":201,"name":"WarGrowlmon"},{"id":204,"name":"MasterTyrannomon"},{"id":206,"name":"Megadramon"},{"id":207,"name":"MetalTyrannomon"},{"id":251,"name":"WaruMonzaemon"},{"id":256,"name":"Musyamon"},{"id":284,"name":"Puppetmon"},{"id":296,"name":"Rockmon"},{"id":297,"name":"Deltamon"}]},{"id":"11b","group":"B — Cardmon","tip":"Só árvores","sources":[{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Asuka North · Boot Mountain, Kulon Mine, Lake of Ice, Snow Mountain"}],"cards":[{"id":21,"name":"Flame Gatlin"},{"id":76,"name":"Knightmon"},{"id":80,"name":"Dinohumon"},{"id":148,"name":"Marsmon"},{"id":156,"name":"MegaKabuterimon"},{"id":158,"name":"GrapLeomon"},{"id":159,"name":"Okuwamon"},{"id":162,"name":"Triceramon"},{"id":163,"name":"Cherrymon"},{"id":193,"name":"Imperialdramon I"},{"id":200,"name":"MetalGreymon"},{"id":202,"name":"Garudamon"},{"id":209,"name":"Greymon"},{"id":242,"name":"Myotismon"},{"id":248,"name":"Arukenimon"},{"id":252,"name":"Devimon"},{"id":280,"name":"BK WarGrowlmon"},{"id":286,"name":"Andromon"},{"id":288,"name":"Datamon"},{"id":289,"name":"ExTyrannomon"}]},{"id":"12b","group":"B — Cardmon","tip":"Só pesca","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Asuka North · Lake of Ice (north platform near Legendary Gym)"}],"cards":[{"id":40,"name":"Scramble Up"},{"id":41,"name":"Power Super Metal"},{"id":58,"name":"Disturb Gear"},{"id":67,"name":"Valkrymon"},{"id":70,"name":"PaildramonII"},{"id":73,"name":"Kyukimon"},{"id":81,"name":"Angemon"},{"id":99,"name":"Elecmon"},{"id":109,"name":"SuperStarmon"},{"id":114,"name":"MegaSeadramon"},{"id":115,"name":"Taomon"},{"id":117,"name":"BlueMeramon"},{"id":118,"name":"ShogunGekomon"},{"id":119,"name":"Scorpiomon"},{"id":178,"name":"Dokugumon"},{"id":191,"name":"Gallantmon"},{"id":201,"name":"WarGrowlmon"},{"id":243,"name":"Infermon"},{"id":246,"name":"SkullGreymon"},{"id":247,"name":"Mummymon"},{"id":282,"name":"HiAndromon"},{"id":285,"name":"Shakkoumon"},{"id":291,"name":"Digitamamon"}]},{"id":"13b","group":"B — Cardmon","tip":"Só pesca","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Amaterasu West · N Badland East, Pelche Oasis, S Badland"}],"cards":[{"id":2,"name":"Summon Angemon"},{"id":4,"name":"Protect Aura"},{"id":28,"name":"Vicious Hacking"},{"id":36,"name":"Revival Charge"},{"id":63,"name":"WarGreymon"},{"id":66,"name":"Magnadramon"},{"id":72,"name":"Angewomon"},{"id":74,"name":"Panjyamon"},{"id":105,"name":"Sakuyamon"},{"id":106,"name":"Vikemon"},{"id":108,"name":"Pukumon"},{"id":110,"name":"Preciomon"},{"id":116,"name":"Armormon"},{"id":194,"name":"MegaGargomon"},{"id":205,"name":"Gigadramon"},{"id":239,"name":"Ghoulmon"},{"id":244,"name":"Dragomon"},{"id":250,"name":"SkullMeramon"},{"id":279,"name":"BK Seraphimon"},{"id":292,"name":"Vademon"}]},{"id":"14b","group":"B — Cardmon","tip":"Só árvores","sources":[{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Amaterasu West · N Badland West, Bullet Valley"},{"kind":"B","title":"Kick trees","detail":"Pack obtido em árvores.","maps":"Amaterasu North · Boot Mountain, Kulon Mine, Lake of Ice, Snow Mountain"}],"cards":[{"id":10,"name":"Eclipse Undo"},{"id":39,"name":"Absolute Barrier"},{"id":60,"name":"Assault Armor"},{"id":68,"name":"PrinceMamemon"},{"id":147,"name":"Omnimon II"},{"id":149,"name":"MetalGarurumon"},{"id":150,"name":"H-Kabuterimon"},{"id":151,"name":"GranKuwagamon"},{"id":152,"name":"RosemonI"},{"id":157,"name":"WereGarurumon"},{"id":187,"name":"Kokuwamon"},{"id":192,"name":"Imperialdramon-F"},{"id":196,"name":"Phoenixmon"},{"id":197,"name":"SkullMammothmon"},{"id":230,"name":"Goburimon"},{"id":233,"name":"Armageddemon"},{"id":236,"name":"MaloMyotismon"},{"id":237,"name":"Beelzemon"},{"id":240,"name":"Piedmon"},{"id":245,"name":"SkullSatamon"},{"id":277,"name":"BK Imperialdramon"},{"id":283,"name":"Boltmon"},{"id":313,"name":"Gotsumon"}]},{"id":"15b","group":"B — Cardmon","tip":"Só pesca","sources":[{"kind":"B","title":"Fishing","detail":"Pack obtido pescando.","maps":"Amaterasu North · Lake of Ice (north platform near Legendary Gym)"}],"cards":[{"id":8,"name":"Control Parts"},{"id":9,"name":"Freeze Bug"},{"id":20,"name":"Blazing Chaos"},{"id":26,"name":"Deceive Cloak"},{"id":37,"name":"Chrono Balance"},{"id":49,"name":"Rusty Dust"},{"id":61,"name":"Imperialdramon-P"},{"id":62,"name":"GuardiAngemon"},{"id":65,"name":"Seraphimon"},{"id":71,"name":"MagnaAngemon"},{"id":104,"name":"Cannondramon"},{"id":107,"name":"MetalSeadramon"},{"id":111,"name":"Babamon"},{"id":195,"name":"Machinedramon"},{"id":203,"name":"Kimeramon"},{"id":234,"name":"VenomMyotismon"},{"id":235,"name":"Diaboromon"},{"id":238,"name":"Apokarimon"},{"id":265,"name":"Soulmon"},{"id":276,"name":"BK WarGreymon"},{"id":278,"name":"BK MegaGargomon"},{"id":287,"name":"Giromon"}]},{"id":"R-01","group":"R — Rare","tip":"Drop raro no lugar do B","sources":[{"kind":"R","title":"Rare drop","detail":"Pack raro no lugar do B.","maps":"1b trees · Asuka Central / East (not Kicking Forest) · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; West Wire Forest, East Wire Forest, Divermon's Lake, Wind Prairie; 1b fish · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; West Wire Forest, Divermon's Lake, Kicking Forest; 2b fish · Asuka South · Bulk Bridge, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle, South Cape; 3b trees · Asuka · Kicking Forest"}],"cards":[{"id":96,"name":"Kotemon"},{"id":100,"name":"Patamon"},{"id":101,"name":"Wormmon"},{"id":139,"name":"Monmon"},{"id":140,"name":"Renamon"},{"id":141,"name":"Gomamon"},{"id":182,"name":"Kumamon"},{"id":183,"name":"Gabumon"},{"id":184,"name":"Tentomon"},{"id":185,"name":"Palmon"},{"id":225,"name":"Agumon"},{"id":226,"name":"Veemon"},{"id":227,"name":"Guilmon"},{"id":228,"name":"Hawkmon"},{"id":229,"name":"Biyomon"}]},{"id":"R-02","group":"R — Rare","tip":"Drop raro no lugar do B","sources":[{"kind":"R","title":"Rare drop","detail":"Pack raro no lugar do B.","maps":"4b trees · Asuka South / West · Bulk Swamp, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle; N Badland West, Bullet Valley; 5b fish · Asuka West · N Badland East, Pelche Oasis, S Badland; 6b trees · Amaterasu Central / East (not Kicking Forest) · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; West Wire Forest, East Wire Forest, Divermon's Lake, Wind Prairie"}],"cards":[{"id":10,"name":"Eclipse Undo"},{"id":44,"name":"Program Charge"},{"id":47,"name":"Break Launcher"},{"id":80,"name":"Dinohumon"},{"id":81,"name":"Angemon"},{"id":83,"name":"Gatomon"},{"id":91,"name":"Ankylomon"},{"id":125,"name":"Kyubimon"},{"id":126,"name":"Hookmon"},{"id":129,"name":"Ikkakumon"},{"id":168,"name":"Kabuterimon"},{"id":175,"name":"Togemon"},{"id":210,"name":"Growlmon"},{"id":218,"name":"Aquilamon"},{"id":220,"name":"Birdramon"}]},{"id":"R-03","group":"R — Rare","tip":"Drop raro no lugar do B","sources":[{"kind":"R","title":"Rare drop","detail":"Pack raro no lugar do B.","maps":"7b fish · Amaterasu Central / East · Central Park, Plug Cape, Shell Beach, Wire Forest Entrance; West Wire Forest, Divermon's Lake, Kicking Forest; 8b fish · Amaterasu South · Bulk Bridge, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle, South Cape; 9b trees · Amaterasu · Kicking Forest"}],"cards":[{"id":16,"name":"Beast Energy"},{"id":21,"name":"Flame Gatlin"},{"id":22,"name":"Fire Cannon"},{"id":28,"name":"Vicious Hacking"},{"id":38,"name":"Security Hall"},{"id":41,"name":"Power Super Metal"},{"id":45,"name":"Trade Charge"},{"id":48,"name":"Cancel Wheel"},{"id":49,"name":"Rusty Dust"},{"id":75,"name":"Silphymon"},{"id":167,"name":"Grizzmon"},{"id":169,"name":"Garurumon"},{"id":202,"name":"Garudamon"},{"id":209,"name":"Greymon"},{"id":211,"name":"ExVeemon"},{"id":252,"name":"Devimon"}]},{"id":"R-04","group":"R — Rare","tip":"Drop raro no lugar do B","sources":[{"kind":"R","title":"Rare drop","detail":"Pack raro no lugar do B.","maps":"10b trees · Amaterasu South · Bulk Swamp, Tranquil Swamp, Bios Swamp, Jungle Grave, Phoenix Bay, Ether Jungle; 11b trees · Asuka North · Boot Mountain, Kulon Mine, Lake of Ice, Snow Mountain; 12b fish · Asuka North · Lake of Ice (north platform near Legendary Gym)"}],"cards":[{"id":8,"name":"Control Parts"},{"id":9,"name":"Freeze Bug"},{"id":14,"name":"Ecoly Cycle"},{"id":26,"name":"Deceive Cloak"},{"id":67,"name":"Valkrymon"},{"id":71,"name":"MagnaAngemon"},{"id":72,"name":"Angewomon"},{"id":73,"name":"Kyukimon"},{"id":110,"name":"Preciomon"},{"id":113,"name":"Zudomon"},{"id":115,"name":"Taomon"},{"id":116,"name":"Armormon"},{"id":152,"name":"RosemonI"},{"id":157,"name":"WereGarurumon"},{"id":158,"name":"GrapLeomon"},{"id":160,"name":"Lillymon"},{"id":199,"name":"Paildramon I"},{"id":201,"name":"WarGrowlmon"}]},{"id":"R-05","group":"R — Rare","tip":"Drop raro no lugar do B","sources":[{"kind":"R","title":"Rare drop","detail":"Pack raro no lugar do B.","maps":"13b fish · Amaterasu West · N Badland East, Pelche Oasis, S Badland; 14b trees · Amaterasu West / North · N Badland West, Bullet Valley; Boot Mountain, Kulon Mine, Lake of Ice, Snow Mountain; 15b fish · Amaterasu North · Lake of Ice (north platform near Legendary Gym)"}],"cards":[{"id":39,"name":"Absolute Barrier"},{"id":40,"name":"Scramble Up"},{"id":61,"name":"Imperialdramon-P"},{"id":62,"name":"GuardiAngemon"},{"id":63,"name":"WarGreymon"},{"id":64,"name":"ImperialdramonII"},{"id":104,"name":"Cannondramon"},{"id":105,"name":"Sakuyamon"},{"id":147,"name":"Omnimon II"},{"id":148,"name":"Marsmon"},{"id":149,"name":"MetalGarurumon"},{"id":190,"name":"Omnimon I"},{"id":191,"name":"Gallantmon"},{"id":192,"name":"Imperialdramon-F"},{"id":193,"name":"Imperialdramon I"},{"id":233,"name":"Armageddemon"},{"id":281,"name":"BK KingNumemon"}]}],"cards":[{"id":1,"name":"Sacred Spear","packs":[],"secret":true},{"id":2,"name":"Summon Angemon","packs":["11a","8b","13b"],"secret":false},{"id":3,"name":"Gold Aura","packs":["8a","6b"],"secret":false},{"id":4,"name":"Protect Aura","packs":["10a","9b","13b"],"secret":false},{"id":5,"name":"White Power","packs":["8a","7b"],"secret":false},{"id":6,"name":"Summon Patamon","packs":["6a","5b"],"secret":false},{"id":7,"name":"Tidal Wave","packs":[],"secret":true},{"id":8,"name":"Control Parts","packs":["8b","15b","R-04"],"secret":false},{"id":9,"name":"Freeze Bug","packs":["10a","7b","15b","R-04"],"secret":false},{"id":10,"name":"Eclipse Undo","packs":["6a","5b","14b","R-02"],"secret":false},{"id":11,"name":"Blue Power","packs":["6a","2b"],"secret":false},{"id":12,"name":"Summon Gomamon","packs":["5a","2b"],"secret":false},{"id":13,"name":"Wield Aura","packs":[],"secret":true},{"id":14,"name":"Ecoly Cycle","packs":["10a","R-04"],"secret":false},{"id":15,"name":"Green Force","packs":["7a","5b"],"secret":false},{"id":16,"name":"Beast Energy","packs":["8a","6b","R-03"],"secret":false},{"id":17,"name":"Green Power","packs":["6a","4b"],"secret":false},{"id":18,"name":"Summon Palmon","packs":["5a","4b"],"secret":false},{"id":19,"name":"Volcanic Cannon","packs":[],"secret":true},{"id":20,"name":"Blazing Chaos","packs":["12a","8b","15b"],"secret":false},{"id":21,"name":"Flame Gatlin","packs":["9a","9b","11b","R-03"],"secret":false},{"id":22,"name":"Fire Cannon","packs":["8a","6b","R-03"],"secret":false},{"id":23,"name":"Red Power","packs":["7a","4b"],"secret":false},{"id":24,"name":"Summon Goburimon","packs":["4a","3b"],"secret":false},{"id":25,"name":"Darkness Gale","packs":[],"secret":true},{"id":26,"name":"Deceive Cloak","packs":["11a","10b","15b","R-04"],"secret":false},{"id":27,"name":"Chaos Virus","packs":["9a","7b"],"secret":false},{"id":28,"name":"Vicious Hacking","packs":["9a","9b","13b","R-03"],"secret":false},{"id":29,"name":"Black Power","packs":["7a","4b"],"secret":false},{"id":30,"name":"Summon Devimon","packs":["5a","2b"],"secret":false},{"id":31,"name":"Delete Matrix","packs":[],"secret":true},{"id":32,"name":"Fortune Gate","packs":[],"secret":true},{"id":33,"name":"Misery Gate","packs":[],"secret":true},{"id":34,"name":"Desire Access","packs":[],"secret":true},{"id":35,"name":"Anti-Power","packs":[],"secret":true},{"id":36,"name":"Revival Charge","packs":["11a","8b","13b"],"secret":false},{"id":37,"name":"Chrono Balance","packs":["12a","8b","15b"],"secret":false},{"id":38,"name":"Security Hall","packs":["8a","7b","R-03"],"secret":false},{"id":39,"name":"Absolute Barrier","packs":["14a","14b","R-05"],"secret":false},{"id":40,"name":"Scramble Up","packs":["13a","12b","R-05"],"secret":false},{"id":41,"name":"Power Super Metal","packs":["9a","9b","12b","R-03"],"secret":false},{"id":42,"name":"Charge Terminal","packs":["7a","5b"],"secret":false},{"id":43,"name":"Digimon Charge","packs":["6a","2b"],"secret":false},{"id":44,"name":"Program Charge","packs":["5a","2b","R-02"],"secret":false},{"id":45,"name":"Trade Charge","packs":["9a","R-03"],"secret":false},{"id":46,"name":"Illegal Access","packs":["8a","7b"],"secret":false},{"id":47,"name":"Break Launcher","packs":["4a","4b","R-02"],"secret":false},{"id":48,"name":"Cancel Wheel","packs":["7a","4b","R-03"],"secret":false},{"id":49,"name":"Rusty Dust","packs":["7a","5b","15b","R-03"],"secret":false},{"id":50,"name":"Summon Hagurumon","packs":["6a","4b"],"secret":false},{"id":51,"name":"White Remove","packs":["4a","5b"],"secret":false},{"id":52,"name":"Blue Remove","packs":["4a","5b"],"secret":false},{"id":53,"name":"Green Remove","packs":["2a","2b"],"secret":false},{"id":54,"name":"Red Remove","packs":["5a","5b"],"secret":false},{"id":55,"name":"Black Remove","packs":["3a","3b"],"secret":false},{"id":56,"name":"Summon Cancel","packs":["4a","2b"],"secret":false},{"id":57,"name":"Berserk Energy","packs":["1a","1b"],"secret":false},{"id":58,"name":"Disturb Gear","packs":["1a","3b","12b"],"secret":false},{"id":59,"name":"Protect Armor","packs":["2a","3a","1b"],"secret":false},{"id":60,"name":"Assault Armor","packs":["3a","3b","14b"],"secret":false},{"id":61,"name":"Imperialdramon-P","packs":["15a","15b","R-05"],"secret":false},{"id":62,"name":"GuardiAngemon","packs":["15a","15b","R-05"],"secret":false},{"id":63,"name":"WarGreymon","packs":["14a","13b","R-05"],"secret":false},{"id":64,"name":"ImperialdramonII","packs":["14a","R-05"],"secret":false},{"id":65,"name":"Seraphimon","packs":["15a","15b"],"secret":false},{"id":66,"name":"Magnadramon","packs":["14a","13b"],"secret":false},{"id":67,"name":"Valkrymon","packs":["11a","12b","R-04"],"secret":false},{"id":68,"name":"PrinceMamemon","packs":["14a","14b"],"secret":false},{"id":69,"name":"RosemonII","packs":[],"secret":true},{"id":70,"name":"PaildramonII","packs":["13a","12b"],"secret":false},{"id":71,"name":"MagnaAngemon","packs":["12a","8b","15b","R-04"],"secret":false},{"id":72,"name":"Angewomon","packs":["12a","8b","13b","R-04"],"secret":false},{"id":73,"name":"Kyukimon","packs":["11a","10b","12b","R-04"],"secret":false},{"id":74,"name":"Panjyamon","packs":["10a","9b","13b"],"secret":false},{"id":75,"name":"Silphymon","packs":["9a","7b","R-03"],"secret":false},{"id":76,"name":"Knightmon","packs":["12a","11b"],"secret":false},{"id":77,"name":"MetalMamemon","packs":["11a"],"secret":false},{"id":78,"name":"Mamemon","packs":["10a","8b"],"secret":false},{"id":79,"name":"Piximon","packs":["9a","7b"],"secret":false},{"id":80,"name":"Dinohumon","packs":["6a","5b","11b","R-02"],"secret":false},{"id":81,"name":"Angemon","packs":["5a","5b","12b","R-02"],"secret":false},{"id":82,"name":"Stingmon","packs":["7a","5b"],"secret":false},{"id":83,"name":"Gatomon","packs":["4a","R-02"],"secret":false},{"id":84,"name":"Piddomon","packs":["6a","2b"],"secret":false},{"id":85,"name":"Apemon","packs":["5a","5b"],"secret":false},{"id":86,"name":"Centarumon","packs":["6a","6b"],"secret":false},{"id":87,"name":"Snimon","packs":["4a","4b"],"secret":false},{"id":88,"name":"Thundermon","packs":["8a","6b"],"secret":false},{"id":89,"name":"Unimon","packs":["9a","9b"],"secret":false},{"id":90,"name":"ShimaUnimon","packs":["8a","9b"],"secret":false},{"id":91,"name":"Ankylomon","packs":["4a","2b","R-02"],"secret":false},{"id":92,"name":"Gururumon","packs":["6a","4b"],"secret":false},{"id":93,"name":"Tortomon","packs":["3a","3b"],"secret":false},{"id":94,"name":"Zassomon","packs":["4a","6b"],"secret":false},{"id":95,"name":"Yanmamon","packs":["3a","3b"],"secret":false},{"id":96,"name":"Kotemon","packs":["3a","3b","6b","R-01"],"secret":false},{"id":97,"name":"Armadillomon","packs":["3a","1b"],"secret":false},{"id":98,"name":"Psychemon","packs":["3a","4b"],"secret":false},{"id":99,"name":"Elecmon","packs":["1a","3b","12b"],"secret":false},{"id":100,"name":"Patamon","packs":["2a","1b","R-01"],"secret":false},{"id":101,"name":"Wormmon","packs":["1a","1b","R-01"],"secret":false},{"id":102,"name":"Kunemon","packs":["2a","1b"],"secret":false},{"id":103,"name":"Salamon","packs":["1a","1b"],"secret":false},{"id":104,"name":"Cannondramon","packs":["15a","15b","R-05"],"secret":false},{"id":105,"name":"Sakuyamon","packs":["14a","13b","R-05"],"secret":false},{"id":106,"name":"Vikemon","packs":["14a","13b"],"secret":false},{"id":107,"name":"MetalSeadramon","packs":["15a","15b"],"secret":false},{"id":108,"name":"Pukumon","packs":["14a","13b"],"secret":false},{"id":109,"name":"SuperStarmon","packs":["13a","12b"],"secret":false},{"id":110,"name":"Preciomon","packs":["11a","8b","13b","R-04"],"secret":false},{"id":111,"name":"Babamon","packs":["12a","8b","15b"],"secret":false},{"id":112,"name":"MarineAngemon","packs":[],"secret":true},{"id":113,"name":"Zudomon","packs":["10a","7b","R-04"],"secret":false},{"id":114,"name":"MegaSeadramon","packs":["13a","12b"],"secret":false},{"id":115,"name":"Taomon","packs":["11a","8b","12b","R-04"],"secret":false},{"id":116,"name":"Armormon","packs":["12a","8b","13b","R-04"],"secret":false},{"id":117,"name":"BlueMeramon","packs":["12a","12b"],"secret":false},{"id":118,"name":"ShogunGekomon","packs":["12a","12b"],"secret":false},{"id":119,"name":"Scorpiomon","packs":["13a","12b"],"secret":false},{"id":120,"name":"Brachiomon","packs":["11a","8b"],"secret":false},{"id":121,"name":"WaruSeadramon","packs":["9a","7b"],"secret":false},{"id":122,"name":"Divermon","packs":["8a","7b"],"secret":false},{"id":123,"name":"Whamon","packs":["11a","8b"],"secret":false},{"id":124,"name":"Seadramon","packs":["8a","7b"],"secret":false},{"id":125,"name":"Kyubimon","packs":["6a","2b","R-02"],"secret":false},{"id":126,"name":"Hookmon","packs":["5a","2b","R-02"],"secret":false},{"id":127,"name":"IceDevimon","packs":["10a","8b"],"secret":false},{"id":128,"name":"Shellmon","packs":["7a","5b"],"secret":false},{"id":129,"name":"Ikkakumon","packs":["4a","2b","R-02"],"secret":false},{"id":130,"name":"Frigimon","packs":["4a","2b"],"secret":false},{"id":131,"name":"Ebidramon","packs":["10a","8b"],"secret":false},{"id":132,"name":"Icemon","packs":["8a","7b"],"secret":false},{"id":133,"name":"Mojyamon","packs":["9a","7b"],"secret":false},{"id":134,"name":"Ninjamon","packs":["5a","2b"],"secret":false},{"id":135,"name":"Starmon","packs":["7a","5b"],"secret":false},{"id":136,"name":"Coelamon","packs":["3a","1b"],"secret":false},{"id":137,"name":"Dolphmon","packs":["4a","2b"],"secret":false},{"id":138,"name":"Gekomon","packs":["1a","3a","1b"],"secret":false},{"id":139,"name":"Monmon","packs":["1a","1b","R-01"],"secret":false},{"id":140,"name":"Renamon","packs":["3a","1b","R-01"],"secret":false},{"id":141,"name":"Gomamon","packs":["2a","R-01"],"secret":false},{"id":142,"name":"SnowAgumon","packs":["2a"],"secret":false},{"id":143,"name":"Gizamon","packs":["2a","1b"],"secret":false},{"id":144,"name":"Otamamon","packs":["1a","2b"],"secret":false},{"id":145,"name":"Crabmon","packs":["2a","1b"],"secret":false},{"id":146,"name":"Syakkomon","packs":["1a","1b"],"secret":false},{"id":147,"name":"Omnimon II","packs":["14a","14b","R-05"],"secret":false},{"id":148,"name":"Marsmon","packs":["13a","14a","11b","R-05"],"secret":false},{"id":149,"name":"MetalGarurumon","packs":["14a","14b","R-05"],"secret":false},{"id":150,"name":"H-Kabuterimon","packs":["14a","14b"],"secret":false},{"id":151,"name":"GranKuwagamon","packs":["15a","14b"],"secret":false},{"id":152,"name":"RosemonI","packs":["11a","10b","14b","R-04"],"secret":false},{"id":153,"name":"KingEtemon","packs":["12a","10b"],"secret":false},{"id":154,"name":"MetalEtemon","packs":["11a","10b"],"secret":false},{"id":155,"name":"SaberLeomon","packs":[],"secret":true},{"id":156,"name":"MegaKabuterimon","packs":["13a","11b"],"secret":false},{"id":157,"name":"WereGarurumon","packs":["11a","10b","14b","R-04"],"secret":false},{"id":158,"name":"GrapLeomon","packs":["10a","9b","11b","R-04"],"secret":false},{"id":159,"name":"Okuwamon","packs":["13a","11b"],"secret":false},{"id":160,"name":"Lillymon","packs":["10a","6b","R-04"],"secret":false},{"id":161,"name":"Etemon","packs":["11a","10b"],"secret":false},{"id":162,"name":"Triceramon","packs":["12a","11b"],"secret":false},{"id":163,"name":"Cherrymon","packs":["12a","11b"],"secret":false},{"id":164,"name":"Blossomon","packs":["9a","6b"],"secret":false},{"id":165,"name":"Deramon","packs":["10a","10b"],"secret":false},{"id":166,"name":"Leomon","packs":["11a","10b"],"secret":false},{"id":167,"name":"Grizzmon","packs":["7a","R-03"],"secret":false},{"id":168,"name":"Kabuterimon","packs":["6a","4b","R-02"],"secret":false},{"id":169,"name":"Garurumon","packs":["8a","6b","R-03"],"secret":false},{"id":170,"name":"Tuskmon","packs":["7a","6b"],"secret":false},{"id":171,"name":"Monochromon","packs":["9a","9b"],"secret":false},{"id":172,"name":"MoriShellmon","packs":["9a","9b"],"secret":false},{"id":173,"name":"Kuwagamon","packs":["4a","4b"],"secret":false},{"id":174,"name":"J-Mojyamon","packs":["5a","5b"],"secret":false},{"id":175,"name":"Togemon","packs":["5a","4b","R-02"],"secret":false},{"id":176,"name":"Flymon","packs":["9a","9b"],"secret":false},{"id":177,"name":"Saberdramon","packs":["7a","6b"],"secret":false},{"id":178,"name":"Dokugumon","packs":["3a","3b","12b"],"secret":false},{"id":179,"name":"Kiwimon","packs":["4a","4b"],"secret":false},{"id":180,"name":"Woodmon","packs":["4a","6b"],"secret":false},{"id":181,"name":"Vegiemon","packs":["3a","3b"],"secret":false},{"id":182,"name":"Kumamon","packs":["2a","3b","6b","R-01"],"secret":false},{"id":183,"name":"Gabumon","packs":["3b","4b","R-01"],"secret":false},{"id":184,"name":"Tentomon","packs":["1a","3b","5b","R-01"],"secret":false},{"id":185,"name":"Palmon","packs":["3a","3b","7b","R-01"],"secret":false},{"id":186,"name":"Betamon","packs":["1a","1b"],"secret":false},{"id":187,"name":"Kokuwamon","packs":["2a","3b","14b"],"secret":false},{"id":188,"name":"Floramon","packs":["2a","1b"],"secret":false},{"id":189,"name":"Mushroomon","packs":["1a","1b"],"secret":false},{"id":190,"name":"Omnimon I","packs":["15a","R-05"],"secret":false},{"id":191,"name":"Gallantmon","packs":["13a","12b","R-05"],"secret":false},{"id":192,"name":"Imperialdramon-F","packs":["14a","14b","R-05"],"secret":false},{"id":193,"name":"Imperialdramon I","packs":["13a","11b","R-05"],"secret":false},{"id":194,"name":"MegaGargomon","packs":["14a","13b"],"secret":false},{"id":195,"name":"Machinedramon","packs":["15a","15b"],"secret":false},{"id":196,"name":"Phoenixmon","packs":["14a","14b"],"secret":false},{"id":197,"name":"SkullMammothmon","packs":["15a","14b"],"secret":false},{"id":198,"name":"Gryphonmon","packs":[],"secret":true},{"id":199,"name":"Paildramon I","packs":["12a","10b","R-04"],"secret":false},{"id":200,"name":"MetalGreymon","packs":["13a","11b"],"secret":false},{"id":201,"name":"WarGrowlmon","packs":["12a","10b","12b","R-04"],"secret":false},{"id":202,"name":"Garudamon","packs":["9a","9b","11b","R-03"],"secret":false},{"id":203,"name":"Kimeramon","packs":["10a","9b","15b"],"secret":false},{"id":204,"name":"MasterTyrannomon","packs":["11a","10b"],"secret":false},{"id":205,"name":"Gigadramon","packs":["11a","8b","13b"],"secret":false},{"id":206,"name":"Megadramon","packs":["10a","10b"],"secret":false},{"id":207,"name":"MetalTyrannomon","packs":["11a","10b"],"secret":false},{"id":208,"name":"Mammothmon","packs":["8a","6b"],"secret":false},{"id":209,"name":"Greymon","packs":["7a","5b","11b","R-03"],"secret":false},{"id":210,"name":"Growlmon","packs":["6a","4b","R-02"],"secret":false},{"id":211,"name":"ExVeemon","packs":["8a","R-03"],"secret":false},{"id":212,"name":"Veedramon","packs":["6a","4b"],"secret":false},{"id":213,"name":"Airdramon","packs":["8a","6b"],"secret":false},{"id":214,"name":"Ogremon","packs":["7a","4b"],"secret":false},{"id":215,"name":"Minotarumon","packs":["6a","6b"],"secret":false},{"id":216,"name":"Fugamon","packs":["5a","5b"],"secret":false},{"id":217,"name":"Tyrannomon","packs":["9a","9b"],"secret":false},{"id":218,"name":"Aquilamon","packs":["5a","4b","R-02"],"secret":false},{"id":219,"name":"Meramon","packs":["6a","6b"],"secret":false},{"id":220,"name":"Birdramon","packs":["4a","4b","R-02"],"secret":false},{"id":221,"name":"Flarerizamon","packs":["5a","6b"],"secret":false},{"id":222,"name":"RedVegiemon","packs":["4a","4b"],"secret":false},{"id":223,"name":"Akatorimon","packs":["3a","3b"],"secret":false},{"id":224,"name":"SandYanmamon","packs":["3a","4b"],"secret":false},{"id":225,"name":"Agumon","packs":["1a","1b","R-01"],"secret":false},{"id":226,"name":"Veemon","packs":["3a","3b","6b","R-01"],"secret":false},{"id":227,"name":"Guilmon","packs":["2a","1b","R-01"],"secret":false},{"id":228,"name":"Hawkmon","packs":["2a","1b","R-01"],"secret":false},{"id":229,"name":"Biyomon","packs":["3a","3b","5b","R-01"],"secret":false},{"id":230,"name":"Goburimon","packs":["1a","3b","14b"],"secret":false},{"id":231,"name":"Sharmamon","packs":["2a","4b"],"secret":false},{"id":232,"name":"Penguinmon","packs":["1a","3b"],"secret":false},{"id":233,"name":"Armageddemon","packs":["15a","14b","R-05"],"secret":false},{"id":234,"name":"VenomMyotismon","packs":["15a","15b"],"secret":false},{"id":235,"name":"Diaboromon","packs":["15a","15b"],"secret":false},{"id":236,"name":"MaloMyotismon","packs":["15a","14b"],"secret":false},{"id":237,"name":"Beelzemon","packs":["15a","14b"],"secret":false},{"id":238,"name":"Apokarimon","packs":["15a","15b"],"secret":false},{"id":239,"name":"Ghoulmon","packs":["14a","13b"],"secret":false},{"id":240,"name":"Piedmon","packs":["14a","14b"],"secret":false},{"id":241,"name":"Creepymon","packs":[],"secret":true},{"id":242,"name":"Myotismon","packs":["13a","11b"],"secret":false},{"id":243,"name":"Infermon","packs":["13a","12b"],"secret":false},{"id":244,"name":"Dragomon","packs":["14a","13b"],"secret":false},{"id":245,"name":"SkullSatamon","packs":["14a","14b"],"secret":false},{"id":246,"name":"SkullGreymon","packs":["13a","12b"],"secret":false},{"id":247,"name":"Mummymon","packs":["12a","12b"],"secret":false},{"id":248,"name":"Arukenimon","packs":["13a","11b"],"secret":false},{"id":249,"name":"LadyDevimon","packs":["10a","7b"],"secret":false},{"id":250,"name":"SkullMeramon","packs":["10a","9b","13b"],"secret":false},{"id":251,"name":"WaruMonzaemon","packs":["11a","10b"],"secret":false},{"id":252,"name":"Devimon","packs":["7a","5b","11b","R-03"],"secret":false},{"id":253,"name":"Kurisarimon","packs":["7a","5b"],"secret":false},{"id":254,"name":"Raremon","packs":["3a","8a","7b"],"secret":false},{"id":255,"name":"MarineDevimon","packs":["10a","8b"],"secret":false},{"id":256,"name":"Musyamon","packs":["10a","10b"],"secret":false},{"id":257,"name":"Wizardmon","packs":["5a","4b"],"secret":false},{"id":258,"name":"DarkTyrannomon","packs":["6a","2b"],"secret":false},{"id":259,"name":"Devidramon","packs":["4a","2b"],"secret":false},{"id":260,"name":"Vilemon","packs":["9a","7b"],"secret":false},{"id":261,"name":"Hyogamon","packs":["8a","7b"],"secret":false},{"id":262,"name":"Darkrizamon","packs":["7a","7b"],"secret":false},{"id":263,"name":"Octomon","packs":["6a","2b"],"secret":false},{"id":264,"name":"Gesomon","packs":["3a","1b"],"secret":false},{"id":265,"name":"Soulmon","packs":["3a","3b","15b"],"secret":false},{"id":266,"name":"Bakemon","packs":["2a","5a","7b"],"secret":false},{"id":267,"name":"Roachmon","packs":["5a","4b"],"secret":false},{"id":268,"name":"DemiDevimon","packs":["2a","1b"],"secret":false},{"id":269,"name":"Gazimon","packs":["3a","3b"],"secret":false},{"id":270,"name":"Aruraumon","packs":["2a","2b"],"secret":false},{"id":271,"name":"Tsukaimon","packs":["1a","2b"],"secret":false},{"id":272,"name":"ModokiBetamon","packs":["1a","3b"],"secret":false},{"id":273,"name":"Tapirmon","packs":["2a","4b"],"secret":false},{"id":274,"name":"Candlemon","packs":["2a","1b"],"secret":false},{"id":275,"name":"Muchomon","packs":["1a","1b"],"secret":false},{"id":276,"name":"BK WarGreymon","packs":["15a","15b"],"secret":false},{"id":277,"name":"BK Imperialdramon","packs":["15a","14b"],"secret":false},{"id":278,"name":"BK MegaGargomon","packs":["15a","15b"],"secret":false},{"id":279,"name":"BK Seraphimon","packs":["14a","13b"],"secret":false},{"id":280,"name":"BK WarGrowlmon","packs":["13a","11b"],"secret":false},{"id":281,"name":"BK KingNumemon","packs":["13a","R-05"],"secret":false},{"id":282,"name":"HiAndromon","packs":["13a","12b"],"secret":false},{"id":283,"name":"Boltmon","packs":["14a","14b"],"secret":false},{"id":284,"name":"Puppetmon","packs":["12a","10b"],"secret":false},{"id":285,"name":"Shakkoumon","packs":["13a","12b"],"secret":false},{"id":286,"name":"Andromon","packs":["12a","11b"],"secret":false},{"id":287,"name":"Giromon","packs":["10a","9b","15b"],"secret":false},{"id":288,"name":"Datamon","packs":["13a","11b"],"secret":false},{"id":289,"name":"ExTyrannomon","packs":["12a","11b"],"secret":false},{"id":290,"name":"Monzaemon","packs":["11a","8b"],"secret":false},{"id":291,"name":"Digitamamon","packs":["12a","12b"],"secret":false},{"id":292,"name":"Vademon","packs":["14a","13b"],"secret":false},{"id":293,"name":"Garbagemon","packs":["9a","6b"],"secret":false},{"id":294,"name":"Meteormon","packs":["9a","6b"],"secret":false},{"id":295,"name":"Cyclonemon","packs":["3a","8a","6b"],"secret":false},{"id":296,"name":"Rockmon","packs":["10a","10b"],"secret":false},{"id":297,"name":"Deltamon","packs":["10a","10b"],"secret":false},{"id":298,"name":"Guardromon","packs":["7a","4b"],"secret":false},{"id":299,"name":"Tankmon","packs":["4a","4b"],"secret":false},{"id":300,"name":"Clockmon","packs":["4a","5b"],"secret":false},{"id":301,"name":"MudFrigimon","packs":["9a","9b"],"secret":false},{"id":302,"name":"PlatinumSukamon","packs":["8a","9b"],"secret":false},{"id":303,"name":"BomberNanimon","packs":["7a","5b"],"secret":false},{"id":304,"name":"Drimogemon","packs":["8a","6b"],"secret":false},{"id":305,"name":"NiseDrimogemon","packs":["7a","7b"],"secret":false},{"id":306,"name":"Sukamon","packs":["6a","5b"],"secret":false},{"id":307,"name":"Geremon","packs":["6a","2b"],"secret":false},{"id":308,"name":"Kokatorimon","packs":["5a","7b"],"secret":false},{"id":309,"name":"Numemon","packs":["5a","5b"],"secret":false},{"id":310,"name":"ShellNumemon","packs":["5a","5b"],"secret":false},{"id":311,"name":"ClearAgumon","packs":["1a","1b"],"secret":false},{"id":312,"name":"ToyAgumon","packs":["1a","1b"],"secret":false},{"id":313,"name":"Gotsumon","packs":["2a","3b","14b"],"secret":false},{"id":314,"name":"Hagurumon","packs":["2a","2b"],"secret":false}],"cardSource":"Med_Jai Digimon World 3 FAQ (GameFAQs 51616) — card → booster map"};
+const BOOSTERS = DATA.boosters;
+const ALL_CARDS = (DATA.cards || []).slice().sort((a, b) => a.id - b.id);
+
+/** One-of-a-kind secrets · Med_Jai FAQ (GameFAQs 51616) §VI. */
+const SECRET_INTRO = [
+  "Estas 15 são as cartas únicas do jogo. Você pega <strong>uma de cada por save</strong>, então não dá pra errar e tentar de novo.",
+  "Cinco delas vêm dos Tamers lendários de Asuka. Você já duela com eles cedo, mas a carta só sai no <strong>segundo</strong> duelo, lá no fim do jogo. O gatilho é Charisma: a <strong>soma dos 3 Digimon da party precisa passar de ~2500</strong>. Se faltar, compre Charisma Chip no Black Market de Amaterasu City.",
+  "As outras dez ficam escondidas em buracos que levam ao circuit board. Lá dentro você acha um BK Agumon ou um Numemon e ganha a carta vencendo o duelo."
+];
+
+const SECRET_HOWTO = [
+  {
+    id: 13, method: "Legendary Tamer", who: "Tamer Mitch", where: "Asuka East · Wire Forest",
+    steps: [
+      "Chegue perto do fim do jogo, com Amaterasu já normalizado e a soma de Charisma dos 3 acima de ~2500.",
+      "Passe no Yellow Cruiser de Amaterasu pra testar: se o pessoal de lá topar duelar carta, os cinco Tamers também liberam.",
+      "Volte a Wire Forest e ganhe o duelo do Mitch. A carta é a Wield Aura."
+    ]
+  },
+  {
+    id: 7, method: "Legendary Tamer", who: "Tamer Bob", where: "Asuka East · Kicking Forest",
+    steps: [
+      "Mesma condição dos outros Tamers: fim de jogo e Charisma dos 3 somando ~2500+.",
+      "Vá até Kicking Forest e vença o Bob. Ele solta a Tidal Wave."
+    ]
+  },
+  {
+    id: 19, method: "Legendary Tamer", who: "Tamer Jessica", where: "Asuka South · Tranquil Swamp",
+    steps: [
+      "Mesma condição dos outros Tamers: fim de jogo e Charisma dos 3 somando ~2500+.",
+      "Encontre a Jessica em Tranquil Swamp e ganhe o duelo. A carta é a Volcanic Cannon."
+    ]
+  },
+  {
+    id: 1, method: "Legendary Tamer", who: "Tamer Nakano", where: "Asuka West · Mirage Tower",
+    steps: [
+      "Mesma condição dos outros Tamers: fim de jogo e Charisma dos 3 somando ~2500+.",
+      "Suba a Mirage Tower, no Mobius Desert, e vença o Nakano. Ele deixa a Sacred Spear."
+    ]
+  },
+  {
+    id: 25, method: "Legendary Tamer", who: "Tamer Mitaka", where: "Asuka North · Kulon Pit",
+    steps: [
+      "Mesma condição dos outros Tamers: fim de jogo e Charisma dos 3 somando ~2500+.",
+      "Desça no Kulon Pit e ganhe o duelo do Mitaka. A carta é a Darkness Gale."
+    ]
+  },
+  {
+    id: 32, method: "BK Agumon", who: "BK Agumon", where: "Asuka West · Noise Desert",
+    steps: [
+      "Procure o buraco no Noise Desert e entre nele.",
+      "No circuit board, vença o BK Agumon pra ganhar a Fortune Gate. De brinde, a área ainda dropa R-01."
+    ]
+  },
+  {
+    id: 35, method: "BK Agumon", who: "BK Agumon", where: "Asuka North · Lake of Ice",
+    steps: [
+      "O buraco fica lá em cima no Lake of Ice, na Freeze Mountain.",
+      "Vença o BK Agumon lá dentro pra pegar a Anti-Power."
+    ]
+  },
+  {
+    id: 33, method: "BK Agumon", who: "BK Agumon", where: "Amaterasu North · Lake of Ice",
+    steps: [
+      "É o mesmo buraco lá do topo, só que na versão Amaterasu do mapa.",
+      "Vença o BK Agumon pra levar a Misery Gate."
+    ]
+  },
+  {
+    id: 31, method: "BK Agumon", who: "BK Agumon", where: "Amaterasu Central · Plug Cape",
+    steps: [
+      "Em Plug Cape tem dois buracos: pegue o de baixo, perto da entrada.",
+      "Vença o BK Agumon lá dentro pra ganhar a Delete Matrix."
+    ]
+  },
+  {
+    id: 34, method: "BK Agumon", who: "BK Agumon", where: "Asuka West · South Badlands",
+    steps: [
+      "O buraco fica mais ou menos no meio do South Badlands.",
+      "Vença o BK Agumon pra pegar a Desire Access."
+    ]
+  },
+  {
+    id: 112, method: "Numemon", who: "Numemon", where: "Amaterasu West · North Badland W",
+    steps: [
+      "Entre pelo buraco alto de Plug Cape (Amaterasu). Ele te leva até North Badland W.",
+      "Lá você duela com um Numemon, não o BK Agumon. Vença pra ganhar o MarineAngemon."
+    ]
+  },
+  {
+    id: 155, method: "Numemon", who: "Numemon", where: "Amaterasu North · Boot Mountain",
+    steps: [
+      "O buraco fica à esquerda: suba e pule pra dentro. O Agumon avisa que ele só conecta o lado Amaterasu.",
+      "Lá dentro, siga pro oeste e depois pro norte até achar o Numemon (folder King of the Forest).",
+      "Vença o duelo pra levar o SaberLeomon."
+    ]
+  },
+  {
+    id: 69, method: "Numemon", who: "Numemon", where: "Asuka North · Lake of Ice",
+    steps: [
+      "É o buraco lá do topo do Lake of Ice, no lado Asuka.",
+      "Aqui quem aparece é um Numemon. Vença pra ganhar o RosemonII."
+    ]
+  },
+  {
+    id: 198, method: "Numemon", who: "Numemon", where: "Amaterasu North · Lake of Ice",
+    steps: [
+      "Mesmo buraco do topo, agora no lado Amaterasu.",
+      "Vença o Numemon pra pegar o Gryphonmon."
+    ]
+  },
+  {
+    id: 241, method: "Numemon", who: "Numemon", where: "Asuka North · Snow Mountain",
+    steps: [
+      "Em Snow Mountain, o buraco fica a oeste da inn.",
+      "Vença o Numemon lá dentro pra pegar o Creepymon."
+    ]
+  }
+];
+
+const SECRET_PACK = (() => {
+  const byId = new Map(ALL_CARDS.map(c => [c.id, c]));
+  const howtoById = new Map(SECRET_HOWTO.map(h => [h.id, h]));
+  const cards = SECRET_HOWTO
+    .map(h => byId.get(h.id))
+    .filter(Boolean)
+    .sort((a, b) => a.id - b.id);
+  const METHOD_ORDER = { "Legendary Tamer": 0, "BK Agumon": 1, Numemon: 2 };
+  const sources = SECRET_HOWTO
+    .slice()
+    .sort((a, b) => (METHOD_ORDER[a.method] - METHOD_ORDER[b.method]) || a.id - b.id)
+    .map(h => {
+      const c = byId.get(h.id);
+      return {
+        kind: "S",
+        title: c ? `#${c.id} ${c.name}` : `#${h.id}`,
+        detail: `${h.method} ${h.who} card battle secret`,
+        method: h.method,
+        who: h.who,
+        where: h.where,
+        steps: h.steps,
+        maps: h.where
+      };
+    });
+  return {
+    id: "secret",
+    group: "S — Secret",
+    tip: "One-of-a-kind · tamer / circuit board",
+    intro: SECRET_INTRO,
+    sources,
+    cards
+  };
+})();
+
+const PACKS = [...BOOSTERS, SECRET_PACK];
+
+const OWNED_KEY = "dw3-booster-cards-owned-v1";
+let viewMode = "packs";
+let kindFilter = "all";
+let methodFilter = "all";
+let cardStatusFilter = "all";
+let searchFilter = "";
+let selectedId = PACKS[0]?.id || null;
+let owned = loadOwned();
+
+function loadOwned() {
+  try {
+    const raw = localStorage.getItem(OWNED_KEY);
+    if (!raw) return new Set();
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return new Set();
+    return new Set(list.map(Number).filter(n => Number.isFinite(n)));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveOwned() {
+  localStorage.setItem(OWNED_KEY, JSON.stringify([...owned]));
+}
+
+function isOwned(id) { return owned.has(Number(id)); }
+
+function toggleOwned(id) {
+  id = Number(id);
+  if (!Number.isFinite(id)) return;
+  if (owned.has(id)) owned.delete(id);
+  else owned.add(id);
+  saveOwned();
+  render();
+}
+
+function clearOwned() {
+  owned.clear();
+  saveOwned();
+  render();
+}
+
+function packOwnedCount(b) {
+  const cards = b.cards || [];
+  let n = 0;
+  cards.forEach(c => { if (isOwned(c.id)) n++; });
+  return { have: n, total: cards.length };
+}
+
+function packKind(b) {
+  const id = b.id.toLowerCase();
+  if (id === "secret") return "S";
+  if (id.startsWith("r")) return "R";
+  if (id.endsWith("a")) return "A";
+  return "B";
+}
+
+function matchesMethod(b) {
+  if (methodFilter === "all") return true;
+  if (b.id === "secret") return methodFilter === "cards";
+  const titles = b.sources.map(s => (s.title + " " + s.detail).toLowerCase()).join(" ");
+  if (methodFilter === "trees") return /kick trees|árvores|arvores|tree cardmon/.test(titles);
+  if (methodFilter === "fish") return /fishing|pesca|pescando|water cardmon/.test(titles);
+  if (methodFilter === "cards") return /card battles|duelo|tamer|legendary gym|card-battle|challenger/.test(titles);
+  return true;
+}
+
+function matchesSearch(b) {
+  if (!searchFilter) return true;
+  const q = searchFilter.toLowerCase();
+  const blob = [
+    b.id, b.group, b.tip,
+    ...(b.cards || []).map(c => c.name),
+    ...b.sources.flatMap(s => [s.title, s.detail, s.maps, s.kind])
+  ].join(" ").toLowerCase();
+  return blob.includes(q);
+}
+
+function filtered() {
+  return PACKS.filter(b => {
+    const k = packKind(b);
+    if (kindFilter !== "all") {
+      if (kindFilter === "R") {
+        if (k !== "R" && k !== "S") return false;
+      } else if (k !== kindFilter) {
+        return false;
+      }
+    }
+    if (!matchesMethod(b)) return false;
+    if (!matchesSearch(b)) return false;
+    return true;
+  });
+}
+
+function splitMaps(maps) {
+  const raw = String(maps || "").trim();
+  if (!raw) return [];
+  // Rare packs list several B sources in one string ("7b fish · …; 8b fish · …").
+  // Split only before the next booster id, keep ";" inside the same booster.
+  if (/\d+[abr]\s+(?:trees|fish)\b/i.test(raw)) {
+    return raw
+      .split(/\s*;\s*(?=\d+[abr]\s+(?:trees|fish)\b)/i)
+      .map(p => p.trim())
+      .filter(Boolean)
+      .map(text => ({ text, booster: true }));
+  }
+  return raw
+    .split(/\s*;\s*/)
+    .map(p => p.trim())
+    .filter(Boolean)
+    .map(text => ({ text, booster: false }));
+}
+
+function selectPack(id) {
+  selectedId = id;
+  render();
+}
+
+function renderOwnedBar() {
+  const bar = document.getElementById("ownedBar");
+  const total = ALL_CARDS.length || new Set(BOOSTERS.flatMap(b => (b.cards || []).map(c => c.id))).size;
+  let have = 0;
+  if (ALL_CARDS.length) {
+    ALL_CARDS.forEach(c => { if (isOwned(c.id)) have++; });
+  } else {
+    const ids = new Set();
+    BOOSTERS.forEach(b => (b.cards || []).forEach(c => ids.add(c.id)));
+    ids.forEach(id => { if (isOwned(id)) have++; });
+  }
+  bar.innerHTML = `
+    <span>Cartas marcadas: <strong>${have}</strong> / ${total}</span>
+    <span>${viewMode === "cards" ? "Clique numa carta para marcar · ordem por #" : "Clique numa carta do pack para marcar"}</span>
+    ${have ? `<button type="button" id="clearOwned">Clear all</button>` : ""}
+  `;
+  const clearBtn = document.getElementById("clearOwned");
+  if (clearBtn) clearBtn.addEventListener("click", clearOwned);
+}
+
+function filteredCards() {
+  const q = searchFilter.toLowerCase();
+  return ALL_CARDS.filter(c => {
+    const got = isOwned(c.id);
+    if (cardStatusFilter === "owned" && !got) return false;
+    if (cardStatusFilter === "missing" && got) return false;
+    if (cardStatusFilter === "secret" && !c.secret) return false;
+    if (!q) return true;
+    const packs = (c.packs || []).join(" ");
+    return String(c.id).includes(q) || c.name.toLowerCase().includes(q) || packs.toLowerCase().includes(q);
+  });
+}
+
+function renderCardCatalog() {
+  const el = document.getElementById("cardCatalog");
+  const list = filteredCards();
+  el.innerHTML = list.map(c => {
+    const packs = c.packs || [];
+    const packLine = c.secret && !packs.length
+      ? `<span class="secret">Secret</span>`
+      : packs.length
+        ? packs.join(" · ")
+        : "—";
+    return `
+      <button type="button" data-card="${c.id}" class="${isOwned(c.id) ? "owned" : ""} ${c.secret ? "secret" : ""}">
+        <span class="row">
+          <span class="num">#${c.id}</span>
+          <span class="cname">${c.name}</span>
+        </span>
+        <span class="packs">${packLine}</span>
+      </button>
+    `;
+  }).join("") || `<p class="detail-empty">Nenhuma carta bate com estes filtros.</p>`;
+  el.querySelectorAll("button[data-card]").forEach(btn => {
+    btn.addEventListener("click", () => toggleOwned(btn.dataset.card));
+  });
+}
+
+function syncViewChrome() {
+  const packMode = viewMode === "packs";
+  document.querySelectorAll(".view-pack-only").forEach(el => el.classList.toggle("hidden", !packMode));
+  document.querySelectorAll(".view-card-only").forEach(el => el.classList.toggle("hidden", packMode));
+  const search = document.getElementById("search");
+  search.placeholder = packMode ? "Search pack, map, tip…" : "Search #, name, pack…";
+}
+
+function renderPackCards(b) {
+  const el = document.getElementById("packCards");
+  if (!b) {
+    el.innerHTML = `<p class="empty">Escolha um pack para ver as cartas.</p>`;
+    return;
+  }
+  const cards = b.cards || [];
+  const label = b.id === "secret" ? "Secret" : b.id;
+  if (!cards.length) {
+    el.innerHTML = `
+      <div class="card-head">
+        <h3>Cards in this pack · ${label}</h3>
+      </div>
+      <p class="empty">Ainda sem lista de cartas neste pack.</p>`;
+    return;
+  }
+  const { have, total } = packOwnedCount(b);
+  el.innerHTML = `
+    <div class="card-head">
+      <h3>Cards in this pack · ${label}</h3>
+      <p class="hint">${have} / ${total} marcadas · clique para alternar</p>
+    </div>
+    <div class="card-list">
+      ${cards.map(c => `
+        <button type="button" data-card="${c.id}" class="${isOwned(c.id) ? "owned" : ""}" title="#${c.id} ${c.name}">
+          <span class="num">#${c.id}</span>
+          <span class="cname">${c.name}</span>
+        </button>
+      `).join("")}
+    </div>
+  `;
+  el.querySelectorAll("button[data-card]").forEach(btn => {
+    btn.addEventListener("click", () => toggleOwned(btn.dataset.card));
+  });
+}
+
+function renderDetail(b) {
+  const el = document.getElementById("detail");
+  if (!b) {
+    el.innerHTML = `<div class="detail-empty"><h2>Pick a pack</h2><p>Filtre por tipo ou método e escolha um booster. O painel mostra onde ele cai.</p></div>`;
+    renderPackCards(null);
+    return;
+  }
+  const isSecret = b.id === "secret";
+  el.innerHTML = `
+    <div class="detail-head">
+      <h2>${isSecret ? "Secret" : `Booster ${b.id}`}</h2>
+      <div class="meta">${b.group} · ${b.tip}${isSecret ? " · só 1 de cada no save" : ""}</div>
+    </div>
+    ${isSecret && b.intro ? `<div class="secret-intro">${b.intro.map(p => `<p>${p}</p>`).join("")}</div>` : ""}
+    <div class="source-list">
+      ${b.sources.map(s => `
+        <article class="source-card kind-${s.kind.toLowerCase()}">
+          <div class="top">
+            <span class="kind">${s.kind}</span>
+            <span class="title">${s.title}</span>
+          </div>
+          ${isSecret && s.steps ? `
+            <div class="method-tag">${s.method}${s.who ? ` · ${s.who}` : ""}</div>
+            <div class="maps-label">Obtain here</div>
+            <div class="map">${s.where}</div>
+            <ol class="steps">${s.steps.map(step => `<li>${step}</li>`).join("")}</ol>
+          ` : (() => {
+            const parts = splitMaps(s.maps);
+            if (!parts.length) return "";
+            return `<div class="maps-label">Obtain here</div>
+              ${parts.map(m => `<div class="map${m.booster ? " map-booster" : ""}">${m.text}</div>`).join("")}`;
+          })()}
+        </article>
+      `).join("")}
+    </div>
+  `;
+  renderPackCards(b);
+}
+
+function render() {
+  syncViewChrome();
+  renderOwnedBar();
+  const meta = document.getElementById("metaBar");
+
+  if (viewMode === "cards") {
+    const list = filteredCards();
+    meta.innerHTML = `<span><strong>${list.length}</strong> carta${list.length === 1 ? "" : "s"} · #1–#${ALL_CARDS.length || "—"}</span>
+      <span>Todas em ordem numérica · packs embaixo de cada carta</span>`;
+    renderCardCatalog();
+    return;
+  }
+
+  const list = filtered();
+  const grid = document.getElementById("packGrid");
+  if (selectedId && !list.some(b => b.id === selectedId)) {
+    selectedId = list[0]?.id || null;
+  }
+  meta.innerHTML = `<span><strong>${list.length}</strong> pack${list.length === 1 ? "" : "s"} na lista</span>
+    <span>A = challengers · B = Cardmon · R = rare · S = secret</span>`;
+
+  grid.innerHTML = list.map(b => {
+    const k = packKind(b);
+    const { have, total } = packOwnedCount(b);
+    const done = total > 0 && have === total;
+    const label = b.id === "secret" ? "Secret" : b.id;
+    return `
+      <button type="button" class="pack kind-${k.toLowerCase()} ${selectedId === b.id ? "active" : ""}" data-id="${b.id}">
+        <span class="id">${label}</span>
+        <span class="kind-tag">${k}</span>
+        <span class="tip">${b.tip}</span>
+        <span class="have ${done ? "done" : ""}">${have}/${total} cards</span>
+      </button>
+    `;
+  }).join("") || `<p class="detail-empty" style="grid-column:1/-1">Nenhum pack bate com estes filtros.</p>`;
+
+  grid.querySelectorAll("button[data-id]").forEach(btn => {
+    btn.addEventListener("click", () => selectPack(btn.dataset.id));
+  });
+
+  const selected = PACKS.find(b => b.id === selectedId);
+  renderDetail(selected || null);
+}
+
+document.getElementById("viewFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-view]");
+  if (!btn) return;
+  viewMode = btn.dataset.view;
+  document.querySelectorAll("#viewFilters .chip").forEach(c => c.classList.toggle("active", c === btn));
+  render();
+});
+
+document.getElementById("kindFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-kind]");
+  if (!btn) return;
+  kindFilter = btn.dataset.kind;
+  document.querySelectorAll("#kindFilters .chip").forEach(c => c.classList.toggle("active", c === btn));
+  render();
+});
+
+document.getElementById("methodFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-method]");
+  if (!btn) return;
+  methodFilter = btn.dataset.method;
+  document.querySelectorAll("#methodFilters .chip").forEach(c => c.classList.toggle("active", c === btn));
+  render();
+});
+
+document.getElementById("cardStatusFilters").addEventListener("click", e => {
+  const btn = e.target.closest("button[data-card-status]");
+  if (!btn) return;
+  cardStatusFilter = btn.dataset.cardStatus;
+  document.querySelectorAll("#cardStatusFilters .chip").forEach(c => c.classList.toggle("active", c === btn));
+  render();
+});
+
+document.getElementById("search").addEventListener("input", e => {
+  searchFilter = e.target.value.trim();
+  render();
+});
+
+render();
+
+</script>
+</body>
+</html>
