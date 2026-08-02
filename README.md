@@ -16,22 +16,28 @@ O lobby na raiz lista os jogos disponíveis e leva direto para a primeira págin
 
 | Projeto | Pasta | Entrada |
 |--------|--------|---------|
-| Bestiary | [`Bestiary/`](Bestiary/) | [`bestiary-index.html`](Bestiary/bestiary-index.html) |
+| Pokémon | [`Pokemon/`](Pokemon/) | [`pokemon-index.html`](Pokemon/pokemon-index.html) |
 | Digimon World 3 | [`Digimon World 3/`](Digimon%20World%203/) | [`digimon-world-3-agumon-tree.html`](Digimon%20World%203/digimon-world-3-agumon-tree.html) |
 
 Novos documentos entram como pasta nova + card no lobby da raiz.
 
-### Bestiary
+### Pokémon
 
-Kit de documentação do jogo:
+Kit de referência de design para o Bestiary (como Pokémon faz cada mecânica e o que isso significa para o nosso jogo):
 
-- Technical Game Design Document
-- Art Style Guide
-- Localization Guide
-- Moves Docs
-- Beasts 1st Gen (CSV)
+- Mechanics Overview
+- Classic reference (Fire Red / Leaf Green)
+- Modern generations
+- Pokémonsó-combate (Champions)
+- Battle-only games
+- Type Chart
+- Battle Logic
+- Monster Data
+- Moves & Abilities
+- Capture & Economy
+- Index & conexões (adotar / adaptar / rejeitar)
 
-### Digimon World 3
+Estilo compartilhado em `Pokemon/pokemon-shell.css`. Checagem opcional: `node "Pokemon/_check.cjs"`.
 
 Kit de referência HTML:
 

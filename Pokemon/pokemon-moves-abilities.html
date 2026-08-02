@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golpes &amp; Abilidades</title>
+    <link rel="icon" href="favicon.svg">
+    <link rel="stylesheet" href="pokemon-shell.css">
+    <style>
+        .shell-prose table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.92rem;
+        }
+        .shell-prose th,
+        .shell-prose td {
+            border: 1px solid var(--border, #d0d7de);
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        .shell-prose th {
+            background-color: var(--accent-dim, #f0f4f8);
+            font-weight: 600;
+        }
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-scroll table {
+            min-width: 640px;
+        }
+        .decision {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .decision.adopt {
+            background-color: #d1f0d1;
+            color: #14532d;
+        }
+        .decision.adapt {
+            background-color: #fde9c8;
+            color: #7c4a03;
+        }
+        .decision.reject {
+            background-color: #f8d7da;
+            color: #7f1d1d;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Golpes &amp; Abilidades</h1>
+        <p class="subtitle">Referência de design para o Bestiary — sistema de moves e passivas, convertido do modelo Pokémon (Fire Red / Moderno).</p>
+        <nav class="doc-nav">
+            <a href="pokemon-mechanics-overview.html">Overview</a>
+            <a href="pokemon-firered.html">Fire Red</a>
+            <a href="pokemon-modern.html">Moderno</a>
+            <a href="pokemon-champions.html">Champions</a>
+            <a href="pokemon-battle-only-games.html">Só-batalha</a>
+            <a href="pokemon-type-chart.html">Tipos</a>
+            <a href="pokemon-battle-logic.html">Batalha</a>
+            <a href="pokemon-monster-data.html">Monstro</a>
+            <a href="pokemon-moves-abilities.html" class="active">Golpes</a>
+            <a href="pokemon-capture-economy.html">Captura</a>
+            <a href="pokemon-index.html">Índice</a>
+        </nav>
+    </header>
+
+    <main class="shell-prose">
+
+        <section>
+            <h2>1. Movepool Pokémon — como os golpes funcionam</h2>
+            <p>
+                No modelo moderno (Gen 4+) os golpes são divididos por <strong>categoria do move</strong>, não mais por tipo.
+                Antes da Gen 4 (Gen 1–3) a categoria era definida pelo <strong>tipo</strong> do golpe (ou seja, todo golpe FOGO era Físico).
+            </p>
+            <ul>
+                <li><strong>Físico (Physical)</strong> — dano baseado em ataque físico (ATK) vs. defesa física (DEF).</li>
+                <li><strong>Especial (Special)</strong> — dano baseado em ataque especial (SpA) e defesa especial (SpDEF).</li>
+                <li><strong>Status</strong> — não causa dano direto; aplica buffs/debuffs, cura, condições de status ou suporte.</li>
+            </ul>
+            <p>
+                Todo golpe tem atributos <strong>Power</strong> (Base Power), <strong>Accuracy</strong> (precisão, % — golpes com <code>100%</code> de Acc ou "nunca erra"),
+                <strong>PP</strong> (Power Points — recargas do uso) e distribuição de aprendizado:
+            </p>
+            <ul>
+                <li><strong>Base Power (BP)</strong> — dano bruto do golpe;</li>
+                <li><strong>Accuracy (Acc)</strong> — chance de acertar (valores típicos 50%–100%, alguns sem chance de erro);</li>
+                <li><strong>PP</strong> — número de usos por luta antes de precisar reabastecer;</li>
+                <li><strong>TM / HM</strong> — máquinas descartáveis (Technical/Hidden Machine) que ensinam um golpe;</li>
+                <li><strong>Move Tutor</strong> — um NPC ensina golpe pagando-se (ou com itens);</li>
+                <li><strong>Egg Moves</strong> — golpes herdados via reprodução (Berçário);</li>
+                <li><strong>Level-Up</strong> — golpes aprendidos automaticamente com a evolução de nível.</li>
+            </ul>
+            <p>
+                <strong>STAB</strong> (Same-Type Attack Bonus): um golpe cujo tipo é igual ao tipo do monstré recebe bônus de
+                <code>×1.5</code> no poder (no Bestiary, bônus de dano por afinidade). Todo monstre trage de ações ativas de
+                combate limitado a <strong>4 movesat máximo</strong> carregados simultaneamente — o que torna a escolha build crucial.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Sistema de golpes do Bestiary (GDD Apêndice B)</h2>
+            <p>
+                O Bestiary adota o pool curado de <strong>49 moves</strong>, convertidos da PokeAPI
+                (457 totais reduzidos para 49+ por curadoria). Rebalanceamento próprio:
+                categorias <strong>Físico / Especial / Status</strong>, <strong>Acc</strong> e <strong>Base Power</strong> próprios,
+                sem PP rígido. Cada monstre carrega no máximo <strong>4 moves ativos</strong>.
+            </p>
+            <p>Exemplo de tabela do GDD (Apêndice B) — amostra de moves balanceados:</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Move</th>
+                            <th>Tipo</th>
+                            <th>Categoria</th>
+                            <th>BP</th>
+                            <th>Acc</th>
+                            <th>Efeito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Prime Power</td>
+                            <td>NORMAL</td>
+                            <td>Suporte (Status)</td>
+                            <td>—</td>
+                            <td>100%</td>
+                            <td>Buff todos os stats +10%</td>
+                        </tr>
+                        <tr>
+                            <td>Burning Charge</td>
+                            <td>FOGO</td>
+                            <td>Físico</td>
+                            <td>70</td>
+                            <td>100%</td>
+                            <td>10% recuo; 10% burn</td>
+                        </tr>
+                        <tr>
+                            <td>Overheat Strike</td>
+                            <td>FOGO</td>
+                            <td>Físico</td>
+                            <td>110</td>
+                            <td>100%</td>
+                            <td>Perde o próximo turno × dano se o alvo estiver queimado (burn)</td>
+                        </tr>
+                        <tr>
+                            <td>Torrential Slash</td>
+                            <td>ÁGUA</td>
+                            <td>Físico</td>
+                            <td>60</td>
+                            <td>100%</td>
+                            <td>Força a troca/switch do oponente</td>
+                        </tr>
+                        <tr>
+                            <td>Tornado Prison</td>
+                            <td>AR</td>
+                            <td>Especial</td>
+                            <td>90</td>
+                            <td>100%</td>
+                            <td>50% de chance de flinch</td>
+                        </tr>
+                        <tr>
+                            <td>Earth's Will</td>
+                            <td>ROCHA</td>
+                            <td>Especial</td>
+                            <td>80</td>
+                            <td>100%</td>
+                            <td>30% de chance de +25% DEF e SpDEF</td>
+                        </tr>
+                        <tr>
+                            <td>Absolute Zero</td>
+                            <td>GELO</td>
+                            <td>Especial</td>
+                            <td>100</td>
+                            <td>100%</td>
+                            <td>20% de chance de flinch</td>
+                        </tr>
+                        <tr>
+                            <td>Sun Cannon</td>
+                            <td>PLANTA</td>
+                            <td>Especial</td>
+                            <td>100</td>
+                            <td>100%</td>
+                            <td>Efeito em cadeia (chain): +50% por acerto em sequência</td>
+                        </tr>
+                        <tr>
+                            <td>Zeus Thunder</td>
+                            <td>ELÉT</td>
+                            <td>Especial</td>
+                            <td>150</td>
+                            <td>100%</td>
+                            <td>10% de chance de paralisar (paralyze)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Passivas → Abilidades do Bestiary (GDD seção 13)</h2>
+            <p>
+                No Pokémon, <strong>Abilities</strong> são habilidades passivas fixas por espécie. No Bestiary o sistema
+                <strong>passivo (14+ passivas fixas por espécie)</strong> cumpre esse papel, com significados próprios.
+                As 14/16 principais:
+            </p>
+            <ul>
+                <li><strong>Stoic</strong> — resistência mental/enfrentamento psicológico; não é afetado por intimidação/flinch.</li>
+                <li><strong>Stubborn</strong> — quando um golpe erra, o próximo acerto do monstre recebe +25% de dano.</li>
+                <li><strong>Duelist</strong> — +25% Atk/SpA contra oponente de tipo diferente do seu.</li>
+                <li><strong>Domain Ruler</strong> — STAB +25% e precisão perfeita (nunca erra).</li>
+                <li><strong>Second Strike</strong> — ataca duas vezes (double hit), cada golpe com −50% de BP.</li>
+                <li><strong>Thorns</strong> — ao receber golpe de contato, reflete o dano (Reflect).</li>
+                <li><strong>Sense Danger</strong> — 100% de evasão contra o primeiro ataque recebido.</li>
+                <li><strong>Weather Change</strong> — altera a condição climática da batalha sob certas condições (temática do monstre/região).</li>
+                <li><strong>Marksman</strong> — golpes nunca erram (precisão perfeita).</li>
+                <li><strong>Solar Power</strong> — planta escala de T1 / T2 / T3 conforme o clima/etapa.</li>
+                <li><strong>Vampirism</strong> — rouba 25% do dano causado como vida.</li>
+                <li><strong>Intimidation</strong> — ao entrar (switch-in), aplica −25% Atk/SpA no oponente.</li>
+                <li><strong>Trickster</strong> — golpes de suporte têm precisão perfeita e prioridade no turno.</li>
+                <li><strong>Pacifist</strong> — causa dano ×0.5 até sofrer dano pela primeira vez.</li>
+                <li><strong>Blitzkrieg</strong> — sempre ataca primeiro no turno (prioridade máxima).</li>
+                <li><strong>Royalty</strong> — com HP &gt; 50% recebe ×0.5 de dano; com HP &lt; 50% recebe ×2 de dano (risco/recompensa regal).</li>
+            </ul>
+            <p>Nota: a passiva <strong>Battle-type</strong> também existe no Bestiary (imunidade a status), complementando as listadas acima.</p>
+        </section>
+
+        <section>
+            <h2>4. Conexão com o Bestiary</h2>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decisão</th>
+                            <th>Item de design</th>
+                            <th>Justificativa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="decision adopt">Adotar</span></td>
+                            <td>4 moves por monstre</td>
+                            <td>Limite de 4 golpes ativos força escolha de build e tática, sem dominar o pool.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision adopt">Adotar</span></td>
+                            <td>Categorias Físico / Especial / Status</td>
+                            <td>Separação do sistema de dano por natureza do move (Gen 4+), dando profundidade de build.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision adopt">Adotar</span></td>
+                            <td>STAB</td>
+                            <td>Bônus de afinidade por tipo (×1.5) incentiva binds temáticas e identidade por tipo.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision adopt">Adotar</span></td>
+                            <td>Acc / Base Power</td>
+                            <td>Precisão e poder base dão equilíbrio e opcion pragmática entre golpes fortes e confiáveis.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision adopt">Adotar</span></td>
+                            <td>Level-Up + Discos TM + Egg</td>
+                            <td>Multi-caminho de aprendizado: nivelar, usar Discos TM e adquirir via Berçário (GDD seção 17/20).</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision adopt">Adotar</span></td>
+                            <td>Move Relearner (Tutor da Guilda)</td>
+                            <td>NPC permite reaprender golpes perdidos em troca de minério (GDD seção 17), flexibilizando o build.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision adapt">Adaptar</span></td>
+                            <td>Passivas no lugar de Abilities</td>
+                            <td>Sistema passivo fixo por espécie (GDD seção 13) substitui Abilities com tele de controle de efeito.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision adapt">Adaptar</span></td>
+                            <td>Pool reduzido a 49+</td>
+                            <td>Curadoria de 457 para 49+ moves (GDD seção 24) mantém equilíbrio e legibilidade.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision reject">Rejeitar</span></td>
+                            <td>Pool gigante sem controle</td>
+                            <td>Centenas de moves sem curadoria criam desequilíbrio, redundância e sobrecarga de balanceamento.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision reject">Rejeitar</span></td>
+                            <td>PP strict / agenda locks</td>
+                            <td>Limites rígidos de PP e bloops de agenda travam a progressão e frustram a exploração.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="decision reject">Rejeitar</span></td>
+                            <td>Exclusive egg + HM locks</td>
+                            <td>Trancamentos exclusivos por Ovo/HM criam gargalos de obtenção indesejados no Bestiary.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

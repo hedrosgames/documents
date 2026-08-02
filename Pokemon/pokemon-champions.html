@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="pokemon-shell.css">
+<title>Pokémon Champions — batalha pura → Bestiary</title>
+<style>
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 520px; background: var(--panel); }
+th, td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(0,0,0,0.15); }
+tr:last-child td { border-bottom: none; }
+.kicker { color: var(--muted); font-size: 0.8rem; margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+.decision { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.d-adopt { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
+.d-adapt { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
+.d-reject { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>Pokémon Champions — batalha pura</h1>
+  <p>Simulador só-de-batalha (2025–2026): sem captura, sem exploração em mundo aberto. É o molde perfeito para o Bestiary — a batalha por turnos como <b>centro</b>, não como pendência de um overworld.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="pokemon-mechanics-overview.html">Overview</a>
+    <a href="pokemon-firered.html">Fire Red</a>
+    <a href="pokemon-modern.html">Moderno</a>
+    <a class="current" href="pokemon-champions.html">Champions</a>
+    <a href="pokemon-battle-only-games.html">Só-batalha</a>
+    <a href="pokemon-type-chart.html">Tipos</a>
+    <a href="pokemon-battle-logic.html">Batalha</a>
+    <a href="pokemon-monster-data.html">Monstro</a>
+    <a href="pokemon-moves-abilities.html">Golpes</a>
+    <a href="pokemon-capture-economy.html">Captura</a>
+    <a href="pokemon-index.html">Índice</a>
+  </nav>
+</header>
+
+<div class="shell-prose">
+<p><b>Pokémon Champions</b> é um jogo mobile (Switch/iOS/Android), de 2025–2026, desenvolvido pela <b>The Pokémon Works</b> em conjunto com a <b>GAME FREAK</b>. É a simulação de batalha competitiva oficial, validada como formato do <b>VGC Worlds 2026</b>. A importância para o Bestiary é estrutural: é a prova de que um jogo de monstros pode ser inteiramente orientado à batalha, <b>sem mundo aberto</b> e sem grind de coleta.</p>
+
+<p class="kicker">O que o Pokémon Champions é</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Aspecto</th><th>Detalhe</th><th>Impacto no Bestiary</th></tr></thead>
+  <tbody>
+    <tr><td>Foco</td><td>Batalha competitiva pura: <b>sem captura</b>, sem exploração em mundo aberto, sem narrativa de travessia.</td><td>Valida a tese do Bestiary: batalha pode ser o núcleo do jogo sozinha (seção 2).</td></tr>
+    <tr><td>Plataforma</td><td>Switch + iOS + Android (cross-play), 2025–2026.</td><td>—</td></tr>
+    <tr><td>Titulares</td><td>The Pokémon Company (works) + GAME FREAK; formato oficial do VGC Worlds 2026.</td><td>Prova de mecanismo competitivo maduro.</td></tr>
+    <tr><td>Roster</td><td>~186 Pokémon, lista <b>curada</b> (não todos os ~1000+ existentes).</td><td>Modelo para 70 species do Bestiary (seção 23).</td></tr>
+    <tr><td>Nível &amp; stats</td><td>Nível 50 automático, IVs máximos, SEM grind de EV tradicional.</td><td>Elimina o grind de preparação; stats vêm de construção, não de fazenda.</td></tr>
+    <tr><td>Progressão</td><td>Victory Points (VP) não compráveis — só conquistados em batalha.</td><td>Item de loop sem economia P2W.</td></tr>
+    <tr><td>Compartir times</td><td>Replica Teams por <b>código de 10 caracteres</b> (importa/exporta um time inteiro).</td><td>Fácil teste/balanço de party no Best.</td></tr>
+    <tr><td>Tempo</td><td>45s/turno, 7min/jogador, 20min/partida.</td><td>Referência de pacing para a batalha por turnos do Best.</td></tr>
+  </tbody>
+</table></div>
+
+<p class="note-callout"><b>Estrutura "battle-first":</b> em Champions não há overworld para grind, itens de cura compráveis ou rota de treino. Só times, stats standard e duelo. É exatamente o "uma vitória pode depender somente da party" que o Bestiary busca no seu modo hub-and-spoke.</p>
+
+<p class="kicker">Formatos competitivos oficiais</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Formato</th><th>Regra</th><th>Relevância</th></tr></thead>
+  <tbody>
+    <tr><td>Doubles oficial</td><td><b>Bring-6 Pick-4</b> — leva 6, escolhe 4 na seleção.</td><td>Padrão VGC; mostra design de "team building + draft" — inspira o sistema de party e inventário limitado.</td></tr>
+    <tr><td>Singles</td><td><b>Bring-6 Pick-3</b>.</td><td>Versão 1v1/N; alinha com o Best (batalha por turnos).</td></tr>
+    <tr><td>Preview de time</td><td><b>Open Team List</b> antes da partida — ambos veem os 6.</td><td>Transparência; decisão de contrapick análogo à escolha no Best antes do duelo.</td></tr>
+    <tr><td>Mega Evolution</td><td>Habilitada via <b>Omni Ring</b> no regulation M-A.</td><td>Booster de uma vez — modelo de "burst" por batalha.</td></tr>
+    <tr><td>Tera</td><td>Possível.</td><td>Fenômeno de mudança de tipo, pontual.</td></tr>
+    <tr><td>Dynamax</td><td>Retorno <b>não confirmado</b>.</td><td>Mantém a ênfase em mecânicas de tipo em vez de boca de escala.</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">Regulamentos (Season Spotlights)</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Formato</th><th>Vigência</th><th>Observação</th></tr></thead>
+  <tbody>
+    <tr><td>Regulation M-A</td><td><b>08/04 a 17/06/2026</b></td><td>Mega habilitada (Omni Ring).</td></tr>
+    <tr><td>Regulation M-B</td><td><b>17/06 a 02/09/2026</b></td><td>Rotação do meta após M-A.</td></tr>
+    <tr><td>Roster</td><td>~186 do elenco curado</td><td>Núcleo fixo; rotação via regras de elegibilidade.</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">Conexão com o Bestiary — ADOTAR</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Elemento Champions</th><th>Tipo</th><th>Aplicação no Bestiary</th></tr></thead>
+  <tbody>
+    <tr><td>Estrutura "battle-first, sem grind de overworld"</td><td><span class="decision d-adopt">Adotar</span></td><td>Bestiary não é mundo aberto (seção 2): o progresso central vem da batalha por turnos, não de travessia de mapa grande.</td></tr>
+    <tr><td>Uma vitória pode depender somente da party</td><td><span class="decision d-adopt">Adotar</span></td><td>Combo/tipo/esquadrão decidem o duelo; não há artefato de fuga de dificuldade via overworld.</td></tr>
+    <tr><td>Roster curado</td><td><span class="decision d-adopt">Adotar</span></td><td>Bestiary tem <b>70 species</b> (seção 23) — número pequeno e desenhado, como os ~186 curados de Champions.</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">Conexão com o Bestiary — ADAPTAR</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Elemento Champions</th><th>Tipo</th><th>Adaptação Bestiary</th></tr></thead>
+  <tbody>
+    <tr><td>Instanced matchmaking (queen uma fila para o duelo)</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ <b>dungeons instanciadas</b> como fonte de captura e desafio (Bestiary mantém a captura como núcleo, seção 15).</td></tr>
+    <tr><td>Roster de ~186</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ <b>70 species</b> + um grupo de lendários de DOMÍNIO (raros, não coletáveis em massa).</td></tr>
+    <tr><td>Stats de batalha (Level 50, IVs max, sem EV grind)</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ Bestiary mantém EVs determinísticos (510/252/4-por-ponto) mas sem IVs ocultos; preparo vem da natureza, não de farm.</td></tr>
+    <tr><td>Mega/Tera como booster único</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ Substituído por clima/passivas curtas por batalha (seção 16).</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">Conexão com o Bestiary — REJEITAR</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Elemento Champions</th><th>Tipo</th><th>Motivo de rejeição</th></tr></thead>
+  <tbody>
+    <tr><td>Multiplayer / VGC / cena competitiva</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary é <b>single-player</b> (seção 4).</td></tr>
+    <tr><td>Victory Points como sistema de monetização / economia live-service</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary não tem metaplayer/P2W; progressão é local e em dizéssolamento.</td></tr>
+    <tr><td>Double battle (Bring-6 Pick-4)</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary é 1v1 / 1vN por turnos.</td></tr>
+    <tr><td>Time limit 45s/turno e 7min/jogador</td><td><span class="decision d-reject">Rejeitar</span></td><td>Single-player sem restrição relativa ao adversário humano.</td></tr>
+  </tbody>
+</table></div>
+
+<p class="note-callout"><b>Síntese:</b> <b>Pokémon Champions</b> é o argumento final para o Bestiary: um jogo de monstros inteiramente sobre batalha, com roster curado e progressão conquistada (não comprada) — sem mundo aberto. O Bestiary adota essa espinha "battle-first", adapta o instanced-play para suas dungeons de captura, e rejeita o MP/competitive e a economia de VP.</p>
+</div>
+</body>
+</html>

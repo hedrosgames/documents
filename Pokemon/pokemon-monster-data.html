@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.svg">
+    <link rel="stylesheet" href="pokemon-shell.css">
+    <title>Dados de monstro — stats, EV/IV, natures, BST | Bestiary</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 0.5rem 0.75rem;
+            text-align: center;
+        }
+        th {
+            background: #2a2a2a;
+            color: #fff;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        tr:nth-child(even) td {
+            background: #fafafa;
+        }
+        .type-description, .td-left {
+            text-align: left;
+        }
+        .decision {
+            display: inline-block;
+            font-weight: 700;
+            padding: 0.15rem 0.6rem;
+            border-radius: 4px;
+            color: #fff;
+            margin-right: 0.25rem;
+        }
+        .decision-adoptar { background: #2e7d32; }
+        .decision-adaptar { background: #1976d2; }
+        .decision-reject { background: #c62828; }
+        .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .bst-total {
+            font-weight: 700;
+            background: #fff3e0;
+        }
+        code {
+            background: #eee;
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        .legendario {
+            background: #fde7e9 !important;
+        }
+        .destacado {
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Dados de monstro — stats, EV/IV, natures, BST</h1>
+        <p class="subtitle">Base de referência para atributos, distribuição determinística de EVs, natures, níveis de BST e o mapeamento aplicado ao Bestiary (GDD seções 11 &amp; 12).</p>
+    </header>
+
+    <nav class="doc-nav">
+        <ol>
+            <li><a href="pokemon-mechanics-overview.html">Overview</a></li>
+            <li><a href="pokemon-firered.html">Fire Red</a></li>
+            <li><a href="pokemon-modern.html">Moderno</a></li>
+            <li><a href="pokemon-champions.html">Champions</a></li>
+            <li><a href="pokemon-battle-only-games.html">Só-batalha</a></li>
+            <li><a href="pokemon-type-chart.html">Tipos</a></li>
+            <li><a href="pokemon-battle-logic.html">Batalha</a></li>
+            <li><a href="pokemon-monster-data.html">Monstro</a></li>
+            <li><a href="pokemon-moves-abilities.html">Golpes</a></li>
+            <li><a href="pokemon-capture-economy.html">Captura</a></li>
+            <li><a href="pokemon-index.html">Índice</a></li>
+        </ol>
+    </nav>
+
+    <main>
+        <div class="shell-prose">
+            <p>Este documento consolida os dados de monstro/<em>Pokémon</em> necessários para o design do <strong>Bestiary</strong>: os 6 atributos, o sistema de <strong>EV/IV</strong>, as <strong>natures</strong> e a curva de <strong>Base Stat Total (BST)</strong>. Ao final, aplica cada item como <span class="decision decision-adoptar">ADOTAR</span>, <span class="decision decision-adaptar">ADAPTAR</span> ou <span class="decision decision-reject">REJEITAR</span> no contexto do Bestiary (GDD seções 11 e 12).</p>
+
+            <h2 id="stats">1. Atributos Pokémon (os 6 principais)</h2>
+            <p>Cada monstro possui seis atributos principais que determinam seu desempenho em batalha:</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Abrev.</th>
+                            <th>Nome</th>
+                            <th class="td-left">Papel em batalha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>HP</td><td>Hit Points</td><td class="td-left">Vida máxima do monstro</td></tr>
+                        <tr><td>ATK</td><td>Attack</td><td class="td-left">Poder de golpes físicos</td></tr>
+                        <tr><td>DEF</td><td>Defense</td><td class="td-left">Redução de dano físico recebido</td></tr>
+                        <tr><td>SPA</td><td>Special Attack</td><td class="td-left">Poder de golpes especiais</td></tr>
+                        <tr><td>SPD</td><td>Special Defense</td><td class="td-left">Redução de dano especial recebido</td></tr>
+                        <tr><td>SPE</td><td>Speed</td><td class="td-left">Define quem age primeiro em batalha</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>IVs (Individual Values)</h3>
+            <p>Valores individuais de <strong>0 a 31</strong> por atributo, definidos na geração do monstro e imutáveis. Representam a "genética" escondida — dois monstros da mesma espécie com o mesmo treino podem ter stats diferentes por causa dos IVs.</p>
+
+            <h3>EVs (Effort Values)</h3>
+            <p>Pontos de esforço inputs pelo treinador durante o combate/treino. Regras centrais:</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Regra</th>
+                            <th>Valor</th>
+                            <th>Efeito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Total máximo de EVs</td><td class="destacado">510</td><td class="td-left">Soma entre todos os atributos</td></tr>
+                        <tr><td>Máximo por atributo</td><td class="destacado">252</td><td class="td-left">EV "pura" em um único stat</td></tr>
+                        <tr><td>Conversão</td><td class="destacado">4 EVs → +1 stat</td><td class="td-left">A cada 4 pontos de EV em um atributo, o stat real sobe 1</td></tr>
+                        <tr><td>Máximo efetivo</td><td>252 × 6 = 1512 possível</td><td class="td-left">Mas apenas 510 são utilizáveis (limitante)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Como o teto é 510 e o teto por atributo é 252, o treino típico "perfeito" é <strong>252 + 252 + 6</strong> = dois stats cheios e um terceiro com um ponto ("+1" grau).</p>
+
+            <h3>Natures (25 combos)</h3>
+            <p>Existem <strong>25 combinações de natures</strong>. Cada uma aplica um multiplicador <strong>+10%</strong> em um atributo e <strong>−10%</strong> em outro, dos <strong>cinco stats não-HP</strong> (nunca afeta HP). As cinco natures "neutras" mantêm tudo igual.</p>
+            <p>Nota: por afetarem apenas Atk/Def/SpA/SpD/Spe (5 stats), a formação dos multiplicadores é: <code>5 bases × 5 multiplicadores = 25 combinações</code>.</p>
+
+            <h3>Base Stat Total (BST)</h3>
+            <p>Soma dos seis atributos base de uma espécie. Determina o "teto de poder" natural. Exemplos ilustrativos de tiers:</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tier</th>
+                            <th>BST aproximado</th>
+                            <th class="td-left">Exemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Inicial (common)</td><td><strong>~318</strong></td><td class="td-left">Starter aministrativo</td></tr>
+                        <tr><td>Starter padrão</td><td>~318 / 304</td><td class="td-left">Pikachu ~320, starters Good</td></tr>
+                        <tr><td>Pseudo-lendário</td><td>600</td><td class="td-left">Dragapult, Garchomp</td></tr>
+                        <tr><td>Lendário</td><td>680</td><td class="td-left">Lendários de caixa (box legendaries)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="bestiary">2. Mapeamento no Bestiary (GDD 11/12)</h2>
+
+            <h3>Base inicial — BST 318 exatamente como os 3 starters</h3>
+            <p>O roster do Bestiary <strong>começa com BST exatamente 318</strong>, o mesmo patamar dos três starters clássicos. Isso cria um ponto de partida equilibrado e previsível para todas as 70 espécies.</p>
+
+            <h3>EV determinístico, sem IVs</h3>
+            <p>O Bestiary <strong>não possui IVs</strong>. Todo o investimento individual vem de <strong>EVs determinísticos</strong> (510 total, máx. 252/stat, +1 real a cada 4 EVs). Consequência direta:</p>
+            <blockquote>
+                <p><strong>Dois monstros idênticos com o mesmo treinamento têm stats idênticos.</strong></p>
+            </blockquote>
+            <p>Não existe variação escondida: o resultado é 100% reprodutível e calculável.</p>
+
+            <h3>Vitaminas no hub = treino de EV dirigido</h3>
+            <p>Vitaminas compradas no hub (<strong>Protein</strong>, <strong>Calcium</strong>, <strong>Carbon</strong> etc.) aplicam EV diretamente ao atributo correspondente. Isso transforma o treino de EV em algo <em>dirigido e à demanda</em>:</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vitamina</th>
+                            <th class="td-left">Atributo</th>
+                            <th class="td-left">Uso típico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Protein</td><td class="td-left">ATK</td><td class="td-left">Tanks físicos / atacantes físicos</td></tr>
+                        <tr><td>Iron</td><td class="td-left">DEF</td><td class="td-left">Monstros de defesa (tanks)</td></tr>
+                        <tr><td>Calcium</td><td class="td-left">SPA</td><td class="td-left">Glass cannons especiais</td></tr>
+                        <tr><td>Zinc</td><td class="td-left">SPD</td><td class="td-left">Resistência especial</td></tr>
+                        <tr><td>Carbon</td><td class="td-left">SPE</td><td class="td-left">Scarers / agilidade</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Resultado de design: <strong>dinheiro → customização sob demanda</strong>. O jogador pode transformar qualquer monstro em <em>tank</em> de 252 DEF ou <em>glass cannon</em> de 252 ATK, pagando pela vitaminas no hub.</p>
+
+            <h2 id="roster">3. Roster de 70 espécies — curva de BST</h2>
+            <p>O roster completo conta com <strong>70 espécies</strong>, distribuídas em uma curva de BST progressiva:</p>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Estágio / Faixa</th>
+                            <th>BST</th>
+                            <th class="td-left">Papel no roster</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Starter / bicho 1</td><td>318</td><td class="td-left">Rosters iniciais e comuns</td></tr>
+                        <tr><td>Stage 2</td><td>405</td><td class="td-left">Evoluções intermediárias</td></tr>
+                        <tr><td>Estágio final</td><td>530</td><td class="td-left">Formas finais</td></tr>
+                        <tr><td>Lendários</td><td>680</td><td class="td-left">Espécies lendárias (raras e poderosas)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>A curva é <strong>318 → 405 → 530 → 680</strong>, espelhando a evolução de poder padrão dos Pokémon, mas com valores próprios do Bestiary.</p>
+
+            <h2 id="compare">4. Comparativo de amostras</h2>
+            <p>Três starters iniciais do Bestiary (#001, #019, #028) e um lendário (#064), todos alinhados com a curva de BST definida.</p>
+
+            <h3>Starters iniciais (BST 318)</h3>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Espécie</th>
+                            <th>Tipo</th>
+                            <th>HP</th>
+                            <th>ATK</th>
+                            <th>DEF</th>
+                            <th>SPA</th>
+                            <th>SPD</th>
+                            <th>SPE</th>
+                            <th class="bst-total">BST</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>001</td>
+                            <td>Hellhound</td>
+                            <td>FOGO</td>
+                            <td>45</td><td>60</td><td>40</td><td>65</td><td>45</td><td>63</td>
+                            <td class="bst-total">318</td>
+                        </tr>
+                        <tr>
+                            <td>019</td>
+                            <td>Sunseed</td>
+                            <td>PLANTA</td>
+                            <td>45</td><td>50</td><td>50</td><td>60</td><td>60</td><td>53</td>
+                            <td class="bst-total">318</td>
+                        </tr>
+                        <tr>
+                            <td>028</td>
+                            <td>Lakezard</td>
+                            <td>ÁGUA</td>
+                            <td>50</td><td>55</td><td>50</td><td>60</td><td>50</td><td>53</td>
+                            <td class="bst-total">318</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Lendário (BST 680)</h3>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Espécie</th>
+                            <th>Tipo</th>
+                            <th>HP</th>
+                            <th>ATK</th>
+                            <th>DEF</th>
+                            <th>SPA</th>
+                            <th>SPD</th>
+                            <th>SPE</th>
+                            <th class="bst-total">BST</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>064</td>
+                            <td class="destacado">Dragoon</td>
+                            <td class="legendario">FOGO</td>
+                            <td>105</td><td>130</td><td>100</td><td>150</td><td>100</td><td>95</td>
+                            <td class="bst-total">680</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="conexao">5. Conexão com o Bestiary</h2>
+
+            <h3>ADOTAR</h3>
+            <ul>
+                <li><span class="decision decision-adoptar">ADOTAR</span> <strong>6 atributos e cálculos</strong> (GDD seção 11) — mesmo conjunto e fórmulas de stats dos Pokémon.</li>
+                <li><span class="decision decision-adoptar">ADOTAR</span> <strong>EV dirigido por hub (vitaminas)</strong> — Protein/Calcium/Carbono no hub permitem customização; dinheiro vira controle de build.</li>
+                <li><span class="decision decision-adoptar">ADOTAR</span> <strong>Starter BST 318</strong> — equilibrar o ponto de partida dos 3 starters clássicos.</li>
+                <li><span class="decision decision-adoptar">ADOTAR</span> <strong>Natures 1/25 determinístico</strong> (GDD seção 12) — pool de 25, +10%/−10%, nunca HP.</li>
+            </ul>
+
+            <h3>ADAPTAR</h3>
+            <ul>
+                <li><span class="decision decision-adaptar">ADAPTAR</span> <strong>Sem IVs (determinismo)</strong> — remover a nosiva genética escondida; só EVs.</li>
+                <li><span class="decision decision-adaptar">ADAPTAR</span> <strong>BST curve própria</strong> <code>318 → 366 → 530 → 680</code> no roster de 70 — valores próprios, não clones diretos dos Pokémon.</li>
+            </ul>
+
+            <h3>REJEITAR</h3>
+            <ul>
+                <li><span class="decision decision-reject">REJEITAR</span> <strong>Grind de IVs</strong> e "genética" escondida — elimina a repetição indefinida para achar o "perfeito".</li>
+                <li><span class="decision decision-reject">REJEITAR</span> <strong>Dual natures / natures que afetam HP</strong> — pools natures nunca tocam HP.</li>
+                <li><span class="decision decision-reject">REJEITAR</span> <strong>Royal T el etc.</strong> — mecânicas complexas desnecessárias ao design.</li>
+            </ul>
+
+        </div>
+    </main>
+</body>
+</html>

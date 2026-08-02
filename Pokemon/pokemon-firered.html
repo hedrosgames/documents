@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="pokemon-shell.css">
+<title>Pokémon — Fire Red/Leaf Green → Bestiary</title>
+<style>
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 520px; background: var(--panel); }
+th, td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(0,0,0,0.15); }
+tr:last-child td { border-bottom: none; }
+.kicker { color: var(--muted); font-size: 0.8rem; margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+.decision { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.d-adopt { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
+.d-adapt { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
+.d-reject { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>Fire Red / Leaf Green — a referência de mecânica crua</h1>
+  <p>Gen 3 (GBA) como base: a matemática mais simples e mais estável da franquia. Aqui está <i>como o FRLG calcula</i> — dano, captura, status, EVs e natures — e o que isso significa para o Bestiary.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="pokemon-mechanics-overview.html">Overview</a>
+    <a class="current" href="pokemon-firered.html">Fire Red</a>
+    <a href="pokemon-modern.html">Moderno</a>
+    <a href="pokemon-champions.html">Champions</a>
+    <a href="pokemon-battle-only-games.html">Só-batalha</a>
+    <a href="pokemon-type-chart.html">Tipos</a>
+    <a href="pokemon-battle-logic.html">Batalha</a>
+    <a href="pokemon-monster-data.html">Monstro</a>
+    <a href="pokemon-moves-abilities.html">Golpes</a>
+    <a href="pokemon-capture-economy.html">Captura</a>
+    <a href="pokemon-index.html">Índice</a>
+  </nav>
+</header>
+
+<div class="shell-prose">
+<p class="kicker">1. Fórmula de dano Gen 3</p>
+<p>A fórmula de dano é calculada em etapas inteiras, <b>com floor (piso) a cada passo de multiplicação/divisão</b>:</p>
+<div class="table-scroll"><pre style="background: rgba(0,0,0,0.25); padding: 1rem; border-radius: 8px; font-size: 0.9rem; overflow-x: auto;"><code>Dano = floor(floor(floor((2 × Nível / 5 + 2) × Poder × Atk / Def) / 50) + 2) → depois aplica mods.</code></pre></div>
+<p>Depois do valor base, aplica-se em sequência fixa: <b>eficácia</b> de tipo (½, 1, 2, 0 p/ imune), <b>clima</b> (×1.5 chuva/água, ×1.5 sol/planta/fogo; ×0.5 inversos), <b>crítico</b> (×2 na Gen 3, diferença de estágios de crit determina a chance), <b>roll aleatório 217–255 / 255</b>, <b>STAB ×1.5</b> quando o atacante compartilha o tipo do golpe, e <b>Burn</b> corta o Atk físico pela metade.</p>
+<p>A grande decisão do Gen 3 é que <b>Físico vs Especial é decidido por TIPO, não por golpe</b>:</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Categoria</th><th>Tipos (Gen 3)</th></tr></thead>
+  <tbody>
+    <tr><td>Físico</td><td>Normal, Bug, Fighting, Rock, Ground, Poison, Steel, Flying, Ghost</td></tr>
+    <tr><td>Especial</td><td>Fire, Water, Grass, Electric, Ice, Psychic, Dragon, Dark</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">2. Captura</p>
+<p>A chance de captura começa com um valor <b>a</b>, calculado do HP atual e máximo, o CatchRate da espécie e o modificador da bola. Se <b>a ≥ 255</b>, a captura é <b>garantida</b> (1 captura em 100 %). Caso contrário, são feitas <b>4 trepidações</b> do ball (shakes), cada uma com chance p, e a captura falha se qualquer shake falhar.</p>
+<div class="table-scroll"><pre style="background: rgba(0,0,0,0.25); padding: 1rem; border-radius: 8px; font-size: 0.9rem; overflow-x: auto;"><code>a = ((3 × MaxHP − 2 × HP) × CatchRate × BallMod) / (3 × MaxHP) × StatusMod</code></pre></div>
+<div class="table-scroll"><table>
+  <thead><tr><th>Ident</th><th>Golpes / bolas</th><th>Valor</th></tr></thead>
+  <tbody>
+    <tr><td>BallMod</td><td>Poké Ball</td><td>×1</td></tr>
+    <tr><td>BallMod</td><td>Great Ball</td><td>×1.5</td></tr>
+    <tr><td>BallMod</td><td>Ultra Ball</td><td>×2</td></tr>
+    <tr><td>BallMod</td><td>Master Ball</td><td>×255 (captura garantida)</td></tr>
+    <tr><td>BallMod</td><td>Net / Dive Ball (condições)</td><td>×3</td></tr>
+    <tr><td>StatusMod</td><td>Sleep / Freeze</td><td>×2</td></tr>
+    <tr><td>StatusMod</td><td>Paralysis / Poison / Burn</td><td>×1.5</td></tr>
+  </tbody>
+</table></div>
+<p><b>CatchRate</b> varia por espécie: de <b>3</b> (Mewtwo) até <b>255</b> (Magikarp).</p>
+
+<p class="kicker">3. Status Gen 3</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Status</th><th>Efeito Gen 3</th></tr></thead>
+  <tbody>
+    <tr><td>BRN (Burn)</td><td>Dano 1/8 do MaxHP por turno + halve o Atk físico (ugua a handle do dano).</td></tr>
+    <tr><td>PSN (Poison)</td><td>Dano 1/8 do MaxHP por turno; Toxic acumula a cada turno.</td></tr>
+    <tr><td>PAR (Paralysis)</td><td>Speed cai para 25% + 25% de chance de perder o turno.</td></tr>
+    <tr><td>SLP (Sleep)</td><td>1–3 turnos (Gen 3: 1 a 3, fixo no início).</td></tr>
+    <tr><td>FRZ (Freeze)</td><td>Imobiliza; 20% de chance de degelo por turno.</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">4. EVs (Effort Values) Gen 3</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Regra</th><th>Valor Gen 3</th></tr></thead>
+  <tbody>
+    <tr><td>EVs por derrota</td><td>1–3 por espécie derrotada</td></tr>
+    <tr><td>Conversão</td><td>4 EVs = +1 stat a Lv 100</td></tr>
+    <tr><td>Cap por stat</td><td>255 (252 efetivo por conta da conversão de 4)</td></tr>
+    <tr><td>Cap total</td><td>510</td></tr>
+    <tr><td>Vitaminas (Proteína etc.)</td><td>+10 EV cada, param ao chegar a 100</td></tr>
+    <tr><td>Multiplicadores</td><td>Macho Brace ×2 · Pokérus ×2 (acumulam)</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">5. IVs (Individual Values) Gen 3</p>
+<p>Cada stat tem um IV <b>0–31</b>, sorteado no nascimento e <b>imutável</b>. Em Gen 3, IVs determinam o poder/tipo de <b>Hidden Power</b> (0–31 em cada stat define o tipo e a força do golpe 31-excluído). São invisíveis ao jogador na época — o único "preço" escondido.</p>
+
+<p class="kicker">6. Natures Gen 3</p>
+<p>São <b>25 natures</b> dispostas numa <b>matriz 5×5</b> (5 stats up × 5 stats down). Cada natureza dá <b>+10%</b> a um stat e <b>−10%</b> a outro. <b>HP nunca é afetado</b>; e há <b>5 natures neutras</b> cujos up/down cancelam (mesmo stat).</p>
+<p class="note-callout"><b>Regra de ouro:</b> a natureza é a <b>única variação genética</b> que o jogador enxerga logo na captura — e é exatamente a que o Bestiary mantém.</p>
+
+<p class="kicker">7. Progressão Kanto</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Item</th><th>Valor FRLG</th></tr></thead>
+  <tbody>
+    <tr><td>Ginásios</td><td>8 insígnias obrigatórias na ordem fixa de Kanto</td></tr>
+    <tr><td>Pós-liga</td><td>Elite 4 + Champion (Venusaur / em FRLG: a Liga)</td></tr>
+    <tr><td>Objetivo Dex</td><td>Capturar 150 monos (151 com o Pokémon Mew via evento)</td></tr>
+    <tr><td>Enciclopédia Dex</td><td>2 camadas: Visto e Capturado, contados à parte</td></tr>
+    <tr><td>Recompensa crescente</td><td>Prêmios por número capturado (from 10 Ate 151)</td></tr>
+  </tbody>
+</table></div>
+
+<p class="kicker">8. Conexão com o Bestiary</p>
+<p>Traduzindo o núcleo mecânico do FRLG para o Bestiary (hub-based dungeon crawler &amp; monster taming, Nuzlocke de morte permanente, 7 tipos, determinístico):</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Mecânica FRLG</th><th>Decisão</th><th>Como entra no Bestiary</th></tr></thead>
+  <tbody>
+    <tr><td>Fórmula de dano base</td><td><span class="decision d-adopt">Adotar</span></td><td>Mantém-se (GDD seção 8).</td></tr>
+    <tr><td>Captura com shakes + A ≥ 255 garantida</td><td><span class="decision d-adopt">Adotar</span></td><td>Idêntica (GDD seção 15).</td></tr>
+    <tr><td>EVs determinísticos 510 / 252 / 4</td><td><span class="decision d-adopt">Adotar</span></td><td>Mantém (GDD seção 11).</td></tr>
+    <tr><td>Natures +10%/−10%</td><td><span class="decision d-adopt">Adotar</span></td><td>Única variação genética visível (GDD seção 12).</td></tr>
+    <tr><td>Status major + estágios −6 a +6</td><td><span class="decision d-adopt">Adotar</span></td><td>Extrai o modelo (GDD seção 10).</td></tr>
+    <tr><td>STAB ×1.5</td><td><span class="decision d-adopt">Adotar</span></td><td>Mantém (reforça identidade de tipo).</td></tr>
+    <tr><td>18 tipos + dual-typing</td><td><span class="decision d-adapt">Adaptar</span></td><td>Reduz para <b>7 tipos</b> (FOGO/AR/PLANTA/ÁGUA/ROCHA/ELÉTRICO/GELO), tipagem única.</td></tr>
+    <tr><td>Captura em selva a qualquer momento</td><td><span class="decision d-adapt">Adaptar</span></td><td><b>First Encounter Lock</b> por andar do dungeon (GDD seção 9).</td></tr>
+    <tr><td>Mundo aberto</td><td><span class="decision d-adapt">Adaptar</span></td><td>Hub-and-Spoke: cidade + dungeons em grid (GDD seção 2).</td></tr>
+    <tr><td>IVs randômicos (0–31 ocultos)</td><td><span class="decision d-reject">Rejeitar</span></td><td>Determinismo: 2 monstros iguais = mesmos stats (GDD seção 11).</td></tr>
+    <tr><td>Divisão Físico/Especial por tipo rígida</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary usa categorias de golpe (p. idem seção Batalha).</td></tr>
+    <tr><td>Rollout de crit aleatório</td><td><span class="decision d-reject">Rejeitar</span></td><td>Sem rollout de crit semelhante ao Gen 3; sistema próprio.</td></tr>
+  </tbody>
+</table></div>
+
+<p class="note-callout"><b>Síntese:</b> FRLG entrega a <b>matemática limpa e previsível</b> — dano stepwise, captura com shakes, EVs determinísticos, natures 25, cinco status e estágios. O Bestiary <b>mantém</b> esse miolo e <b>reformula</b> o espaço (7 tipos, hub-and-spoke, First Encounter Lock), rejeitando o hidden RNG dos IVs, a rigidez física/especial e o crit genérico.</p>
+</div>
+</body>
+</html>

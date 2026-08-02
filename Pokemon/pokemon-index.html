@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="pokemon-shell.css">
+<title>Pokémon → Bestiary — Índice &amp; conexões</title>
+<style>
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.85rem; margin: 1.25rem 0; }
+.tile { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 0.95rem 1.05rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.tile h3 { margin: 0; font-size: 0.98rem; }
+.tile .p { margin: 0; color: var(--muted); font-size: 0.82rem; }
+.tile a { color: var(--link); text-decoration: none; font-weight: 600; }
+.tile a:hover { text-decoration: underline; }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; background: var(--panel); }
+th, td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(0,0,0,0.15); }
+tr:last-child td { border-bottom: none; }
+.kicker { color: var(--muted); font-size: 0.7rem; margin: 1.4rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
+.decision { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
+.d-adopt { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
+.d-adapt { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
+.d-reject { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>Índice &amp; conexões — Pokémon → Bestiary</h1>
+  <p>Entrada do kit: mapa de navegação das páginas de referência que consolida as decisões de adoção no <b>Bestiary</b>. O leitor entra pelo lado Pokémon e sai sabendo como cada sistema é moldado.</p>
+  <nav class="doc-nav" aria-label="Guides">
+    <a href="pokemon-mechanics-overview.html">Overview</a>
+    <a href="pokemon-firered.html">Fire Red</a>
+    <a href="pokemon-modern.html">Moderno</a>
+    <a href="pokemon-champions.html">Champions</a>
+    <a href="pokemon-battle-only-games.html">Só-batalha</a>
+    <a href="pokemon-type-chart.html">Tipos</a>
+    <a href="pokemon-battle-logic.html">Batalha</a>
+    <a href="pokemon-monster-data.html">Monstro</a>
+    <a href="pokemon-moves-abilities.html">Golpes</a>
+    <a href="pokemon-capture-economy.html">Captura</a>
+    <a class="current" href="pokemon-index.html">Índice</a>
+  </nav>
+</header>
+
+<div class="shell-prose">
+<p>O jogo é o <b>Bestiary</b> (hub-based dungeon crawler &amp; monster taming — cidade point-and-click + dungeons em grid + batalha por turnos + Nuzlocke, sem mundo aberto). Pokémon é a principal referência de design. Use este índice para navegar por página temática e ver, em cada uma, o veredito <b>Adotar / Adaptar / Rejeitar</b>.</p>
+
+<p class="kicker">Páginas temáticas</p>
+<div class="grid">
+  <div class="tile"><h3><a href="pokemon-mechanics-overview.html">Overview</a></h3><p class="p">O que o Bestiary mantém, muda ou corta de Pokémon.</p></div>
+  <div class="tile"><h3><a href="pokemon-firered.html">Fire Red / Leaf Green</a></h3><p class="p">Referência clássica: dano, captura, EVs, natures, status.</p></div>
+  <div class="tile"><h3><a href="pokemon-modern.html">Gerações modernas</a></h3><p class="p">Abilities, Tera/Dynamax, EV treino, no-HM.</p></div>
+  <div class="tile"><h3><a href="pokemon-champions.html">Pokémon Champions</a></h3><p class="p">Batalha pura sem mundo — o molde do Bestiary.</p></div>
+  <div class="tile"><h3><a href="pokemon-battle-only-games.html">Só-batalha</a></h3><p class="p">Stadium, Battle Revolution, Showdown e tiers.</p></div>
+  <div class="tile"><h3><a href="pokemon-type-chart.html">Matriz de tipos</a></h3><p class="p">18 Pokémon → 7 Bestiary, tipagem única.</p></div>
+  <div class="tile"><h3><a href="pokemon-battle-logic.html">Lógica de batalha</a></h3><p class="p">Turno, prioridade, dano, status, crítico, stages.</p></div>
+  <div class="tile"><h3><a href="pokemon-monster-data.html">Dados de monstro</a></h3><p class="p">Stats, EV/IV, natures, BST.</p></div>
+  <div class="tile"><h3><a href="pokemon-moves-abilities.html">Golpes &amp; abilidades</a></h3><p class="p">Movepool, categorias, passivas.</p></div>
+  <div class="tile"><h3><a href="pokemon-capture-economy.html">Captura &amp; economia</a></h3><p class="p">Catch rate, esferas, itens, lojas do hub.</p></div>
+</div>
+
+<p class="kicker">Consolidado: decisões por mecânica</p>
+<div class="table-scroll"><table>
+  <thead><tr><th>Mecânica</th><th>Decisão</th><th>Bestiary</th></tr></thead>
+  <tbody>
+    <tr><td>Fórmula de dano</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 8, idem ao clássico.</td></tr>
+    <tr><td>Captura com shakes + A≥255</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 15.</td></tr>
+    <tr><td>EV determinístico 510/252/+1 a cada 4</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 11.</td></tr>
+    <tr><td>Natures +10/−10 (não HP)</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 12.</td></tr>
+    <tr><td>Status + estágios de stat</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 10.</td></tr>
+    <tr><td>Passivas (Abilities) fixas</td><td><span class="decision d-adapt">Adaptar</span></td><td>14 passivas próprias, GDD seção 13.</td></tr>
+    <tr><td>18 tipos + dual typing</td><td><span class="decision d-adapt">Adaptar</span></td><td>7 tipos, tipagem única, GDD Ap. D.</td></tr>
+    <tr><td>Mundo aberto / rotas livres</td><td><span class="decision d-adapt">Adaptar</span></td><td>Hub-and-spoke: cidade + dungeons instanciadas.</td></tr>
+    <tr><td>IVs ocultos (genética randômica)</td><td><span class="decision d-reject">Rejeitar</span></td><td>Determinismo total.</td></tr>
+    <tr><td>Mega / Dynamax / Tera generalization</td><td><span class="decision d-reject">Rejeitar</span></td><td>Clima/terremoto + passivas curtas.</td></tr>
+    <tr><td>Double battle / multiplayer</td><td><span class="decision d-reject">Rejeitar</span></td><td>1v1/1vN single-player.</td></tr>
+  </tbody>
+</table></div>
+</div>
+</body>
+</html>

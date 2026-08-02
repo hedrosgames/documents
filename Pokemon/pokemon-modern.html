@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="pokemon-shell.css">
+    <title>Moderno — gerações modernas</title>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Moderno — gerações modernas</h1>
+        <p>Mecânicas das gerações Gen 8 e Gen 9 e o que o Bestiary adota, adapta ou rejeita delas.</p>
+        <nav class="doc-nav">
+            <a href="pokemon-mechanics-overview.html">Overview</a>
+            <a href="pokemon-firered.html">Fire Red</a>
+            <a href="pokemon-modern.html" class="current">Moderno</a>
+            <a href="pokemon-champions.html">Champions</a>
+            <a href="pokemon-battle-only-games.html">Só-batalha</a>
+            <a href="pokemon-type-chart.html">Tipos</a>
+            <a href="pokemon-battle-logic.html">Batalha</a>
+            <a href="pokemon-monster-data.html">Monstro</a>
+            <a href="pokemon-moves-abilities.html">Golpes</a>
+            <a href="pokemon-capture-economy.html">Captura</a>
+            <a href="pokemon-index.html">Índice</a>
+        </nav>
+    </header>
+
+    <div class="shell-prose">
+        <style>
+            table{border-collapse:collapse;width:100%;font-size:.88rem;background:var(--panel)} th,td{padding:.55rem .75rem;text-align:left;border-bottom:1px solid var(--border)} th{color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
+            .table-scroll{overflow-x:auto}
+            .decision{display:inline-block;padding:.12rem .55rem;border-radius:999px;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin:0 .35rem;vertical-align:middle}
+            .d-adopt{background:color-mix(in srgb,#4ade80 18%,transparent);color:#86efac}
+            .d-adapt{background:color-mix(in srgb,#fbbf24 18%,transparent);color:#fde68a}
+            .d-reject{background:color-mix(in srgb,#f87171 18%,transparent);color:#fca5a5}
+        </style>
+
+        <section>
+            <h2>1. Abilities (Gen 5+)</h2>
+            <p>Abilities modernas são <strong>modificadores condicionais</strong> — não substituem stats brutos. Elas ativam quando condições de batalha são atendidas: mudança de clima (Drought, Sand Stream, Drizzle), imunidades condicionais (Levitate anula golpes Ground), efeitos de entrada (Intimidate reduz o Attack do oponente) e auto-buffs (Speed Boost, Moxie).</p>
+            <p><strong>Hidden Abilities</strong> são versões raras e específicas de cada espécie. O <strong>Ability Patch</strong> (introduzido na Crown Tundra, Gen 8) converte a ability atual para a Hidden Ability de forma permanente.</p>
+        </section>
+
+        <section>
+            <h2>2. Terastal (Gen 9, Scarlet/Violet)</h2>
+            <p>O <strong>Terastal</strong> permite cristalizar o Pokémon <strong>apenas 1× por batalha</strong>, mudando seu tipo para o <strong>Tera Type</strong> escolhido. O efeito dura até o Pokémon ser derrubado ou a batalha terminar.</p>
+            <ul>
+                <li><strong>STAB no Tera Type:</strong> ×1.5 no tipo do Tera.</li>
+                <li><strong>STAB reforçado:</strong> ×2 se o Tera Type já é um dos tipos originais do Pokémon.</li>
+                <li><strong>Tera Blast:</strong> golpe de 80 BP que muda de tipo conforme o Tera Type, garantindo cobertura ofensiva.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. Dynamax / Gigantamax (Gen 8, Sword/Shield)</h2>
+            <p>O <strong>Dynamax</strong> dura <strong>3 turnos</strong>, <strong>dobra o HP</strong> e converte os golpes em <strong>Max Moves</strong>, um por tipo (Max Airstrike aumenta a Speed, Max Willow cria terreno, etc.).</p>
+            <p>O <strong>Gigantamax</strong> é exclusivo de certas espécies, com forma especial e Max Move próprio, e <strong>depende de item</strong> para ativar. A mecânica não retorna em Scarlet/Violet, substituída pelo Terastal.</p>
+        </section>
+
+        <section>
+            <h2>4. EV — treino moderno</h2>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Método</th>
+                            <th>Descrição</th>
+                            <th>Efeito</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Vitaminas em massa</td>
+                            <td>Aplicadas em lotes de até 10</td>
+                            <td>+10 cada, até o cap de 252</td>
+                        </tr>
+                        <tr>
+                            <td>Wings</td>
+                            <td>Itens que concedem poucos EVs</td>
+                            <td>+1 por item</td>
+                        </tr>
+                        <tr>
+                            <td>Berries de reset</td>
+                            <td>Reduzem EVs de um stat</td>
+                            <td>Restauram pontos para re-treinar</td>
+                        </tr>
+                        <tr>
+                            <td>Poke Jobs</td>
+                            <td>Treino automático sem batalha</td>
+                            <td>Ganho passivo de EVs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Cap habitual: <strong>510 no total, 252 por stat, 4 no "quarto"</strong>.</p>
+        </section>
+
+        <section>
+            <h2>5. Nature Mints (Gen 8)</h2>
+            <p>Os <strong>Nature Mints</strong> aplicam ao Pokémon o efeito <strong>+10/−10 de outra natureza</strong> — os stats mudam como se a natureza fosse outra, mas a natureza registrada não muda. Isso redireciona o bônus de stat sem reconstruir o Pokémon.</p>
+        </section>
+
+        <section>
+            <h2>6. No HMs</h2>
+            <p>Os <strong>Hidden Machines (HMs)</strong>, golpes de campo que limitavam a progressão, foram <strong>removidos na Gen 7</strong> e substituídos pelo <strong>Poké Ride</strong>, montarias que dispensam HMs.</p>
+            <p>A <strong>Gen 9</strong> segue sem HMs, usando <strong>Koraidon/Miraidon</strong> como montaria do mundo aberto. Os <strong>TMs são reutilizáveis desde a Gen 8</strong> (100 TMs infinitos), aos quais se somam <strong>100 TRs de uso único</strong> e alta raridade.</p>
+        </section>
+
+        <section>
+            <h2>7. Pokémon HOME</h2>
+            <p>O <strong>Pokémon HOME</strong> é o serviço de <strong>cloud</strong> que sucede o <strong>Pokémon Bank</strong>. Ele integra jogos de várias gerações e se conecta ao <strong>Champions</strong>, permitindo <strong>transferência em massa</strong> entre títulos. É a base para manter a coleção viva entre gerações.</p>
+        </section>
+
+        <section>
+            <h2>8. Conexão com o Bestiary</h2>
+
+            <h3>ADOTAR</h3>
+            <p><span class="decision d-adopt">Adotar</span> Abilities como passivas — o conceito de modificador condicional origina as <strong>14 passivas do Bestiary</strong> (Stoic, Stubborn, Duelist, Weather Change, Marksman…), GDD seção 13.</p>
+            <p><span class="decision d-adopt">Adotar</span> EV treino direcionado do hub — a facilidade de treino moderno (vitaminas e jobs) se torna o <strong>treino de EV planejado no hub</strong>, GDD seção 11.</p>
+            <p><span class="decision d-adopt">Adotar</span> Nature determinística pré-captura — a natureza é <strong>determinística desde a captura</strong>, GDD seção 12.</p>
+
+            <h3>ADAPTAR</h3>
+            <p><span class="decision d-adapt">Adaptar</span> Terastal/Dynamax como <strong>booster único</strong> — o burst pontual é substituído por <strong>clima/terrenos por 5 turnos + passivas</strong>, GDD seção 16.</p>
+            <p><span class="decision d-adapt">Adaptar</span> TMs infinitos tornam-se <strong>Discos TM como loot</strong> + <strong>Move Relearner</strong> para personalizar o moveset, GDD seção 17.</p>
+
+            <h3>REJEITAR</h3>
+            <p><span class="decision d-reject">Rejeitar</span> Mega/Dynamax/Tera como <strong>blocos de poder genérico</strong> — o Bestiary usa <strong>clima e passivas</strong> em vez de um "super-poder" temporário.</p>
+            <p><span class="decision d-reject">Rejeitar</span> <strong>Grind de IVs</strong> — determinismo: sem IVs, EVs fixos (510/252/4).</p>
+            <p><span class="decision d-reject">Rejeitar</span> <strong>Componente online / multiplayer</strong> — o Bestiary é single-player.</p>
+        </section>
+    </div>
+</body>
+</html>

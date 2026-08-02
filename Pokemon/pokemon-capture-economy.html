@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Referência de captura e economia de Pokémon comparada ao design do Bestiary — fórmula de catch rate, esferas e moeda com recomendações de adoção.">
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="pokemon-shell.css">
+<title>Captura &amp; economia — Pokémon vs Bestiary</title>
+<style>
+  .shell-prose { line-height: 1.75; color: #2d2d2d; }
+  .shell-prose h2 { border-bottom: 2px solid #e0e0e0; padding-bottom: .3rem; margin-top: 1.8rem; }
+  .shell-prose h3 { margin-top: 1.4rem; }
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .9rem; }
+  th, td { border: 1px solid #d8d8d8; padding: .5rem .7rem; text-align: left; }
+  th { background: #f0f0f0; }
+  tr:nth-child(even) td { background: #fafafa; }
+  code { background: #f3f3f3; padding: .1rem .35rem; border-radius: 4px; font-size: .88em; }
+  .decision { display: inline-block; border-radius: 4px; padding: .1rem .5rem; font-weight: 700; font-size: .8rem; }
+  .decision.adopt { background: #e6f4ea; color: #137333; border: 1px solid #34a853; }
+  .decision.adapt { background: #fef7e0; color: #7a5c00; border: 1px solid #f9ab00; }
+  .decision.reject { background: #fce8e6; color: #c5221f; border: 1px solid #e3746f; }
+  .note { background: #f7f7fb; border-left: 4px solid #5b5bd6; padding: .7rem 1rem; border-radius: 4px; margin: 1rem 0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Captura &amp; Economia</h1>
+  <p class="subtitle">Formas de capturar monstros, esferas, moeda e a curva de mercador — Pokémon e a implementação do Bestiary.</p>
+  <nav class="doc-nav">
+    <a href="pokemon-mechanics-overview.html">Overview</a>
+    <a href="pokemon-firered.html">Fire Red</a>
+    <a href="pokemon-modern.html">Moderno</a>
+    <a href="pokemon-champions.html">Champions</a>
+    <a href="pokemon-battle-only-games.html">Só-batalha</a>
+    <a href="pokemon-type-chart.html">Tipos</a>
+    <a href="pokemon-battle-logic.html">Batalha</a>
+    <a href="pokemon-monster-data.html">Monstro</a>
+    <a href="pokemon-moves-abilities.html">Golpes</a>
+    <a aria-current="page" href="pokemon-capture-economy.html">Captura</a>
+    <a href="pokemon-index.html">Índice</a>
+  </nav>
+</header>
+
+<main class="shell-prose">
+
+  <h2>1. Captura em Pokémon (Gen 3)</h2>
+  <p>A captura é resolvida pelo valor <code>a</code>, calculado pela fórmula conhecida das gerações 3 e posteriores:</p>
+  <div class="note">
+    <code>a = floor( ( ( 3 × MaxHP − 2 × HPAtual ) × BaseRate × BallBonus ) ÷ ( 3 × MaxHP ) ) × StatusBonus</code>
+  </div>
+  <p>Quanto mais ferido o alvo (HP atual baixo), maior a chance. O ritual de captura dispara <strong>3 shakes</strong> de uma Poké Ball: se o valor rolado for menor que <code>a</code> em cada shake, o monstro é capturado.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Parte da fórmula</th><th>Efeito</th><th>Referência</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>MaxHP / HP</code></td><td>Ratio de vida restante</td><td>Quanto mais dano, maior o valor</td></tr>
+        <tr><td><code>BaseRate</code></td><td>Chance base da espécie</td><td>Magikarp 255 · lendários 3</td></tr>
+        <tr><td><code>BallBonus</code></td><td>Multiplicador da esfera</td><td>Ver tabela de esferas</td></tr>
+        <tr><td><code>StatusBonus</code></td><td>Multiplicador de status</td><td>Sleep/Freeze 2× · demais 1.5×</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>BaseRate</h3>
+  <p>A chance base é um atributo fixo da espécie: criaturas comuns (como Magikarp) têm <strong>255</strong>, enquanto lendários usam valores baixos como <strong>3</strong>.</p>
+
+  <h3>Multiplicadores de esfera</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Esfera</th><th>Modificador</th><th>Observação</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Poké Ball</td><td>1</td><td>Base</td></tr>
+        <tr><td>Great Ball</td><td>1.5</td><td>Intermediária</td></tr>
+        <tr><td>Ultra Ball</td><td>2</td><td>Superior</td></tr>
+        <tr><td>Master Ball</td><td>255</td><td>Captura garantida</td></tr>
+        <tr><td>Net Ball</td><td>3</td><td>Apenas Bug e Water</td></tr>
+        <tr><td>Thrive Ball</td><td>3</td><td>Condicional de situação</td></tr>
+        <tr><td>Lure Ball</td><td>1.5</td><td>Pesca / isca</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Bônus de status</h3>
+  <p>O <strong>StatusBonus</strong> amplifica a chance quando o alvo está enfraquecido por uma condição:</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Status</th><th>Multiplicador</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sono (Sleep)</td><td><code>2×</code> (Gen3)</td></tr>
+        <tr><td>Congelamento (Freeze)</td><td><code>2×</code> (Gen3)</td></tr>
+        <tr><td>Demais status</td><td><code>1.5×</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Sistema de shakes e crítico</h3>
+  <p>Após calcular <code>a</code>, a captura procede por <strong>3 shakes/jogulares independentes</strong>. Se <code>a ≥ 255</code> a captura é <strong>garantida</strong>. Na Gen 3 <strong>não existe captura crítica</strong> (critical catch), mecânica introduzida apenas na Gen 5.</p>
+
+  <h2>2. Captura no Bestiary (GDD seção 15)</h2>
+  <p>O Bestiary reutiliza a <strong>mesma fórmula</strong> de capture, com a regra de captura própria:</p>
+  <div class="note">
+    <code>A = ((3×MaxHP − 2×HP) × BaseRate × BallBonus) ÷ (3×MaxHP) × StatusBonus</code>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Regra</th><th>Valor / Comportamento</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Disparo</td><td><strong>3 shakes</strong> → captura se mantém</td></tr>
+        <tr><td>Garantia</td><td><code>A ≥ 255</code> → captura garantida</td></tr>
+        <tr><td>Fallback</td><td>senão, <strong>3 rolagens independentes</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Esferas do Bestiary</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Esfera</th><th>Modificador</th><th>Preço</th><th>Observação</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Esfera Base</td><td><code>×1</code></td><td><strong>200g</strong></td><td>Padrão inicial</td></tr>
+        <tr><td>Esfera Avançada</td><td><code>×1.5</code></td><td><strong>600g</strong></td><td>Melhor chance, maior custo</td></tr>
+        <tr><td>Master Sphere</td><td>bypass 100%</td><td>— (drop raro)</td><td>Ignora o cálculo; obtenção por drop</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>A <strong>Master Sphere</strong> não é comprada: é um <em>bypass</em> que garante 100% de captura e vem de <strong>drop raro</strong>, funcionando como um recurso de recurso, não de compra.</p>
+
+  <h2>3. Economia (GDD seções 19, 23)</h2>
+  <h3>Loot e vendas</h3>
+  <p>O jogador converte loot em moeda vendendo no hub. A economia segue regras diretas:</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Regra</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Venda de loot</td><td><strong>50%</strong> do valor</td></tr>
+        <tr><td>Penalidade de wipe</td><td><strong>−50%</strong> (perda em caso de derrota)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Um <strong>wipe</strong> (derrota/extermínio do grupo) penaliza o jogador com <strong>−10 gold</strong> — uma barreira pequena, mas recorrente que incentiva o planejamento.</p>
+
+  <h3>Curva de estoque do mercador</h3>
+  <p>O mercador <strong>escala seu estoque</strong> conforme o progresso do mapa, desbloqueando tiers progressivamente:</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Tier / Fase</th><th>Itens adicionados</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Tier 1</td><td>Poções (Potions)</td></tr>
+        <tr><td>Tier 2</td><td>Suplementos (Supplements)</td></tr>
+        <tr><td>Tier 3</td><td>Full heal (cura total)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Conforme o jogador avança nos mapas, o mercador passa a oferecer <strong>curas maiores</strong>, mantendo o ritmo de dificuldade.</p>
+
+  <h3>Provas (procurement / âmbar)</h3>
+  <p>O <strong>procurement</strong> de âmbar é o recurso de captura/obtenção de monstros (GDD seção 20). É o fluxo de como o jogador consegue novas criaturas selvagens, atrelado à economia de esferas e às entregas do mercador.</p>
+
+  <h3>Vitaminas como investimento</h3>
+  <p>Vitaminas (Protein, Calcium, Carbon etc.) funcionam como <strong>investimento dirigido</strong>: o jogador gasta dinheiro no hub para aplicar EVs e customizar builds. O fluxo dinheiro → vitaminas → customização é a ponte entre economia e progressão de monstros.</p>
+
+  <div class="note">
+    <strong>Nuzlocke × Spend:</strong> o design equilibra a sangria de curas/wipe (perdas recorrentes) com a possibilidade de <strong>investimento</strong> em vitaminas e esferas avançadas, criando uma economia de risco vs. retorno.
+  </div>
+
+  <h2>4. Conexão com o Bestiary</h2>
+
+  <h3>Adotar (adopt)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fórmula de captura com shakes</td><td><span class="decision adopt">ADOTAR</span></td><td>GDD seção 15; 3 shakes → hold, mesmo caráter tático.</td></tr>
+        <tr><td>Multiplicadores de esfera</td><td><span class="decision adopt">ADOTAR</span></td><td>Base ×1, Avançada ×1.5, Master bypass.</td></tr>
+        <tr><td>Limite do valor A em 255</td><td><span class="decision adopt">ADOTAR</span></td><td>A≥255 = captura garantida, mesma linha de Pokémon.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Adaptar (adapt)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>First Encounter Lock</td><td><span class="decision adapt">ADAPTAR</span></td><td>Apenas o <strong>primeiro selvagem por sala</strong> pode ser capturado (GDD seção 9).</td></tr>
+        <tr><td>Esferas só em dungeons</td><td><span class="decision adapt">ADAPTAR</span></td><td>Esferas utilizáveis apenas em calabouços isolados (HUB), não abertamente.</td></tr>
+        <tr><td>Sem loja de cura ilimitada</td><td><span class="decision adapt">ADAPTAR</span></td><td>Curas vêm do estoque do mercador; campo depende de Escape Rope/teleporte.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Rejeitar (reject)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Compra ilimitada de cura em campo</td><td><span class="decision reject">REJEITAR</span></td><td>Negaria o custo tático; GDD usa Escape Rope/teleporte.</td></tr>
+        <tr><td>Captura de qualquer encontro sem restrição</td><td><span class="decision reject">REJEITAR</span></td><td>O Bestiary usa <strong>avion lock por sala</strong> — apenas o primeiro selvagem.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Veredito geral:</strong> a espinha dorsal da captura de Pokémon (fórmula, shakes, esferas, teto 255) é adotada integralmente. O Bestiary ajusta o <em>quando</em> e <em>onde</em> capturar (lock por sala, esferas em dungeons) e recusa a cura ilimitada de campo, mantendo o dilema de recursos como parte do loop de jogo.
+  </div>
+</main>
+
+</body>
+</html>

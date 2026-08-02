@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Comparação da lógica de batalha de Pokémon com a implementação do Bestiary e recomendações de adoção.">
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="pokemon-shell.css">
+<title>Lógica de batalha — Pokémon vs Bestiary</title>
+<style>
+  .shell-prose { line-height: 1.75; color: #2d2d2d; }
+  .shell-prose h2 { border-bottom: 2px solid #e0e0e0; padding-bottom: .3rem; margin-top: 1.8rem; }
+  .table-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .9rem; }
+  th, td { border: 1px solid #d8d8d8; padding: .5rem .7rem; text-align: left; }
+  th { background: #f0f0f0; }
+  tr:nth-child(even) td { background: #fafafa; }
+  code { background: #f3f3f3; padding: .1rem .35rem; border-radius: 4px; font-size: .88em; }
+  .decision { display: inline-block; border-radius: 4px; padding: .1rem .5rem; font-weight: 700; font-size: .8rem; }
+  .decision.adopt { background: #e6f4ea; color: #137333; border: 1px solid #34a853; }
+  .decision.adapt { background: #fef7e0; color: #7a5c00; border: 1px solid #f9ab00; }
+  .decision.reject { background: #fce8e6; color: #c5221f; border: 1px solid #e3746f; }
+  .note { background: #f7f7fb; border-left: 4px solid #5b5bd6; padding: .7rem 1rem; border-radius: 4px; margin: 1rem 0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Lógica de batalha</h1>
+  <p class="subtitle">Ordem de turnos, fórmula de dano, status e estágios — Pokémon e a implementação do Bestiary.</p>
+  <nav class="doc-nav">
+    <a href="pokemon-mechanics-overview.html">Overview</a>
+    <a href="pokemon-firered.html">Fire Red</a>
+    <a href="pokemon-modern.html">Moderno</a>
+    <a href="pokemon-champions.html">Champions</a>
+    <a href="pokemon-battle-only-games.html">Só-batalha</a>
+    <a href="pokemon-type-chart.html">Tipos</a>
+    <a aria-current="page" href="pokemon-battle-logic.html">Batalha</a>
+    <a href="pokemon-monster-data.html">Monstro</a>
+    <a href="pokemon-moves-abilities.html">Golpes</a>
+    <a href="pokemon-capture-economy.html">Captura</a>
+    <a href="pokemon-index.html">Índice</a>
+  </nav>
+</header>
+
+<main class="shell-prose">
+
+  <h2>1. Ordem de turnos em Pokémon</h2>
+  <p>A ordem de ação é determinada pelo <strong>Stat de Velocidade (SPE)</strong>: quem tem maior SPE age primeiro. Existem exceções que se movem <strong>antes</strong> da checagem de velocidade:</p>
+  <ul>
+    <li><strong>Bracket de prioridade:</strong> golpes de prioridade (ex.: Esquive Rápida/<em>Quick Attack</em>), troca de Pokémon e uso de itens agem no <em>bracket</em> superior, independentemente de SPE.</li>
+    <li><strong>Empate:</strong> quando duas ações têm a mesma prioridade e mesma velocidade, o empate é resolvido por sorteio (50/50 RNG).</li>
+  </ul>
+  <p>Resumo da ordem genérica: itens/troca &gt; prioridade &gt; velocidade (desc.).</p>
+
+  <h2>2. Fórmula de dano</h2>
+  <p>A fórmula geral de dano (Baseline Gen 1–6 é idêntica à usada no Bestiary):</p>
+  <div class="note">
+    <code>floor( floor( floor( (2 × Lvl/5 + 2) × Power × (A/D) ) ÷ 50 ) + 2 )</code>
+  </div>
+  <p>Simplificando: <code>((2×Lvl/5 + 2) × Power × (A/D)) / 50 + 2</code>. Esse valor base é multiplicado por modificadores:</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Mod</th><th>Valor</th><th>Observação</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Aleatório</td><td>217–255 / 255 → 0.85–1.0</td><td>Rolagem uniforme por golpe</td></tr>
+        <tr><td>STAB</td><td>1.5</td><td>Type-match do próprio usuário</td></tr>
+        <tr><td>Efetividade</td><td>2 / 0.5 / 0</td><td>Super, não muito efetivo, imune</td></tr>
+        <tr><td>Crítico</td><td>×2</td><td>Gerações 1–5; Gen 6+ = 1.5</td></tr>
+        <tr><td>Queimadura (BRN)</td><td>÷2</td><td>Apenas físico, em gerações que aplicam</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>3. Status</h2>
+  <p>Condições de status principais (valores de referência Gen 3, com variação por geração):</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Status</th><th>Efeito</th><th>Valores</th><th>Variação por gen</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>BRN (Queimadura)</td><td>Dano 1/8 por turno + ataque físico halved</td><td>1/16 HP Gen 1</td><td>Gen 3+ 1/8</td></tr>
+        <tr><td>PAR (Paralisia)</td><td>Chance de ficar paralisado; SPE halve</td><td>25% chance de não agir</td><td>SPE atua como *0.25 Gen 7+</td></tr>
+        <tr><td>PSN (Envenenamento)</td><td>Dano ao fim do turno</td><td>1/8 HP</td><td>PSN tóxico dobra a cada turno no Bestiary</td></tr>
+        <tr><td>SLP (Sono)</td><td>Incapacitado por N turnos</td><td>1–7 turnos (Gen3)</td><td>Gen 1 podia durar 1–7; Gen 5+ 1–3; 2–4</td></tr>
+        <tr><td>FRZ (Congelamento)</td><td>Imobilizado até descongelar</td><td>Chance 10–20% de derreter por turno</td><td>Chance 20% Gen 3+</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>4. Sistema de estágios (buff/debuff) −6..+6</h2>
+  <p><strong>Estágios</strong> são bônus/penalidades nos stats que variam de <code>−6</code> a <code>+6</code>.</p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Stat</th><th>Fórmula</th><th>Mín</th><th>Máx</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Atk / Def / SpA / SpD</td><td><code>2÷8 → 8÷2</code></td><td>0.25×</td><td>4×</td></tr>
+        <tr><td>Acc / Eva</td><td><code>3÷9 → 9÷3</code></td><td>0.33×</td><td>3×</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Os multiplicadores de estágio se aplicam normalmente aos cálculos de dano e precisão. Estágios zeram quando o Pokémon troca (limpeza na troca). É o mesmo sistema da seção 10 do GDD do Bestiary.</p>
+
+  <h2>5. Implementação no Bestiary (GDD seções 08, 10)</h2>
+  <p>O Bestiary usa <strong>fórmula de dano idêntica</strong> à fórmula geral de Pokémon, e a mesma resolução de turno:</p>
+  <ol>
+    <li><strong>Declare</strong> — jogadores declaram intenção.</li>
+    <li><strong>Prioridade / switch + itens</strong> — ações de troca e itens executam antes da velocidade.</li>
+    <li><strong>Speed</strong> — ordena golpes por SPE (maior primeiro, empate 50/50).</li>
+    <li><strong>Execute</strong> — resolve os efeitos definidos.</li>
+    <li><strong>Accuracy</strong> — rolagem de precisão/critério.</li>
+    <li><strong>is_dead</strong> — checa e resolve KO.</li>
+  </ol>
+  <p><strong>Status</strong> persistem entre turnos (não resetam espontaneamente). <strong>Estágios</strong> zeram na troca.</p>
+  <p>Diferenças do Bestiary vs Pokémon: o Bestiary <strong>não tem PP</strong> (sem custo de uso), <strong>não há golpes de carga simples</strong>, e <strong>não há turno duplo</strong> (double-action) além do natural por velocidade.</p>
+
+  <h2>6. Conexão com o Bestiary — recomendações</h2>
+  <p>Comparação direta da lógica de batalha de Pokémon e as decisões recomendadas para adoção no Bestiary.</p>
+
+  <h3>Adotar (adopt)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Ordem por Speed + 50/50 empate</td><td><span class="decision adopt">ADOTAR</span></td><td>Simples, familiar e resolveempates de forma justa.</td></tr>
+        <tr><td>Fórmula de dano</td><td><span class="decision adopt">ADOTAR</span></td><td>GDD seção 8; idêntica à Pokémon.</td></tr>
+        <tr><td>Estágios −6..+6</td><td><span class="decision adopt">ADOTAR</span></td><td>GDD seção 10; buff/debuff integrados, zeram na troca.</td></tr>
+        <tr><td>Status major (BRN/PAR/PSN/SLP/FRZ)</td><td><span class="decision adopt">ADOTAR</span></td><td>GDD seção 10; persistem por turno.</td></tr>
+        <tr><td>SPE 1v1 / 1vTRUE</td><td><span class="decision adopt">ADOTAR</span></td><td>Speed define ação; empate resolvido por RNG.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Adaptar</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Prioridade de itens</td><td><span class="decision adapt">ADAPTAR</span></td><td>Itens vêm do hub, sem carga/consum; aguem antes da velocidade, mas sem sistema de "uso de turno".</td></tr>
+        <tr><td>STAB</td><td><span class="decision adapt">ADAPTAR</span></td><td>Aplicado nos 7 tipos do Bestiary (não nos 18 do Pokémon).</td></tr>
+        <tr><td>Crítico</td><td><span class="decision adapt">ADAPTAR</span></td><td>Crítico como comportamento (chance ligada a ações/posição), não só por stat.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Rejeitar</h3>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Double battle</td><td><span class="decision reject">REJEITAR</span></td><td>Fora de escopo; o Bestiary é 1v1.</td></tr>
+        <tr><td>Restrição de PP</td><td><span class="decision reject">REJEITAR</span></td><td>Sem custo de golpe no Bestiary (sem rework de uso).</td></tr>
+        <tr><td>Golpes com recoil de agenda</td><td><span class="decision reject">REJEITAR</span></td><td>Recoil como custo de agenda não encaixa no modelo.</td></tr>
+        <tr><td>Regras de double-turn 50/50 de slows</td><td><span class="decision reject">REJEITAR</span></td><td>Sem turno duplo; ação única por velocidaderesolvida natural.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Veredito geral:</strong> a lógica de batalha de Pokémon é amplamente compatível e serve de referência sólida. O Bestiary adota a espinha dorsal (velocidade, dano, estágios, status) e adapta os pontos de identidade própria (itens do hub, 7 tipos, crítico comportamental), rejeitando o que escapa do escopo 1v1 e agendaless.
+  </div>
+</main>
+
+</body>
+</html>

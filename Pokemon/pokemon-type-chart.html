@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos — da matriz de 18 para os 7 do Bestiary</title>
+    <link rel="icon" href="favicon.svg">
+    <link rel="stylesheet" href="pokemon-shell.css">
+    <style>
+        .shell-prose table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25em 0;
+            font-size: 0.95rem;
+        }
+        .shell-prose th,
+        .shell-prose td {
+            border: 1px solid #d9cdb8;
+            padding: 0.5em 0.6em;
+            text-align: center;
+        }
+        .shell-prose thead th {
+            background: #3a6ea5;
+            color: #fff;
+            font-weight: 600;
+        }
+        .shell-prose thead th:first-child {
+            background: #2b4a6f;
+        }
+        .shell-prose tbody th {
+            background: #eff2f7;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .shell-prose tbody td:first-child {
+            border-left: 2px solid #3a6ea5;
+        }
+        .mult-2 { background: #ffd591; color: #7a2d00; font-weight: 600; }
+        .mult-half { background: #c9d8ea; color: #1b3a5c; }
+        .mult-0 { background: #f4f1ea; color: #9a9487; }
+        .mult-1 { background: #faf8f2; color: #544b3d; }
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .decision { display: inline-block; padding: 0.15em 0.7em; border-radius: 4px; font-weight: 600; font-size: 0.85rem; margin-right: 0.4em; }
+        .decision.adotar { background: #dffadf; color: #1a7a1a; }
+        .decision.adaptar { background: #fff3d4; color: #a06a00; }
+        .decision.rejeitar { background: #ffdcdc; color: #b00000; }
+        .legend { display: flex; gap: 1.5em; flex-wrap: wrap; margin: 0.75em 0 0.25em; font-size: 0.9rem; }
+        .legend span { display: flex; align-items: center; gap: 0.4em; }
+        .swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
+        .table-scroll-title { margin-top: 1.5em; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Tipos — da matriz de 18 para os 7 do Bestiary</h1>
+        <p>Como o type-chart dos 18 tipos de Pokémon se comprime na matriz reduzida de 7 tipos do Bestiary (GDD Apêndice D).</p>
+        <nav class="doc-nav">
+            <a href="pokemon-mechanics-overview.html">Overview</a>
+            <a href="pokemon-firered.html">Fire Red</a>
+            <a href="pokemon-modern.html">Moderno</a>
+            <a href="pokemon-champions.html">Champions</a>
+            <a href="pokemon-battle-only-games.html">Só-batalha</a>
+            <a href="pokemon-type-chart.html">Tipos</a>
+            <a href="pokemon-battle-logic.html">Batalha</a>
+            <a href="pokemon-monster-data.html">Monstro</a>
+            <a href="pokemon-moves-abilities.html">Golpes</a>
+            <a href="pokemon-capture-economy.html">Captura</a>
+            <a href="pokemon-index.html">Índice</a>
+        </nav>
+    </header>
+
+    <main class="shell-prose">
+        <section>
+            <h2>1. A matriz de 18 tipos de Pokémon</h2>
+            <p>
+                Pokémon usa <strong>18 tipos</strong> combinados em <strong>dual-typing</strong> (um monstro pode ter dois tipos simultaneamente), o que gera uma tabela de matchups de <strong>324 células</strong> (18 atacantes × 18 defensores). Essa matriz cobre resistências, fraquezas e imunidades, e algumas relações são parte da <em>identidade central</em> do jogo — por exemplo, <strong>Elétrico → Água ×2</strong> e <strong>Gelo → Grama/Dragão ×2</strong>. Para o jogador veterano, esses números são memorizados como reflexo.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. A matriz de 7 tipos do Bestiary</h2>
+            <p>
+                O Bestiary usa <strong>apenas 7 tipos</strong> e um sistema de <strong>single-typing</strong> (nenhum monstro tem dois tipos). O resultado é uma matriz <strong>7×7</strong> (GDD Apêndice D), muito mais enxuta e lida de cabeça. Multiplicadores possíveis: <strong>2&times;</strong>, <strong>0.5&times;</strong> e <strong>1&times;</strong>, sem imunidade plena na matriz padrão. A tabela abaixo lê <em>atacante (linha) × defensor (coluna)</em>.
+            </p>
+
+            <div class="legend">
+                <span><span class="swatch mult-2"></span> ×2 (vantajoso)</span>
+                <span><span class="swatch mult-1"></span> ×1 (neutro)</span>
+                <span><span class="swatch mult-half"></span> ×0.5 (resistido)</span>
+            </div>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Atacante \\ Defensor</th>
+                            <th>Fogo</th>
+                            <th>Ar</th>
+                            <th>Planta</th>
+                            <th>Água</th>
+                            <th>Rocha</th>
+                            <th>Elétrico</th>
+                            <th>Gelo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Fogo</th>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-2">2</td>
+                        </tr>
+                        <tr>
+                            <th>Ar</th>
+                            <td class="mult-1">1</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                        </tr>
+                        <tr>
+                            <th>Planta</th>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-half">0.5</td>
+                        </tr>
+                        <tr>
+                            <th>Água</th>
+                            <td class="mult-2">2</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-1">1</td>
+                        </tr>
+                        <tr>
+                            <th>Rocha</th>
+                            <td class="mult-2">2</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-2">2</td>
+                        </tr>
+                        <tr>
+                            <th>Elétrico</th>
+                            <td class="mult-1">1</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-1">1</td>
+                        </tr>
+                        <tr>
+                            <th>Gelo</th>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-2">2</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-half">0.5</td>
+                            <td class="mult-1">1</td>
+                            <td class="mult-half">0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Condensando os 18 tipos nos 7 do Bestiary</h2>
+            <p>
+                Cada tipo do Bestiary funciona como um <em>aggregator</em> de tipos de Pokémon – agrupa os conceitos que melhor se encaixam na taxonomia reduzida, jogando fora o restante que não serve ao hub roguelite.
+            </p>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo Bestiary</th>
+                            <th>Condensa os tipos de Pokémon</th>
+                            <th>Nota de adaptação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Fogo</th>
+                            <td>Fire (+ parcialmente Fighting pelo "fogo de batalha")</td>
+                            <td>Central; mantém fraqueza natural à Água/Área e resistência à Planta/Gelo.</td>
+                        </tr>
+                        <tr>
+                            <th>Ar</th>
+                            <td>Flying, Grass leve</td>
+                            <td>... a resistência a Ground/Elétrico de Flying foi comprimida num único ×0.5 vs Água e Elétrico.</td>
+                        </tr>
+                        <tr>
+                            <th>Planta</th>
+                            <td>Grass, Bug</td>
+                            <td>Fraqueza a Fogo/Ice/Rocha preservada; vantagem sobre Água/Rocha mantida.</td>
+                        </tr>
+                        <tr>
+                            <th>Água</th>
+                            <td>Water, Ice parcial</td>
+                            <td>Mantém vantagem sobre Fogo/Rocha, mas agora é resistida por Planta e Elétrico.</td>
+                        </tr>
+                        <tr>
+                            <th>Rocha</th>
+                            <td>Rock, Ground<br><small>(melhor espaço para peças de Rock → pedaças)</small></td>
+                            <td>Forte contra Fogo, Ar, Elétrico, Gelo; resistido por Planta e Água.</td>
+                        </tr>
+                        <tr>
+                            <th>Elétrico</th>
+                            <td>Electric, parcial Steel</td>
+                            <td>Cobre seu papel: vantagem forte sobre Água e Ar; fraqueza a Área e Planta.</td>
+                        </tr>
+                        <tr>
+                            <th>Gelo</th>
+                            <td>Ice</td>
+                            <td>Golpes de gelo neutralizam Planta, Elétrico e Água; fraco contra Fogo.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Conexão com o Bestiary</h2>
+            <p>Decisões deliberadas ao reduzir a taxonomia de Pokémon para o hub roguelite:</p>
+
+            <h3><span class="decision adotar">ADOTAR</span>Matriz 7×7 do GDD Apêndice D</h3>
+            <p>
+                Usar a matriz <strong>7×7</strong> com multiplicadores <strong>2 / 0.5 / 1</strong>, <strong>STAB ×1.5</strong> para golpes do próprio tipo, e <strong>imunidade usada pontualmente</strong> (apenas onde faz sentido de design, nunca como regra padrão).
+            </p>
+
+            <h3><span class="decision adaptar">ADAPTAR</span>Reduzir de 18 para 7</h3>
+            <p>
+                Remoção dos tipos que não servem ao sistema (Normal, Psychic, Ghost, Dragon, Fighting, Poison, Dark, Fairy, Ground, Bug, Steel...), <strong>remover o dual-typing</strong> e focar apenas nos <strong>matchups principais</strong> que importam para a identidade de cada monstro.
+            </p>
+
+            <h3><span class="decision rejeitar">REJEITAR</span>Complexidade que não escala</h3>
+            <p>
+                <strong>Dual-typing completo</strong>, a demanda da matriz inteira <strong>18² (324 células)</strong> e a complexidade de taxonomia que não aqui ao hub roguelite foram <strong>rejeitadas</strong> — o custo cognitivo e de balanceamento não compensa o ganho.
+            </p>
+        </section>
+    </main>
+</body>
+</html>

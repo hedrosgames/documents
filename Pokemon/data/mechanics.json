@@ -1,0 +1,32 @@
+{
+  "kit": "pokemon",
+  "purpose": "Referência de design — como Pokémon implementa cada mecânica e o que isso significa para o Bestiary (hub-based dungeon crawler & monster taming).",
+  "pages": [
+    "pokemon-mechanics-overview",
+    "pokemon-firered",
+    "pokemon-modern",
+    "pokemon-champions",
+    "pokemon-battle-only-games",
+    "pokemon-type-chart",
+    "pokemon-battle-logic",
+    "pokemon-monster-data",
+    "pokemon-moves-abilities",
+    "pokemon-capture-economy",
+    "pokemon-index"
+  ],
+  "types": {
+    "pokemon": ["Normal", "Fire", "Water", "Grass", "Electric", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"],
+    "bestiary": ["FOGO", "AR", "PLANTA", "ÁGUA", "ROCHA", "ELÉTRICO", "GELO"]
+  },
+  "starter_bst": 318,
+  "stat_names": { "pokemon": ["HP", "Attack", "Defense", "SpAtk", "SpDef", "Speed"], "bestiary": ["HP", "ATK", "DEF", "SPA", "SPD", "SPE"] },
+  "ev": { "total": 510, "max_per_stat": 252, "per_point": 4 },
+  "no_hidden_ivs": true,
+  "natures": { "pool": 25, "bonus_percent": 10, "hp_unaffected": true },
+  "damage_formula": "bestiary: ((2*Lvl/5 + 2) * Power * (A/D)) / 50 + 2, × Mods (STAB 1.5, effective 2/0.5/0, random 0.85–1.0)",
+  "status": ["BRN", "PAR", "PSN", "SLP", "FRZ"],
+  "stage_buffs": { "min": -6, "max": 6, "plus1": "1.5x", "plus2": "2.0x", "plus6": "4.0x", "minus1": "0.66x", "minus2": "0.50x", "minus6": "0.25x" },
+  "master_ball": "catch bypass 100%",
+  "type_advantages": ["Fogo vence Planta/Gelo", "Água vence Fogo/Rocha", "Planta vence Água/Rocha", "Elétrico vence Água", "Pedra vence Ar/Fogo/Gelo", "Gelo vence Planta/Ar", "Ar vence Planta"],
+  "roster": { "base": 70, "legendaries": "Deuses (680 BST)", "stage1": 318, "stage2": 405, "final": 530, "legend": 680 }
+}

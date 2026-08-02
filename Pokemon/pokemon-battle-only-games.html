@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.svg">
+    <link rel="stylesheet" href="pokemon-shell.css">
+    <title>Só-batalha — Stadium, Battle Revolution, Showdown</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { border: 1px solid var(--border-color, #444); padding: 0.5rem 0.75rem; text-align: left; }
+        th { background: var(--header-bg, rgba(255,255,255,0.08)); }
+        tbody tr:nth-child(even) { background: rgba(255,255,255,0.03); }
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .table-scroll table { min-width: 640px; }
+        .decision {
+            display: inline-block;
+            font-weight: 700;
+            padding: 0.15rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            letter-spacing: 0.03em;
+        }
+        .decision.adopt   { background: #2e7d32; color: #fff; }
+        .decision.adapt   { background: #f9a825; color: #1a1a1a; }
+        .decision.reject  { background: #c62828; color: #fff; }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <h1>Só-batalha — Stadium, Battle Revolution, Showdown</h1>
+        <p class="subtitle">Jogos e simuladores de batalha pura — inspirações para os sistemas de combate do <strong>Bestiary</strong>.</p>
+        <nav class="doc-nav">
+            <a href="pokemon-mechanics-overview.html">Overview</a>
+            <a href="pokemon-firered.html">Fire Red</a>
+            <a href="pokemon-modern.html">Moderno</a>
+            <a href="pokemon-champions.html">Champions</a>
+            <a href="pokemon-battle-only-games.html" class="current">Só-batalha</a>
+            <a href="pokemon-type-chart.html">Tipos</a>
+            <a href="pokemon-battle-logic.html">Batalha</a>
+            <a href="pokemon-monster-data.html">Monstro</a>
+            <a href="pokemon-moves-abilities.html">Golpes</a>
+            <a href="pokemon-capture-economy.html">Captura</a>
+            <a href="pokemon-index.html">Índice</a>
+        </nav>
+    </header>
+
+    <div class="shell-prose">
+        <p>
+            Este documento examina os jogos e simuladores que são <em>apenas</em> batalha — sem exploração,
+            sem estória, sem captura. Eles são especialmente relevantes para o <strong>Bestiary</strong> porque
+            provam que a batalha por si só sustenta um produto, e oferecem modelos de balanceamento
+            (tiers, custos de equipe, restrições) diretamente transferíveis para a dificuldade das dungeons.
+        </p>
+
+        <h2>1. Pokémon Stadium (N64, 1998)</h2>
+        <p>
+            <strong>Pokémon Stadium</strong> é o caso canônico de batalha pura: não há mundo para explorar,
+            não há história e não há captura. A estrutura é inteiramente composta por arenas e copas a serem
+            vencidas. As equipes podem ser montadas de duas formas:
+        </p>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Recurso</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Upload via Transfer Pak</td>
+                        <td>Mover uma equipe do jogo de Game Boy (RGBY) para o Stadium, preservando os monstros capturados e treinados no overworld.</td>
+                    </tr>
+                    <tr>
+                        <td>Curso Rental</td>
+                        <td>Alugar monstros prontos de pools fixas quando não há cartucho conectado, com custo e restrição por copa.</td>
+                    </tr>
+                    <tr>
+                        <td>Budget de equipe</td>
+                        <td><strong>Anything goes</strong> em 180 pts: qualquer monstro entra, mas a soma de custos não pode passar de 180 pontos. Copas menores forçam pools de <em>tiers</em> específicos (Little/Poke/Great/Ultra).</td>
+                    </tr>
+                    <tr>
+                        <td>Staff tiers</td>
+                        <td>Copas em níveis hierárquicos de dificuldade do monstro, restringindo quais monstros podem entrar em cada modo.</td>
+                    </tr>
+                    <tr>
+                        <td>Rental system</td>
+                        <td>Com <em>cost limits</em>: cada copa define um teto de pontos, obrigando escolhas dentro do budget e incentivando sinergia em vez de power creep puro.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            A lição central do Stadium é a do <em>arena como progressão vertical</em>: o jogador nunca explora,
+            apenas sobe a dificuldade das copas dentro de um mesmo espaço. É exatamente o formato de dungeon-level.
+        </p>
+
+        <h2>2. Pokémon Battle Revolution (Wii, 2006)</h2>
+        <p>
+            <strong>Pokémon Battle Revolution</strong> é a continuação direta do conceito stoppia, no Wii.
+            Mais uma vez é <em>battle-only</em>:
+        </p>
+        <ul>
+            <li><strong>Conecta ao DS (DP):</strong> a equipe é enviada de <em>Diamond/Pearl</em> para o Wii, de forma análoga ao Transfer Pak do Stadium.</li>
+            <li><strong>Sem minigames e sem história:</strong> não há exploração nem captura; o foco é 100% no combate em arenas temáticas.</li>
+            <li>Apresenta múltiplas arenas com regras locais variadas (diferentes restrições de monstros e formato de batalha), reforçando o padrão de "salas de desafio" com regras próprias.</li>
+        </ul>
+        <p>
+            A contribuição de Battle Revolution é o modelo de <strong>arenas modulares</strong>: cada arena impõe
+            suas próprias condições, o que ecoa o design de <em>andares/domínios</em> com regras distintas no Bestiary.
+        </p>
+
+        <h2>3. Pokémon Showdown (simulador)</h2>
+        <p>
+            <strong>Pokémon Showdown</strong> é um simulador de batalha online. Nele não há overworld de espécie
+            alguma: o time é criado instantaneamente pelo <em>teambuilder</em> e vai direto para a batalha.
+            O balanceamento é feito por <strong>tiers baseados em uso</strong>:
+        </p>
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tier</th>
+                        <th>Nome</th>
+                        <th>Significado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mais alto</td><td>Ubers</td><td>Monstros banidos de OU por poder excessivo.</td></tr>
+                    <tr><td>▼</td><td>OU (Overused)</td><td>Monstros mais usados no metagame principal.</td></tr>
+                    <tr><td>▼</td><td>UU (Underused)</td><td>Escolhas menos populares que OU.</td></tr>
+                    <tr><td>▼</td><td>RU (Rarely Used)</td><td>Monstros raramente usados.</td></tr>
+                    <tr><td>▼</td><td>NU (Never Used)</td><td>Quase nunca usados no topo.</td></tr>
+                    <tr><td>▼</td><td>PU</td><td>Nível mais baixo de uso (sendo denominador "PU" de "P - Used").</td></tr>
+                    <tr><td>Tiers de trânsito</td><td>BL</td><td>Ban Lists (BL1/BL2…) — monstros acima do nível inferior de cada tier, esperando reclassificação.</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            A mecânica de mérito é estritamente quantitativa: um monstro sobe de tier quando atinge cerca de
+            <strong>4,52% de uso ponderado</strong> em batalhas válidas do tier atual. As <strong>clauses</strong>
+            padronizadas proíbem táticas desequilibradoras, como <strong>evasão</strong> e <strong>OHKO</strong>
+            (blows de vitória instantânea por chance), garantindo resultado de habilidade, não de lot.
+            O Showdown suporta vários formatos. Exigências:
+        </p>
+        <ul>
+            <li><strong>Team building instantâneo</strong> — sem breeding real, sem captura, sem overworld: a equipe nasce no teambuilder e cai direto na arena.</li>
+            <li><strong>Tiers por uso ponderado</strong> (UBERS &gt; OU &gt; UU &gt; RU &gt; NU &gt; PU) com BL como barreira de reclassificação.</li>
+            <li><strong>Clauses globais</strong>: ban de OHKO e evasion como padrão competitivo.</li>
+            <li><strong>Multi-geeração</strong>: funciona de mais de uma gén; formatos variam de Gen1 a Gen9 (incluindo variantes como Roulette e máquinas de random dota).</li>
+        </ul>
+        <p>
+            A ideia de "Roulette/Random" também vale como forma de apresentar o combate sem o peso do
+            teambuilding — algo importante para o Bestiary na hora de testes rápidos.
+        </p>
+
+        <h2>4. Conexão com o Bestiary</h2>
+        <p>
+            O Bestiary não copia o modelo de jogos "só-batalha" literalmente (ele <em>tem</em> um hub e dungeons).
+            Mas esses jogos informam como a batalha cria desafio vertical — exatamente do que as dungeons do
+            Bestiary precisam. Abaixo, o veredito de cada conceito:
+        </p>
+
+        <h3><span class="decision adopt">ADOTAR</span> — Batalha vês é um desafio vertical sem explorar</h3>
+        <p>
+            A premissa de Stadium/Battle Revolution/Showdown é que <em>a batalha em si é o conteúdo</em>. No
+            Bestiary isso sustenta a <strong>dungeon como arena</strong>: cada andamento função como uma "copa"
+            que exige o mesmo tom de equipe que os tiers de uso. Difícil dignidade vem de restrições e de
+            ameaças escalonadas, não do overworld.
+        </p>
+
+        <h3><span class="decision adopt">ADOTAR</span> — teambuilding curto de PU/OU inspira a dificuldade das dungeons</h3>
+        <p>
+            Os tiers baixos (PU) forçam a zero forma equipe com monstros fracos e criativos; os altos (OU)
+            cobrar os seis melhores. As dungeons do Bestiary podem oscilar entre esses dois polos: andares
+            iniciais no estilo "PU" (monstros fracos, muitos monstros usáveis) e finais no estilo "OU"
+            (monstros fortes, decisões de step mesmoa).
+        </p>
+
+        <h3><span class="decision adapt">ADAPTAR</span> — tiers de base de uso → dificuldade por DOMÍNIO/andar</h3>
+        <p>
+            O sistema de <strong>tiers</strong> de Showdown não vira uma hierarquia global de ban, vira
+            <strong>dificuldade por domínio/andar</strong> no Bestiary. Cada domínio tem o "tier" próprio da
+            ameaça, tornando a curva de progressão legível e a build de equipe direcionada — sem precisar de
+            balanceamento de metagame online.
+        </p>
+
+        <h3><span class="decision adapt">ADAPTAR</span> — rentals → formações de teste gratuitas no hub</h3>
+        <p>
+            O <strong>rental system</strong> do Stadium vira <strong>formações de teste gratuitas</strong> no
+            hub do Bestiary: o jogador pode montar qualquer monster com estatísticas deterministas (HP/ATK/DEF/SPA/
+            SPD/SPE, 7 tip-os, EVs determinísticos) e testar a combat sem custo financeiro — baixo o custo de EV
+            de uma tentativa real. Ótimo para aprenderm antes de gastar recursos.
+        </p>
+
+        <h3><span class="decision reject">REJEITAR</span> — multiplayer/Showdown online</h3>
+        <p>
+            O Bestiary é <em>single-player por 100%</em>. Não há multiplayer síncrono, ladder ou partidas
+            online estilo Showdown. A dificuldade vem do design da PRÓPRIA dungeon, nunca de um oponente
+            real humano.
+        </p>
+
+        <h3><span class="decision reject">REJEITAR</span> — metagame PvP</h3>
+        <p>
+            Sem lôndico PvP, não há metagame a equilibrar contra adversários. O Bestiary rejeita evidência de
+            PvP como a gente de base de sua dificuldade.
+        </p>
+
+        <h3><span class="decision reject">REJEITAR</span> — tier ban/balanço que polua a experiência single-player</h3>
+        <p>
+            Showdown precisa de ban e rebalanceamento constante porque dezenas de milhares de jogadores os
+            colonam o meta. No Bestiary não há o que banir contra vitalmente: a dificuldade é fixada pelo
+            design de cada dungeon, e o jogador é livre para usar qualquer monstro forte. Sem ban, sem
+            tier-listing ferrante a single experience.
+        </p>
+
+        <hr>
+        <p><em>Resumo: a fonte de inspiração de só-batalha dá ao Bestiary o modelo do <strong>desafio vertical</strong> e do <strong>teambuilding como decisão</strong> — adaptado a uma dificuldade por domínio e a testes de formação gratuitas no hub, sem nenhuma contaminação online.</em></p>
+    </div>
+</body>
+</html>
