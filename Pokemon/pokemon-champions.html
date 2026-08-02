@@ -6,17 +6,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="pokemon-shell.css">
 <title>Pokémon Champions — batalha pura → Bestiary</title>
-<style>
-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 520px; background: var(--panel); }
-th, td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(0,0,0,0.15); }
-tr:last-child td { border-bottom: none; }
-.kicker { color: var(--muted); font-size: 0.8rem; margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-.decision { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
-.d-adopt { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
-.d-adapt { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
-.d-reject { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
-</style>
+
 </head>
 <body>
 <header class="site-header">
@@ -84,9 +74,9 @@ tr:last-child td { border-bottom: none; }
 <div class="table-scroll"><table>
   <thead><tr><th>Elemento Champions</th><th>Tipo</th><th>Aplicação no Bestiary</th></tr></thead>
   <tbody>
-    <tr><td>Estrutura "battle-first, sem grind de overworld"</td><td><span class="decision d-adopt">Adotar</span></td><td>Bestiary não é mundo aberto (seção 2): o progresso central vem da batalha por turnos, não de travessia de mapa grande.</td></tr>
-    <tr><td>Uma vitória pode depender somente da party</td><td><span class="decision d-adopt">Adotar</span></td><td>Combo/tipo/esquadrão decidem o duelo; não há artefato de fuga de dificuldade via overworld.</td></tr>
-    <tr><td>Roster curado</td><td><span class="decision d-adopt">Adotar</span></td><td>Bestiary tem <b>70 species</b> (seção 23) — número pequeno e desenhado, como os ~186 curados de Champions.</td></tr>
+    <tr><td>Estrutura "battle-first, sem grind de overworld"</td><td><span class="aria-decidir">a decidir</span></td><td>Bestiary não é mundo aberto (seção 2): o progresso central vem da batalha por turnos, não de travessia de mapa grande.</td></tr>
+    <tr><td>Uma vitória pode depender somente da party</td><td><span class="aria-decidir">a decidir</span></td><td>Combo/tipo/esquadrão decidem o duelo; não há artefato de fuga de dificuldade via overworld.</td></tr>
+    <tr><td>Roster curado</td><td><span class="aria-decidir">a decidir</span></td><td>Bestiary tem <b>70 species</b> (seção 23) — número pequeno e desenhado, como os ~186 curados de Champions.</td></tr>
   </tbody>
 </table></div>
 
@@ -94,10 +84,10 @@ tr:last-child td { border-bottom: none; }
 <div class="table-scroll"><table>
   <thead><tr><th>Elemento Champions</th><th>Tipo</th><th>Adaptação Bestiary</th></tr></thead>
   <tbody>
-    <tr><td>Instanced matchmaking (queen uma fila para o duelo)</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ <b>dungeons instanciadas</b> como fonte de captura e desafio (Bestiary mantém a captura como núcleo, seção 15).</td></tr>
-    <tr><td>Roster de ~186</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ <b>70 species</b> + um grupo de lendários de DOMÍNIO (raros, não coletáveis em massa).</td></tr>
-    <tr><td>Stats de batalha (Level 50, IVs max, sem EV grind)</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ Bestiary mantém EVs determinísticos (510/252/4-por-ponto) mas sem IVs ocultos; preparo vem da natureza, não de farm.</td></tr>
-    <tr><td>Mega/Tera como booster único</td><td><span class="decision d-adapt">Adaptar</span></td><td>→ Substituído por clima/passivas curtas por batalha (seção 16).</td></tr>
+    <tr><td>Instanced matchmaking (queen uma fila para o duelo)</td><td><span class="aria-decidir">a decidir</span></td><td>→ <b>dungeons instanciadas</b> como fonte de captura e desafio (Bestiary mantém a captura como núcleo, seção 15).</td></tr>
+    <tr><td>Roster de ~186</td><td><span class="aria-decidir">a decidir</span></td><td>→ <b>70 species</b> + um grupo de lendários de DOMÍNIO (raros, não coletáveis em massa).</td></tr>
+    <tr><td>Stats de batalha (Level 50, IVs max, sem EV grind)</td><td><span class="aria-decidir">a decidir</span></td><td>→ Bestiary mantém EVs determinísticos (510/252/4-por-ponto) mas sem IVs ocultos; preparo vem da natureza, não de farm.</td></tr>
+    <tr><td>Mega/Tera como booster único</td><td><span class="aria-decidir">a decidir</span></td><td>→ Substituído por clima/passivas curtas por batalha (seção 16).</td></tr>
   </tbody>
 </table></div>
 
@@ -105,10 +95,10 @@ tr:last-child td { border-bottom: none; }
 <div class="table-scroll"><table>
   <thead><tr><th>Elemento Champions</th><th>Tipo</th><th>Motivo de rejeição</th></tr></thead>
   <tbody>
-    <tr><td>Multiplayer / VGC / cena competitiva</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary é <b>single-player</b> (seção 4).</td></tr>
-    <tr><td>Victory Points como sistema de monetização / economia live-service</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary não tem metaplayer/P2W; progressão é local e em dizéssolamento.</td></tr>
-    <tr><td>Double battle (Bring-6 Pick-4)</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary é 1v1 / 1vN por turnos.</td></tr>
-    <tr><td>Time limit 45s/turno e 7min/jogador</td><td><span class="decision d-reject">Rejeitar</span></td><td>Single-player sem restrição relativa ao adversário humano.</td></tr>
+    <tr><td>Multiplayer / VGC / cena competitiva</td><td><span class="aria-decidir">a decidir</span></td><td>Bestiary é <b>single-player</b> (seção 4).</td></tr>
+    <tr><td>Victory Points como sistema de monetização / economia live-service</td><td><span class="aria-decidir">a decidir</span></td><td>Bestiary não tem metaplayer/P2W; progressão é local e em dizéssolamento.</td></tr>
+    <tr><td>Double battle (Bring-6 Pick-4)</td><td><span class="aria-decidir">a decidir</span></td><td>Bestiary é 1v1 / 1vN por turnos.</td></tr>
+    <tr><td>Time limit 45s/turno e 7min/jogador</td><td><span class="aria-decidir">a decidir</span></td><td>Single-player sem restrição relativa ao adversário humano.</td></tr>
   </tbody>
 </table></div>
 

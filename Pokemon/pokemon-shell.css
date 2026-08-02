@@ -1,33 +1,52 @@
 /* Pokémon — shared shell (kit de referência para o Bestiary)
-   Adaptado do padrão DW3, com identidade própria (vermelho/âmbar de Pokébola).
+   Adaptado do padrão DW3, com identidade própria (paleta legível, tags por tipo).
    Breakpoints canônicos: 1100 / 700 / 520. */
 :root {
   --shell-max: 2560px;
   --shell-pad: 1.25rem;
   --shell-w: min(96vw, var(--shell-max));
 
-  --bg: #0d0f14;
-  --panel: #191b22;
-  --panel2: #23262f;
-  --text: #f2f3f7;
-  --muted: #9aa3b2;
-  --border: #31353f;
-  --accent: #ef4444;       /* vermelho Pokébola */
-  --accent2: #fbbf24;      /* âmbar (luz/inicial) */
-  --blue: #60a5fa;         /* azul elétrico */
-  --warn: #f97316;
-  --tip: #4fc3f7;
-  --special: #c084fc;
-  --link: #7cb3ff;
-  --fire: #ef4444;
-  --air: #a2c8ff;
-  --plant: #4ade80;
-  --water: #38bdf8;
-  --rock: #c9a86a;
-  --electric: #facc15;
-  --ice: #7dd3fc;
+  /* Core — ispirado ao DW3-shell.css */
+  --bg: #0c1017;
+  --panel: #151c27;
+  --panel2: #1c2635;
+  --text: #edf2f7;
+  --muted: #8fa0b5;
+  --border: #2a3648;
+  --accent: #3ecf8e;           /* verde-água primário */
+  --link: #6eb6ff;
+
+  /* Tipos Pokémon (18) — cores adaptadas para badges legíveis no escuro */
+  --type-normal: #a8a878;
+  --type-fire:   #f08030;
+  --type-water:  #6890f0;
+  --type-grass:  #78c850;
+  --type-electric:#f8d030;
+  --type-ice:    #98d8d8;
+  --type-fighting:#c03028;
+  --type-poison: #a040a0;
+  --type-ground: #e0c068;
+  --type-flying: #a890f0;
+  --type-psychic:#f85888;
+  --type-bug:    #a8b820;
+  --type-rock:   #b8a038;
+  --type-ghost:  #705898;
+  --type-dragon: #7038f8;
+  --type-dark:   #705848;
+  --type-steel:  #b8b8d0;
+  --type-fairy:  #ee99ac;
+
+  /* Tipos Bestiary (7) — mapeamento para o Bestiary (do documento de mecânicas) */
+  --bestiary-fogo:   #f08030;
+  --bestiary-ar:     #a890f0;
+  --bestiary-planta: #78c850;
+  --bestiary-água:   #6890f0;
+  --bestiary-rocha:  #b8a038;
+  --bestiary-elétrico:#f8d030;
+  --bestiary-gelo:   #98d8d8;
 }
 
+/* Reset e base */
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -45,26 +64,33 @@ body {
   color: var(--text);
   background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse 60% 35% at 0% 0%, rgba(239, 68, 68, 0.08), transparent),
-    radial-gradient(ellipse 50% 30% at 100% 0%, rgba(249, 115, 22, 0.06), transparent);
+    radial-gradient(ellipse 60% 35% at 0% 0%, rgba(62, 207, 142, 0.08), transparent),
+    radial-gradient(ellipse 50% 30% at 100% 0%, rgba(240, 160, 32, 0.07), transparent);
   background-repeat: no-repeat;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   font-size: 1rem;
 }
 
+/* Links */
 a { color: var(--link); }
-a:hover { color: #bcdcff; }
+a:hover { color: #9ad4ff; }
 
+/* Form controls */
 button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
-button:focus-visible, input:focus-visible, a:focus-visible {
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--accent) 70%, white);
   outline-offset: 2px;
 }
 
 /* —— Header + nav —— */
-.site-header, .top, header.site-header, body > header {
+.site-header,
+.top,
+header.site-header,
+body > header {
   display: grid;
   grid-template-columns: minmax(0, var(--shell-w));
   justify-content: center;
@@ -72,18 +98,30 @@ button:focus-visible, input:focus-visible, a:focus-visible {
   border-bottom: 1px solid var(--border);
   background: color-mix(in srgb, var(--panel) 55%, transparent);
 }
-.site-header > *, .top > *, header.site-header > *, body > header > * { padding-inline: var(--shell-pad); }
+.site-header > *,
+.top > *,
+header.site-header > *,
+body > header > * { padding-inline: var(--shell-pad); }
 
-.site-header h1, .top h1, header.site-header h1, body > header h1 {
+.site-header h1,
+.top h1,
+header.site-header h1,
+body > header h1 {
   margin: 0 0 0.25rem;
   font-size: clamp(1.15rem, 2.2vw, 1.45rem);
   letter-spacing: -0.02em;
 }
-.site-header > p, .top > p, header.site-header > p, body > header > p {
+.site-header > p,
+.top > p,
+header.site-header > p,
+body > header > p {
   margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 52rem; line-height: 1.5;
 }
 
-.doc-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+/* Navegação de documentos */
+.doc-nav {
+  display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem;
+}
 .doc-nav a {
   display: inline-flex; align-items: center; min-height: 2rem; text-decoration: none;
   color: var(--muted); border: 1px solid var(--border); background: var(--panel);
@@ -92,60 +130,192 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 .doc-nav a:hover { color: var(--text); border-color: #4a5d75; }
 .doc-nav a.current {
   color: var(--text); border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 16%, var(--panel));
+  background: color-mix(in srgb, var(--accent) 14%, var(--panel));
 }
 
 /* —— Width shells —— */
-.shell-wide, .shell-app { max-width: var(--shell-w); margin: 0 auto; padding: 0.85rem var(--shell-pad) 2.5rem; }
+.shell-wide,
+.shell-app { max-width: var(--shell-w); margin: 0 auto; padding: 0.85rem var(--shell-pad) 2.5rem; }
 .shell-prose { max-width: min(96vw, 46rem); margin: 0 auto; padding: 0.85rem var(--shell-pad) 2.5rem; }
-.wrap.shell-wide, .wrap.shell-app, .wrap.shell-prose { margin-left: auto; margin-right: auto; }
+.wrap.shell-wide,
+.wrap.shell-app,
+.wrap.shell-prose { margin-left: auto; margin-right: auto; }
 
 /* —— Chips / toolbar —— */
-.chip, .toolbar .chip {
-  border: 1px solid var(--border); background: var(--panel2); border-radius: 999px;
-  padding: 0.35rem 0.75rem; min-height: 2.2rem; font-size: 0.78rem; font-weight: 650;
+.chip,
+.toolbar .chip {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  min-height: 2.2rem;
+  font-size: 0.78rem;
+  font-weight: 650;
 }
 .chip:hover { border-color: #4a5d75; }
 .chip.active {
-  border-color: var(--accent); color: #ffc9c9;
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel2));
+  border-color: var(--accent);
+  color: #bff0d8;
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel2));
 }
-.search, input[type="search"] {
-  border: 1px solid var(--border); background: var(--panel2); color: var(--text);
-  border-radius: 999px; padding: 0.4rem 0.85rem; font-size: 0.82rem; min-height: 2.2rem;
+
+/* Search */
+.search,
+input[type="search"] {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  min-height: 2.2rem;
 }
 
 /* —— Badges / pills —— */
-.badge { padding: 0.12rem 0.42rem; border-radius: 5px; font-size: 0.66rem; font-weight: 750; text-transform: uppercase; letter-spacing: 0.04em; }
-.badge.type-fire { color: #fca5a5; background: color-mix(in srgb, var(--fire) 18%, transparent); }
-.badge.type-air { color: #bfdbfe; background: color-mix(in srgb, var(--air) 18%, transparent); }
-.badge.type-plant { color: #86efac; background: color-mix(in srgb, var(--plant) 18%, transparent); }
-.badge.type-water { color: #7dd3fc; background: color-mix(in srgb, var(--water) 18%, transparent); }
-.badge.type-rock { color: #e7cf9d; background: color-mix(in srgb, var(--rock) 18%, transparent); }
-.badge.type-electric { color: #fde68a; background: color-mix(in srgb, var(--electric) 18%, transparent); }
-.badge.type-ice { color: #bae6fd; background: color-mix(in srgb, var(--ice) 18%, transparent); }
+.badge {
+  padding: 0.12rem 0.42rem;
+  border-radius: 5px;
+  font-size: 0.66rem;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
 
+/* Tipo Pokémon — badges com cor de fundo sólida e texto contrastante */
+.badge.type-normal   { background: var(--type-normal);   color: #000; }
+.badge.type-fire     { background: var(--type-fire);     color: #fff; }
+.badge.type-water    { background: var(--type-water);    color: #fff; }
+.badge.type-grass    { background: var(--type-grass);    color: #000; }
+.badge.type-electric { background: var(--type-electric); color: #000; }
+.badge.type-ice      { background: var(--type-ice);      color: #000; }
+.badge.type-fighting { background: var(--type-fighting); color: #fff; }
+.badge.type-poison   { background: var(--type-poison);   color: #fff; }
+.badge.type-ground   { background: var(--type-ground);   color: #000; }
+.badge.type-flying   { background: var(--type-flying);   color: #000; }
+.badge.type-psychic  { background: var(--type-psychic);  color: #fff; }
+.badge.type-bug      { background: var(--type-bug);      color: #000; }
+.badge.type-rock     { background: var(--type-rock);     color: #000; }
+.badge.type-ghost    { background: var(--type-ghost);    color: #fff; }
+.badge.type-dragon   { background: var(--type-dragon);   color: #fff; }
+.badge.type-dark     { background: var(--type-dark);     color: #fff; }
+.badge.type-steel    { background: var(--type-steel);    color: #000; }
+.badge.type-fairy    { background: var(--type-fairy);    color: #000; }
+
+/* Tipos Bestiary — badges para o contexto do Bestiary */
+.badge.bestiary-fogo   { background: var(--bestiary-fogo);   color: #000; }
+.badge.bestiary-ar     { background: var(--bestiary-ar);     color: #fff; }
+.badge.bestiary-planta { background: var(--bestiary-planta); color: #000; }
+.badge.bestiary-água   { background: var(--bestiary-água);   color: #fff; }
+.badge.bestiary-rocha  { background: var(--bestiary-rocha);  color: #000; }
+.badge.bestiary-elétrico{background: var(--bestiary-elétrico);color: #000; }
+.badge.bestiary-gelo   { background: var(--bestiary-gelo);   color: #000; }
+
+/* Pill (uso geral) */
 .pill {
-  background: color-mix(in srgb, var(--accent) 14%, var(--panel2));
+  background: color-mix(in srgb, var(--accent) 12%, var(--panel2));
   border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
-  color: #fecaca; border-radius: 999px; padding: 0.14rem 0.55rem; font-size: 0.72rem; font-weight: 650;
+  color: #bff0d8;
+  border-radius: 999px;
+  padding: 0.14rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+/* Decisão — substituindo Adotar/Adaptar/Rejeitar por "a decidir" */
+.aria-decidir {
+  display: inline-block;
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: color-mix(in srgb, var(--muted) 20%, var(--panel2));
+  color: var(--muted);
+  border: 1px solid color-mix(in srgb, var(--muted) 40%, var(--border));
+}
+.aria-decidir:hover {
+  background: color-mix(in srgb, var(--muted) 30%, var(--panel2));
+  color: var(--text);
 }
 
 /* —— Callouts —— */
-.tip, .warn, .note-callout { margin: 0.75rem 0; padding: 0.65rem 0.8rem; border-radius: 10px; font-size: 0.88rem; border: 1px solid var(--border); }
+.tip, .warn, .note-callout {
+  margin: 0.75rem 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  border: 1px solid var(--border);
+}
 .tip, .note-callout {
   background: color-mix(in srgb, var(--tip) 10%, var(--panel2));
   border-color: color-mix(in srgb, var(--tip) 40%, var(--border));
 }
 .warn {
-  background: color-mix(in srgb, var(--warn) 14%, var(--panel2));
+  background: color-mix(in srgb, var(--warn) 12%, var(--panel2));
   border-color: color-mix(in srgb, var(--warn) 45%, var(--border));
 }
 
 /* —— Common layout helpers —— */
-.group-label { margin: 0.55rem 0.35rem 0.25rem; font-size: 0.64rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
+.group-label {
+  margin: 0.55rem 0.35rem 0.25rem;
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
 img, svg, video { max-width: 100%; height: auto; }
+
+/* —— Flowchart básico (estilo simples) —— */
+.flowchart {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.flowchart-step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.flowchart-step .icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent) 20%, var(--panel));
+  border-radius: 4px;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+.flowchart-step .content {
+  flex: 1;
+}
+.flowchart-step .label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.flowchart-step .desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.flowchart-arrow {
+  align-self: center;
+  font-size: 1.2rem;
+  color: var(--accent);
+}
 
 /* —— Canonical breakpoints —— */
 @media (max-width: 1100px) {

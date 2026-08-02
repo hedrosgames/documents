@@ -19,9 +19,9 @@ th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-s
 tr:last-child td { border-bottom: none; }
 .kicker { color: var(--muted); font-size: 0.7rem; margin: 1.4rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
 .decision { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
-.d-adopt { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
-.d-adapt { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
-.d-reject { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
+..aria-decidir { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
+.aria-decidir { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
+aria-decidir { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
 </style>
 </head>
 <body>
@@ -64,11 +64,11 @@ tr:last-child td { border-bottom: none; }
 <div class="table-scroll"><table>
   <thead><tr><th>Mecânica</th><th>Decisão</th><th>Bestiary</th></tr></thead>
   <tbody>
-    <tr><td>Fórmula de dano</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 8, idem ao clássico.</td></tr>
-    <tr><td>Captura com shakes + A≥255</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 15.</td></tr>
-    <tr><td>EV determinístico 510/252/+1 a cada 4</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 11.</td></tr>
-    <tr><td>Natures +10/−10 (não HP)</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 12.</td></tr>
-    <tr><td>Status + estágios de stat</td><td><span class="decision d-adopt">Adotar</span></td><td>GDD seção 10.</td></tr>
+    <tr><td>Fórmula de dano</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 8, idem ao clássico.</td></tr>
+    <tr><td>Captura com shakes + A≥255</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 15.</td></tr>
+    <tr><td>EV determinístico 510/252/+1 a cada 4</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 11.</td></tr>
+    <tr><td>Natures +10/−10 (não HP)</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 12.</td></tr>
+    <tr><td>Status + estágios de stat</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 10.</td></tr>
     <tr><td>Passivas (Abilities) fixas</td><td><span class="decision d-adapt">Adaptar</span></td><td>14 passivas próprias, GDD seção 13.</td></tr>
     <tr><td>18 tipos + dual typing</td><td><span class="decision d-adapt">Adaptar</span></td><td>7 tipos, tipagem única, GDD Ap. D.</td></tr>
     <tr><td>Mundo aberto / rotas livres</td><td><span class="decision d-adapt">Adaptar</span></td><td>Hub-and-spoke: cidade + dungeons instanciadas.</td></tr>

@@ -6,49 +6,7 @@
     <title>Tipos — da matriz de 18 para os 7 do Bestiary</title>
     <link rel="icon" href="favicon.svg">
     <link rel="stylesheet" href="pokemon-shell.css">
-    <style>
-        .shell-prose table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.25em 0;
-            font-size: 0.95rem;
-        }
-        .shell-prose th,
-        .shell-prose td {
-            border: 1px solid #d9cdb8;
-            padding: 0.5em 0.6em;
-            text-align: center;
-        }
-        .shell-prose thead th {
-            background: #3a6ea5;
-            color: #fff;
-            font-weight: 600;
-        }
-        .shell-prose thead th:first-child {
-            background: #2b4a6f;
-        }
-        .shell-prose tbody th {
-            background: #eff2f7;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        .shell-prose tbody td:first-child {
-            border-left: 2px solid #3a6ea5;
-        }
-        .mult-2 { background: #ffd591; color: #7a2d00; font-weight: 600; }
-        .mult-half { background: #c9d8ea; color: #1b3a5c; }
-        .mult-0 { background: #f4f1ea; color: #9a9487; }
-        .mult-1 { background: #faf8f2; color: #544b3d; }
-        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .decision { display: inline-block; padding: 0.15em 0.7em; border-radius: 4px; font-weight: 600; font-size: 0.85rem; margin-right: 0.4em; }
-        .decision.adotar { background: #dffadf; color: #1a7a1a; }
-        .decision.adaptar { background: #fff3d4; color: #a06a00; }
-        .decision.rejeitar { background: #ffdcdc; color: #b00000; }
-        .legend { display: flex; gap: 1.5em; flex-wrap: wrap; margin: 0.75em 0 0.25em; font-size: 0.9rem; }
-        .legend span { display: flex; align-items: center; gap: 0.4em; }
-        .swatch { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
-        .table-scroll-title { margin-top: 1.5em; }
-    </style>
+
 </head>
 <body>
     <header class="site-header">
@@ -244,12 +202,12 @@
                 Usar a matriz <strong>7×7</strong> com multiplicadores <strong>2 / 0.5 / 1</strong>, <strong>STAB ×1.5</strong> para golpes do próprio tipo, e <strong>imunidade usada pontualmente</strong> (apenas onde faz sentido de design, nunca como regra padrão).
             </p>
 
-            <h3><span class="decision adaptar">ADAPTAR</span>Reduzir de 18 para 7</h3>
+            <h3><span class="aria-decidir">a decidir</span>Reduzir de 18 para 7</h3>
             <p>
                 Remoção dos tipos que não servem ao sistema (Normal, Psychic, Ghost, Dragon, Fighting, Poison, Dark, Fairy, Ground, Bug, Steel...), <strong>remover o dual-typing</strong> e focar apenas nos <strong>matchups principais</strong> que importam para a identidade de cada monstro.
             </p>
 
-            <h3><span class="decision rejeitar">REJEITAR</span>Complexidade que não escala</h3>
+            <h3><span class="aria-decidir">a decidir</span>Complexidade que não escala</h3>
             <p>
                 <strong>Dual-typing completo</strong>, a demanda da matriz inteira <strong>18² (324 células)</strong> e a complexidade de taxonomia que não aqui ao hub roguelite foram <strong>rejeitadas</strong> — o custo cognitivo e de balanceamento não compensa o ganho.
             </p>

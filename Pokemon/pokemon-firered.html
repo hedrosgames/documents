@@ -13,9 +13,9 @@ th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-s
 tr:last-child td { border-bottom: none; }
 .kicker { color: var(--muted); font-size: 0.8rem; margin: 1.25rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
 .decision { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
-.d-adopt { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
-.d-adapt { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
-.d-reject { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
+.aria-decidir { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
+aria-decidir { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
+aria-decidir { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
 </style>
 </head>
 <body>
@@ -117,18 +117,18 @@ tr:last-child td { border-bottom: none; }
 <div class="table-scroll"><table>
   <thead><tr><th>Mecânica FRLG</th><th>Decisão</th><th>Como entra no Bestiary</th></tr></thead>
   <tbody>
-    <tr><td>Fórmula de dano base</td><td><span class="decision d-adopt">Adotar</span></td><td>Mantém-se (GDD seção 8).</td></tr>
-    <tr><td>Captura com shakes + A ≥ 255 garantida</td><td><span class="decision d-adopt">Adotar</span></td><td>Idêntica (GDD seção 15).</td></tr>
-    <tr><td>EVs determinísticos 510 / 252 / 4</td><td><span class="decision d-adopt">Adotar</span></td><td>Mantém (GDD seção 11).</td></tr>
-    <tr><td>Natures +10%/−10%</td><td><span class="decision d-adopt">Adotar</span></td><td>Única variação genética visível (GDD seção 12).</td></tr>
-    <tr><td>Status major + estágios −6 a +6</td><td><span class="decision d-adopt">Adotar</span></td><td>Extrai o modelo (GDD seção 10).</td></tr>
-    <tr><td>STAB ×1.5</td><td><span class="decision d-adopt">Adotar</span></td><td>Mantém (reforça identidade de tipo).</td></tr>
-    <tr><td>18 tipos + dual-typing</td><td><span class="decision d-adapt">Adaptar</span></td><td>Reduz para <b>7 tipos</b> (FOGO/AR/PLANTA/ÁGUA/ROCHA/ELÉTRICO/GELO), tipagem única.</td></tr>
-    <tr><td>Captura em selva a qualquer momento</td><td><span class="decision d-adapt">Adaptar</span></td><td><b>First Encounter Lock</b> por andar do dungeon (GDD seção 9).</td></tr>
-    <tr><td>Mundo aberto</td><td><span class="decision d-adapt">Adaptar</span></td><td>Hub-and-Spoke: cidade + dungeons em grid (GDD seção 2).</td></tr>
-    <tr><td>IVs randômicos (0–31 ocultos)</td><td><span class="decision d-reject">Rejeitar</span></td><td>Determinismo: 2 monstros iguais = mesmos stats (GDD seção 11).</td></tr>
-    <tr><td>Divisão Físico/Especial por tipo rígida</td><td><span class="decision d-reject">Rejeitar</span></td><td>Bestiary usa categorias de golpe (p. idem seção Batalha).</td></tr>
-    <tr><td>Rollout de crit aleatório</td><td><span class="decision d-reject">Rejeitar</span></td><td>Sem rollout de crit semelhante ao Gen 3; sistema próprio.</td></tr>
+    <tr><td>Fórmula de dano base</td><td><span class="aria-decidir">a decidir</span></td><td>Mantém-se (GDD seção 8).</td></tr>
+    <tr><td>Captura com shakes + A ≥ 255 garantida</td><td><span class="aria-decidir">a decidir</span></td><td>Idêntica (GDD seção 15).</td></tr>
+    <tr><td>EVs determinísticos 510 / 252 / 4</td><td><span class="aria-decidir">a decidir</span></td><td>Mantém (GDD seção 11).</td></tr>
+    <tr><td>Natures +10%/−10%</td><td><span class="aria-decidir">a decidir</span></td><td>Única variação genética visível (GDD seção 12).</td></tr>
+    <tr><td>Status major + estágios −6 a +6</td><td><span class="aria-decidir">a decidir</span></td><td>Extrai o modelo (GDD seção 10).</td></tr>
+    <tr><td>STAB ×1.5</td><td><span class="aria-decidir">a decidir</span></td><td>Mantém (reforça identidade de tipo).</td></tr>
+    <tr><td>18 tipos + dual-typing</td><td><span class="aria-decidir">a decidir</span></td><td>Reduz para <b>7 tipos</b> (FOGO/AR/PLANTA/ÁGUA/ROCHA/ELÉTRICO/GELO), tipagem única.</td></tr>
+    <tr><td>Captura em selva a qualquer momento</td><td><span class="aria-decidir">a decidir</span></td><td><b>First Encounter Lock</b> por andar do dungeon (GDD seção 9).</td></tr>
+    <tr><td>Mundo aberto</td><td><span class="aria-decidir">a decidir</span></td><td>Hub-and-Spoke: cidade + dungeons em grid (GDD seção 2).</td></tr>
+    <tr><td>IVs randômicos (0–31 ocultos)</td><td><span class="aria-decidir">a decidir</span></td><td>Determinismo: 2 monstros iguais = mesmos stats (GDD seção 11).</td></tr>
+    <tr><td>Divisão Físico/Especial por tipo rígida</td><td><span class="aria-decidir">a decidir</span></td><td>Bestiary usa categorias de golpe (p. idem seção Batalha).</td></tr>
+    <tr><td>Rollout de crit aleatório</td><td><span class="aria-decidir">a decidir</span></td><td>Sem rollout de crit semelhante ao Gen 3; sistema próprio.</td></tr>
   </tbody>
 </table></div>
 

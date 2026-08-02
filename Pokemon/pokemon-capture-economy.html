@@ -7,22 +7,7 @@
 <link rel="icon" href="favicon.svg">
 <link rel="stylesheet" href="pokemon-shell.css">
 <title>Captura &amp; economia — Pokémon vs Bestiary</title>
-<style>
-  .shell-prose { line-height: 1.75; color: #2d2d2d; }
-  .shell-prose h2 { border-bottom: 2px solid #e0e0e0; padding-bottom: .3rem; margin-top: 1.8rem; }
-  .shell-prose h3 { margin-top: 1.4rem; }
-  .table-scroll { overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: .9rem; }
-  th, td { border: 1px solid #d8d8d8; padding: .5rem .7rem; text-align: left; }
-  th { background: #f0f0f0; }
-  tr:nth-child(even) td { background: #fafafa; }
-  code { background: #f3f3f3; padding: .1rem .35rem; border-radius: 4px; font-size: .88em; }
-  .decision { display: inline-block; border-radius: 4px; padding: .1rem .5rem; font-weight: 700; font-size: .8rem; }
-  .decision.adopt { background: #e6f4ea; color: #137333; border: 1px solid #34a853; }
-  .decision.adapt { background: #fef7e0; color: #7a5c00; border: 1px solid #f9ab00; }
-  .decision.reject { background: #fce8e6; color: #c5221f; border: 1px solid #e3746f; }
-  .note { background: #f7f7fb; border-left: 4px solid #5b5bd6; padding: .7rem 1rem; border-radius: 4px; margin: 1rem 0; }
-</style>
+
 </head>
 <body>
 
@@ -191,9 +176,9 @@
         <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
       </thead>
       <tbody>
-        <tr><td>Fórmula de captura com shakes</td><td><span class="decision adopt">ADOTAR</span></td><td>GDD seção 15; 3 shakes → hold, mesmo caráter tático.</td></tr>
-        <tr><td>Multiplicadores de esfera</td><td><span class="decision adopt">ADOTAR</span></td><td>Base ×1, Avançada ×1.5, Master bypass.</td></tr>
-        <tr><td>Limite do valor A em 255</td><td><span class="decision adopt">ADOTAR</span></td><td>A≥255 = captura garantida, mesma linha de Pokémon.</td></tr>
+        <tr><td>Fórmula de captura com shakes</td><td><span class="aria-decidir">a decidir</span></td><td>GDD seção 15; 3 shakes → hold, mesmo caráter tático.</td></tr>
+        <tr><td>Multiplicadores de esfera</td><td><span class="aria-decidir">a decidir</span></td><td>Base ×1, Avançada ×1.5, Master bypass.</td></tr>
+        <tr><td>Limite do valor A em 255</td><td><span class="aria-decidir">a decidir</span></td><td>A≥255 = captura garantida, mesma linha de Pokémon.</td></tr>
       </tbody>
     </table>
   </div>
@@ -205,9 +190,9 @@
         <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
       </thead>
       <tbody>
-        <tr><td>First Encounter Lock</td><td><span class="decision adapt">ADAPTAR</span></td><td>Apenas o <strong>primeiro selvagem por sala</strong> pode ser capturado (GDD seção 9).</td></tr>
-        <tr><td>Esferas só em dungeons</td><td><span class="decision adapt">ADAPTAR</span></td><td>Esferas utilizáveis apenas em calabouços isolados (HUB), não abertamente.</td></tr>
-        <tr><td>Sem loja de cura ilimitada</td><td><span class="decision adapt">ADAPTAR</span></td><td>Curas vêm do estoque do mercador; campo depende de Escape Rope/teleporte.</td></tr>
+        <tr><td>First Encounter Lock</td><td><span class="aria-decidir">a decidir</span></td><td>Apenas o <strong>primeiro selvagem por sala</strong> pode ser capturado (GDD seção 9).</td></tr>
+        <tr><td>Esferas só em dungeons</td><td><span class="aria-decidir">a decidir</span></td><td>Esferas utilizáveis apenas em calabouços isolados (HUB), não abertamente.</td></tr>
+        <tr><td>Sem loja de cura ilimitada</td><td><span class="aria-decidir">a decidir</span></td><td>Curas vêm do estoque do mercador; campo depende de Escape Rope/teleporte.</td></tr>
       </tbody>
     </table>
   </div>
@@ -219,8 +204,8 @@
         <tr><th>Mecânica</th><th>Decisão</th><th>Justificativa</th></tr>
       </thead>
       <tbody>
-        <tr><td>Compra ilimitada de cura em campo</td><td><span class="decision reject">REJEITAR</span></td><td>Negaria o custo tático; GDD usa Escape Rope/teleporte.</td></tr>
-        <tr><td>Captura de qualquer encontro sem restrição</td><td><span class="decision reject">REJEITAR</span></td><td>O Bestiary usa <strong>avion lock por sala</strong> — apenas o primeiro selvagem.</td></tr>
+        <tr><td>Compra ilimitada de cura em campo</td><td><span class="aria-decidir">a decidir</span></td><td>Negaria o custo tático; GDD usa Escape Rope/teleporte.</td></tr>
+        <tr><td>Captura de qualquer encontro sem restrição</td><td><span class="aria-decidir">a decidir</span></td><td>O Bestiary usa <strong>avion lock por sala</strong> — apenas o primeiro selvagem.</td></tr>
       </tbody>
     </table>
   </div>
