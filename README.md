@@ -28,7 +28,7 @@ Kit de referência de design para o Bestiary (como Pokémon faz cada mecânica e
 - Mechanics Overview
 - Classic reference (Fire Red / Leaf Green)
 - Modern generations
-- Pokémonsó-combate (Champions)
+- Pokémon só-combate (Champions)
 - Battle-only games
 - Type Chart
 - Battle Logic
@@ -38,6 +38,8 @@ Kit de referência de design para o Bestiary (como Pokémon faz cada mecânica e
 - Index & conexões (adotar / adaptar / rejeitar)
 
 Estilo compartilhado em `Pokemon/pokemon-shell.css`. Checagem opcional: `node "Pokemon/_check.cjs"`.
+
+### Digimon World 3
 
 Kit de referência HTML:
 
