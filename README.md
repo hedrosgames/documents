@@ -16,9 +16,20 @@ O lobby na raiz lista os jogos disponíveis e leva direto para a primeira págin
 
 | Projeto | Pasta | Entrada |
 |--------|--------|---------|
+| Bestiary | [`Bestiary/`](Bestiary/) | [`bestiary-index.html`](Bestiary/bestiary-index.html) |
 | Digimon World 3 | [`Digimon World 3/`](Digimon%20World%203/) | [`digimon-world-3-agumon-tree.html`](Digimon%20World%203/digimon-world-3-agumon-tree.html) |
 
 Novos documentos entram como pasta nova + card no lobby da raiz.
+
+### Bestiary
+
+Kit de documentação do jogo:
+
+- Technical Game Design Document
+- Art Style Guide
+- Localization Guide
+- Moves Docs
+- Beasts 1st Gen (CSV)
 
 ### Digimon World 3
 
@@ -40,10 +51,10 @@ Checagem opcional: `node "Digimon World 3/_check.cjs"`.
 ## Clone local
 
 ```
-C:\CursorProjects\documents
+C:\CursorProjects\USO GERAL\documents
 ```
 
-Outros docs não-Unity ficam em `C:\CursorProjects\` (`privatedocuments`, `bugstatus`).
+Outros docs não-Unity ficam em `C:\CursorProjects\USO GERAL\` (`privatedocuments`, `bugstatus`).
 
 ## Como contribuir (fluxo interno)
 
