@@ -239,6 +239,31 @@ input[type="search"] {
   color: var(--text);
 }
 
+.decision {
+  display: inline-block;
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.decision.adopt {
+  background: color-mix(in srgb, #4ade80 18%, var(--panel2));
+  color: #86efac;
+  border: 1px solid color-mix(in srgb, #4ade80 40%, var(--border));
+}
+.decision.adapt {
+  background: color-mix(in srgb, #fbbf24 18%, var(--panel2));
+  color: #fde68a;
+  border: 1px solid color-mix(in srgb, #fbbf24 40%, var(--border));
+}
+.decision.reject {
+  background: color-mix(in srgb, #f87171 18%, var(--panel2));
+  color: #fca5a5;
+  border: 1px solid color-mix(in srgb, #f87171 40%, var(--border));
+}
+
 /* —— Callouts —— */
 .tip, .warn, .note-callout {
   margin: 0.75rem 0;

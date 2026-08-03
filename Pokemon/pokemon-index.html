@@ -18,10 +18,9 @@ th, td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid va
 th { color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; background: rgba(0,0,0,0.15); }
 tr:last-child td { border-bottom: none; }
 .kicker { color: var(--muted); font-size: 0.7rem; margin: 1.4rem 0 0.5rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-.decision { display: inline-block; padding: 0.12rem 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; }
-..aria-decidir { background: color-mix(in srgb, #4ade80 18%, transparent); color: #86efac; }
-.aria-decidir { background: color-mix(in srgb, #fbbf24 18%, transparent); color: #fde68a; }
-aria-decidir { background: color-mix(in srgb, #f87171 18%, transparent); color: #fca5a5; }
+.decision.adopt { background: #e6f4ea; color: #137333; border: 1px solid #34a853; }
+.decision.adapt { background: #fef7e0; color: #7a5c00; border: 1px solid #f9ab00; }
+.decision.reject { background: #fce8e6; color: #c5221f; border: 1px solid #e3746f; }
 </style>
 </head>
 <body>
@@ -64,17 +63,17 @@ aria-decidir { background: color-mix(in srgb, #f87171 18%, transparent); color: 
 <div class="table-scroll"><table>
   <thead><tr><th>Mecânica</th><th>Decisão</th><th>Bestiary</th></tr></thead>
   <tbody>
-    <tr><td>Fórmula de dano</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 8, idem ao clássico.</td></tr>
-    <tr><td>Captura com shakes + A≥255</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 15.</td></tr>
-    <tr><td>EV determinístico 510/252/+1 a cada 4</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 11.</td></tr>
-    <tr><td>Natures +10/−10 (não HP)</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 12.</td></tr>
-    <tr><td>Status + estágios de stat</td><td><span class="decision .aria-decidir">Adotar</span></td><td>GDD seção 10.</td></tr>
-    <tr><td>Passivas (Abilities) fixas</td><td><span class="decision d-adapt">Adaptar</span></td><td>14 passivas próprias, GDD seção 13.</td></tr>
-    <tr><td>18 tipos + dual typing</td><td><span class="decision d-adapt">Adaptar</span></td><td>7 tipos, tipagem única, GDD Ap. D.</td></tr>
-    <tr><td>Mundo aberto / rotas livres</td><td><span class="decision d-adapt">Adaptar</span></td><td>Hub-and-spoke: cidade + dungeons instanciadas.</td></tr>
-    <tr><td>IVs ocultos (genética randômica)</td><td><span class="decision d-reject">Rejeitar</span></td><td>Determinismo total.</td></tr>
-    <tr><td>Mega / Dynamax / Tera generalization</td><td><span class="decision d-reject">Rejeitar</span></td><td>Clima/terremoto + passivas curtas.</td></tr>
-    <tr><td>Double battle / multiplayer</td><td><span class="decision d-reject">Rejeitar</span></td><td>1v1/1vN single-player.</td></tr>
+    <tr><td>Fórmula de dano</td><td><span class="decision adopt">Adotar</span></td><td>GDD seção 8, idem ao clássico.</td></tr>
+    <tr><td>Captura com shakes + A≥255</td><td><span class="decision adopt">Adotar</span></td><td>GDD seção 15.</td></tr>
+    <tr><td>EV determinístico 510/252/+1 a cada 4</td><td><span class="decision adopt">Adotar</span></td><td>GDD seção 11.</td></tr>
+    <tr><td>Natures +10/−10 (não HP)</td><td><span class="decision adopt">Adotar</span></td><td>GDD seção 12.</td></tr>
+    <tr><td>Status + estágios de stat</td><td><span class="decision adopt">Adotar</span></td><td>GDD seção 10.</td></tr>
+    <tr><td>Passivas (Abilities) fixas</td><td><span class="decision adapt">Adaptar</span></td><td>14 passivas próprias, GDD seção 13.</td></tr>
+    <tr><td>18 tipos + dual typing</td><td><span class="decision adapt">Adaptar</span></td><td>7 tipos, tipagem única, GDD Ap. D.</td></tr>
+    <tr><td>Mundo aberto / rotas livres</td><td><span class="decision adapt">Adaptar</span></td><td>Hub-and-spoke: cidade + dungeons instanciadas.</td></tr>
+    <tr><td>IVs ocultos (genética randômica)</td><td><span class="decision reject">Rejeitar</span></td><td>Determinismo total.</td></tr>
+    <tr><td>Mega / Dynamax / Tera generalization</td><td><span class="decision reject">Rejeitar</span></td><td>Clima/terremoto + passivas curtas.</td></tr>
+    <tr><td>Double battle / multiplayer</td><td><span class="decision reject">Rejeitar</span></td><td>1v1/1vN single-player.</td></tr>
   </tbody>
 </table></div>
 </div>
